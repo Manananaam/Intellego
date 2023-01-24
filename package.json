@@ -1,0 +1,53 @@
+{
+  "name": "fs-app-template",
+  "version": "2.0.0",
+  "description": "Some boilerplate code to get you started - get shakin'!",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "build:dev": "npm run build -- --watch --mode=development",
+    "seed": "node script/seed.js",
+    "start": "node server",
+    "start:dev": "npm run build:dev & npm run start-server",
+    "start:dev:logger": "LOGGING=true npm run start:dev",
+    "start:dev:seed": "SEED=true npm run start:dev",
+    "start-server": "JWT=shh nodemon server -e html,js,scss --ignore public --ignore client",
+    "test": "NODE_ENV=test JWT=a_secret mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" --require @babel/register --require esm ",
+    "test:dev": "npm run test -- --watch",
+    "test:dev:models": "npm run test:dev -- --grep=model",
+    "test:dev:routes": "npm run test:dev -- --grep=route"
+  },
+  "author": "Fullstack Academy of Code",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "pg": "^8.8.0",
+    "sequelize": "^6.25.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.6",
+    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/register": "^7.18.9",
+    "@reduxjs/toolkit": "^1.8.6",
+    "axios": "^1.1.3",
+    "axios-mock-adapter": "^1.21.2",
+    "babel-loader": "^8.2.5",
+    "chai": "^4.3.6",
+    "esm": "^3.2.25",
+    "mocha": "^10.1.0",
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.4",
+    "react-router-dom": "^6.4.2",
+    "redux-logger": "^3.0.6",
+    "supertest": "^6.3.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
