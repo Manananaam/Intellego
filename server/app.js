@@ -1,43 +1,51 @@
-const path = require('path')
-const express = require('express')
-const morgan = require('morgan')
-const app = express()
-module.exports = app
+const path = require("path");
+const express = require("express");
+const morgan = require("morgan");
+const keys = require("./config/dev");
+const AppError = require("./utils/appError");
+const {
+  notFound,
+  glbalErrorHandler,
+} = require("./controllers/errorController");
 
-// logging middleware
-app.use(morgan('dev'))
+const app = express();
 
-// body parsing middleware
-app.use(express.json())
+// Development logging
+if (keys.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
-// auth and api routes
-app.use('/auth', require('./auth'))
-app.use('/api', require('./api'))
-
-app.get('/', (req, res)=> res.sendFile(path.join(__dirname, '..', 'public/index.html')));
+// Body parser, reading data from body into req.body
+app.use(express.json());
 
 // static file-serving middleware
-app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use(express.static(path.join(__dirname, "..", "public")));
+
+// Send index.html for SPAs
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "..", "public/index.html"))
+);
+
+// Routes
+app.use("/api", require("./routers"));
 
 // any remaining requests with an extension (.js, .css, etc.) send 404
 app.use((req, res, next) => {
   if (path.extname(req.path).length) {
-    const err = new Error('Not found')
-    err.status = 404
-    next(err)
+    const err = new AppError("Not found", 404);
+    next(err);
   } else {
-    next()
+    next();
   }
-})
+});
 
 // sends index.html
-app.use('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public/index.html'));
-})
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public/index.html"));
+});
 
 // error handling endware
-app.use((err, req, res, next) => {
-  console.error(err)
-  console.error(err.stack)
-  res.status(err.status || 500).send(err.message || 'Internal server error.')
-})
+app.use(notFound);
+app.use(glbalErrorHandler);
+
+module.exports = app;

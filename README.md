@@ -1,44 +1,30 @@
-# FS-App-Template
+## Steps to setup project
 
-## Setup
+1.  update project name and description in `package.json`
+2.  `npm install`
+3.  Create two postgres databases
 
-To use this as boilerplate, you'll need to take the following steps:
+    - These commands will create both your **development** and **test** databases
 
-- Don't fork or clone this repo! Instead, create a new, empty
-  directory on your machine and `git init` (or create an empty repo on
-  Github and clone it to your local machine)
+      ```jsx
+      createdb <YOUR APP NAME HERE FROM package.json>
+      createdb <YOUR APP NAME HERE FROM package.json>-test
+      ```
 
-- Now you will have to add the fs-app-template as a remote and merge it into your own repository.
+    - (`MY_APP_NAME` should match the `name` parameter in `package.json`):
 
-```
-git remote add boilermaker git@github.com:FullstackAcademy/fs-app-template-v2.git
-git fetch boilermaker
-git merge boilermaker/main
-git branch -m master main
-```
+4.  By default, running `npm test` will use your test database, while regular development uses the development database
 
-## Customize
+## Commands
 
-Now that you've got the code, follow these steps to get acclimated:
+- `npm run seed` : sync and seed your database
+- `npm run start:dev` : start this full-stack application
+  - `start:dev` will both start your server and build your client side files using webpack
+  - `start:dev:logger` is the same as start:dev, but you will see your SQL queries (can be helpful for debugging)
+  - `start:dev:seed` will start your server and also seed your database (this is useful when you are making schema changes and you don't want to run your seed script separately)
+- `npm install package-name`: install package that related to server
+- `npm install -D package-name`: install package that not related to server, for instance, package that use for React.
 
-- Update project name and description in `package.json`
-- `npm install`
-- Create two postgres databases (`MY_APP_NAME` should match the `name`
-  parameter in `package.json`):
-- These commands will create both your **development** and **test** databases
+### File structure
 
-```
-createdb <YOUR APP NAME HERE FROM package.json>
-createdb <YOUR APP NAME HERE FROM package.json>-test
-```
-
-- By default, running `npm test` will use your test database, while
-  regular development uses development database
-
-## Start
-
-Sync and seed your database by running `npm run seed`. Running `npm run start:dev` will make great things happen!
-
-- start:dev will both start your server and build your client side files using webpack
-- start:dev:logger is the same as start:dev, but you will see your SQL queries (can be helpful for debugging)
-- start:dev:seed will start your server and also seed your database (this is useful when you are making schema changes and you don't want to run your seed script separately)
+fileStructure.md includes more detail and instruction of this template
