@@ -45,7 +45,27 @@ app.use("*", (req, res) => {
 });
 
 // error handling endware
-app.use(notFound);
-app.use(glbalErrorHandler);
+
+// @desc 404 Not Found error message
+// @route -
+// @access -
+app.use((req, res, next) => {
+  const error = new AppError(`Not Found - ${req.originalUrl}`, 404);
+  next(error);
+});
+
+// @desc Global Error handler
+// @route -
+// @access -
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
+  res.status(err.statusCode).json({
+    status: err.status,
+    error: err,
+    message: err.message,
+    stack: err.stack,
+  });
+});
 
 module.exports = app;
