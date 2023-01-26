@@ -1,7 +1,7 @@
 {
   "name": "intellego",
   "version": "2.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "A tool for teachers to create and administer casual formative assessments during class time, and track/review data about student performance.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
