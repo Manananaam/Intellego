@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const templateSlice = createSlice({
   name: "template",
   /*
-  alwasy initialState with {} for scable, eg:
+  always initialState with {} for scalablility, eg:
     initialState: {
       isLoading: false,
       data: [] / {} ,

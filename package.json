@@ -1,7 +1,7 @@
 {
-  "name": "capstone",
+  "name": "intellego",
   "version": "2.0.0",
-  "description": "Some boilerplate code to get you started - get shakin'!",
+  "description": "A tool for teachers to create and administer casual formative assessments during class time, and track/review data about student performance.",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
@@ -17,7 +17,7 @@
     "test:dev:models": "npm run test:dev -- --grep=model",
     "test:dev:routes": "npm run test:dev -- --grep=route"
   },
-  "author": "Fullstack Academy of Code",
+  "author": "Amy Chun, Natalie Dudar, Na Lin, Madeleine Lloyd-Davies, and Natalie Ricci",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
