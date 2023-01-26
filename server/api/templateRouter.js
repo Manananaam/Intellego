@@ -7,12 +7,6 @@ const {
   models: { Template },
 } = require("../db");
 
-const {
-  testTemplate,
-  testError,
-  fetchTemplateData,
-} = require("../controllers/templateController");
-
 // @desc: Test route controller
 // @route: /api/template/test
 // @access: public
