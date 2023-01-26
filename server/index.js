@@ -23,5 +23,5 @@ const init = async () => {
 init();
 
 // start listening (and create a 'server' object representing our server)
-const PORT = keys.PORT || 8080;
+const PORT = keys.PORT;
 app.listen(PORT, () => console.log(`Mixing it up on port ${PORT}`));
