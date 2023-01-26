@@ -27,7 +27,7 @@ app.get("/", (req, res) =>
 );
 
 // Routes
-app.use("/api", require("./routers"));
+app.use("/api", require("./api"));
 
 // any remaining requests with an extension (.js, .css, etc.) send 404
 app.use((req, res, next) => {
