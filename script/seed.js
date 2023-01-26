@@ -6,7 +6,7 @@ const {
 } = require("../server/db");
 
 // data that used to seed
-const templateData = require("../server/db/data/templates");
+const templateData = require("./data/templates");
 
 /**
  * seed - this function clears the database, updates tables to
