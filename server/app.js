@@ -3,11 +3,6 @@ const express = require("express");
 const morgan = require("morgan");
 const keys = require("./config/dev");
 const AppError = require("./utils/appError");
-const {
-  notFound,
-  glbalErrorHandler,
-} = require("./controllers/errorController");
-
 const app = express();
 
 // Development logging
