@@ -2,7 +2,15 @@
 
 const {
   db,
-  models: { Assessment, Course, Question, Student, Submission, User },
+  models: {
+    Assessment,
+    Course,
+    Question,
+    Student,
+    Submission,
+    User,
+    Course_Assessment,
+  },
 } = require("../server/db");
 
 // data that used to seed
@@ -58,12 +66,22 @@ async function seed() {
     })
   );
 
-  console.log(`seeded ${users.length} template data `);
-  console.log(`seeded ${courses.length} template data`);
-  console.log(`seeded ${assessments.length} template data`);
-  console.log(`seeded ${questions.length} template data`);
-  console.log(`seeded ${students.length} template data`);
-  console.log(`seeded ${submissions.length} template data`);
+  //Creating Course Assessment Joins
+  const courseAssess = await Promise.all(
+    templateData.courseAssessmentsSeed.map((data) => {
+      return Course_Assessment.create(data);
+    })
+  );
+
+  console.log(`seeded ${users.length} user data `);
+  console.log(`seeded ${courses.length} course data`);
+  console.log(`seeded ${assessments.length} assessment data`);
+  console.log(`seeded ${questions.length} question data`);
+  console.log(`seeded ${students.length} student data`);
+  console.log(`seeded ${submissions.length} submission data`);
+  console.log(
+    `seeded ${courseAssess.length} course-assessment relationship data`
+  );
   console.log(`seeded successfully`);
   return {
     templateData,

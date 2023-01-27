@@ -56,7 +56,7 @@ const submissionSeed = [
   },
 ];
 
-const courseAssessmentsSeed = [{ courseId: 14, assessmentSeed: 5 }];
+const courseAssessmentsSeed = [{ courseId: 14, assessmentId: 5 }];
 const courseRosterSeed = [{ studentId: 100, courseId: 14 }];
 
 module.exports = {
