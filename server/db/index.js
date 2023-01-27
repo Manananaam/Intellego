@@ -2,7 +2,6 @@
 
 const db = require("./db");
 
-const Template = require("./models/templateModel");
 const User = require("./models/userModel");
 const Assessment = require("./models/assessmentModel");
 const Question = require("./models/questionModel");
@@ -21,6 +20,10 @@ Student.belongsToMany(Course, { through: "courseRoster" });
 
 Course.belongsToMany(Assessment, { through: "courseAssessments" });
 Assessment.belongsToMany(Course, { through: "courseAssessments" });
+Course.hasMany(Assessment);
+Assessment.hasMany(Course);
+Course.belongsTo(Assessment);
+Assessment.belongsTo(Course);
 
 Question.hasMany(Submission);
 Submission.belongsTo(Question);
@@ -34,7 +37,6 @@ Question.belongsTo(Assessment);
 module.exports = {
   db,
   models: {
-    Template,
     User,
     Assessment,
     Question,
