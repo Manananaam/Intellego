@@ -60,3 +60,9 @@ module.exports = {
   courseAssessmentsSeed,
   courseRosterSeed,
 };
+
+/*
+git remote set-url origin [updated link url https://........git]
+
+git@github.com:Manananaam/Intellego.git
+*/
