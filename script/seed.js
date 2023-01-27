@@ -2,7 +2,7 @@
 
 const {
   db,
-  models: { Template },
+  models: { Assessment, Course, Question, Student, Submission, User },
 } = require("../server/db");
 
 // data that used to seed
@@ -16,20 +16,69 @@ async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
   console.log("db synced!");
 
-  // Creating Users
-  const templates = await Promise.all(
-    templateData.map((data) => {
-      return Template.create(data);
+  //Creating Users
+  const users = await Promise.all(
+    templateData.userSeed.map((data) => {
+      return User.create(data);
     })
   );
 
-  console.log(`seeded ${templates.length} template data `);
+  //Creating Courses
+  const courses = await Promise.all(
+    templateData.courseSeed.map((data) => {
+      return Course.create(data);
+    })
+  );
+
+  //Creating Assessments
+  const assessments = await Promise.all(
+    templateData.assessmentSeed.map((data) => {
+      return Assessment.create(data);
+    })
+  );
+
+  //Creating Questions
+  const questions = await Promise.all(
+    templateData.questionSeed.map((data) => {
+      return Question.create(data);
+    })
+  );
+
+  //Creating Students
+  const students = await Promise.all(
+    templateData.studentSeed.map((data) => {
+      return Student.create(data);
+    })
+  );
+
+  //Creating Submissions
+  const submissions = await Promise.all(
+    templateData.submissionSeed.map((data) => {
+      return Submission.create(data);
+    })
+  );
+
+  console.log(`seeded ${users.length} template data `);
+  console.log(`seeded ${courses.length} template data`);
+  console.log(`seeded ${assessments.length} template data`);
+  console.log(`seeded ${questions.length} template data`);
+  console.log(`seeded ${students.length} template data`);
+  console.log(`seeded ${submissions.length} template data`);
   console.log(`seeded successfully`);
   return {
     templateData,
   };
 }
+// async function seedJoins() {
+//   await db.sync({ force: true }); // clears db and matches models to tables
+//   console.log("db synced 2: electric boogaloo!");
 
+//   const roster = await Promise.all(
+//     templateData.courseRosterSeed.map((data) => {
+//       return Course.addStudents(data);
+//     })
+//   );
+// }
 /*
  We've separated the `seed` function from the `runSeed` function.
  This way we can isolate the error handling and exit trapping.
@@ -39,6 +88,7 @@ async function runSeed() {
   console.log("seeding...");
   try {
     await seed();
+    // await seedJoins();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
