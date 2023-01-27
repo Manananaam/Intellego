@@ -36,15 +36,6 @@ const studentSeed = [
     id: 100,
     firstName: "Miso",
     lastName: "Cat",
-    // courses: [
-    //   {
-    //     id: 14,
-    //     name: "Test Course",
-    //     subject: "ELA",
-    //     gradeLevel: 3,
-    //     userId: 1,
-    //   },
-    // ],
   },
 ];
 const submissionSeed = [
@@ -56,7 +47,7 @@ const submissionSeed = [
   },
 ];
 
-const courseAssessmentsSeed = [{ courseId: 14, assessmentSeed: 5 }];
+const courseAssessmentsSeed = [{ courseId: 14, assessmentId: 5 }];
 const courseRosterSeed = [{ studentId: 100, courseId: 14 }];
 
 module.exports = {
@@ -69,3 +60,9 @@ module.exports = {
   courseAssessmentsSeed,
   courseRosterSeed,
 };
+
+/*
+git remote set-url origin [updated link url https://........git]
+
+git@github.com:Manananaam/Intellego.git
+*/

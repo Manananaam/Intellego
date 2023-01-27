@@ -22,10 +22,15 @@ const User = db.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  // role: {
+  //   type: Sequelize.ENUM,
+  //   defaultValue: "teacher",
+  //   values: ["teacher"],
+  // },
   role: {
-    type: Sequelize.STRING,
+    type: Sequelize.ENUM,
     defaultValue: "teacher",
-    // values: ["teacher"],
+    values: ["teacher"],
   },
 });
 
