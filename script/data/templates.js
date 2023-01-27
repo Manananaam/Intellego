@@ -36,15 +36,6 @@ const studentSeed = [
     id: 100,
     firstName: "Miso",
     lastName: "Cat",
-    // courses: [
-    //   {
-    //     id: 14,
-    //     name: "Test Course",
-    //     subject: "ELA",
-    //     gradeLevel: 3,
-    //     userId: 1,
-    //   },
-    // ],
   },
 ];
 const submissionSeed = [

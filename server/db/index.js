@@ -9,6 +9,7 @@ const Student = require("./models/studentModel");
 const Course = require("./models/courseModel");
 const Submission = require("./models/submissionModel");
 const Course_Assessment = require("./models/course_assessmentModel");
+const Course_Student = require("./models/course_studentModel");
 
 User.hasMany(Course);
 Course.belongsTo(User);
@@ -16,8 +17,8 @@ Course.belongsTo(User);
 User.hasMany(Assessment);
 Assessment.belongsTo(User);
 
-Course.belongsToMany(Student, { through: "courseRoster" });
-Student.belongsToMany(Course, { through: "courseRoster" });
+Course.belongsToMany(Student, { through: Course_Student });
+Student.belongsToMany(Course, { through: Course_Student });
 
 Course.belongsToMany(Assessment, { through: Course_Assessment });
 Assessment.belongsToMany(Course, { through: Course_Assessment });
@@ -45,5 +46,6 @@ module.exports = {
     Course,
     Submission,
     Course_Assessment,
+    Course_Student,
   },
 };
