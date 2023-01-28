@@ -20,6 +20,24 @@ router.get(
   })
 );
 
+// todo: how the page enroll student to course if the student already be created before
+// ? students page -> student -> enroll to course
+// ? or at course page, enroll student by enter student name
+// @desc: enroll existed student to course
+// @route: POST /api/students/:studentId/courses/:courseId
+// @access: public
+router.post(
+  "/:studentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    //!500 sequelize error: student had enrolled to this course
+    const enrollResult = await Course_Student.create({
+      courseId: req.params.courseId,
+      studentId: req.params.studentId,
+    });
+    res.status(201).json(enrollResult);
+  })
+);
+
 // @desc: unenroll individual student
 // @route: DELETE /api/students/:studentId/courses/courseId
 // @access: public
