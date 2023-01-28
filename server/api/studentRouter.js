@@ -97,4 +97,22 @@ router.delete(
   })
 );
 
+// @desc: delete student
+// @route: DELETE /api/students/:studentId
+// @access: public
+// ? what would happen to course_student table
+// ? delete the student, and also delete the enroll history / enroll record?
+router.delete(
+  "/:studentId",
+  asyncHandler(async (req, res, next) => {
+    // 1. unenroll this student
+    const student = await Student.findByPk(req.params.studentId);
+    const enrollement = await student.getCourses();
+    await student.removeCourses(enrollement);
+    // 2. delete this student
+    const result = await student.destroy();
+    res.status(204).json(result);
+  })
+);
+
 module.exports = router;
