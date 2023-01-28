@@ -74,19 +74,14 @@ router.post(
 router.delete(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
-    // unenrolle -> remove the row in course_student
-    const enrollement = await Course_Student.findOne({
-      where: {
-        studentId: req.params.studentId,
-        courseId: req.params.courseId,
-      },
+    // unenrolle -> remove relationship between student and this course
+    const course = await Course.findByPk(req.params.courseId);
+    const student = await Student.findByPk(req.params.studentId);
+    const enrollement = await student.removeCourse(course);
+
+    res.status(204).json({
+      unenrollNumOfCourse: enrollement,
     });
-
-    //! because null.destroy() have error, so computer will throw an 500 interal error message if the student don't enrolled to this course
-
-    await enrollement.destroy();
-
-    res.sendStatus(204);
   })
 );
 
