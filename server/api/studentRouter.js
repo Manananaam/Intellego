@@ -106,8 +106,8 @@ router.delete(
   asyncHandler(async (req, res, next) => {
     // 1. unenroll this student
     const student = await Student.findByPk(req.params.studentId);
-    const enrollement = await student.getCourses();
-    await student.removeCourses(enrollement);
+    const enrollements = await student.getCourses();
+    await student.removeCourses(enrollements);
     // 2. delete this student
     const result = await student.destroy();
     res.status(204).json(result);
