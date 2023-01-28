@@ -8,5 +8,6 @@ router.use((req, res, next) => {
 
 // Sub-router, start with /api
 router.use("/template", require("./templateRouter"));
+router.use("/authentication", require("./authenticationRoutes"));
 
 module.exports = router;

@@ -10,3 +10,8 @@
 - add checkPassword method that compares entered password to password in db
 - add checkToken method that finds user by token, and throws an error if the user doesn't exist or the token is invalid
 - add tokenPrecedesPWChange method, which compares the date the token was generated to the date of the most recent password change, and returns "true" if the token is older than the pw change.
+
+3. create authentication routes
+
+- set up router.use for authentication routes in api/index
+- set up api/authenticationRoutes.js
