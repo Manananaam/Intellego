@@ -8,7 +8,6 @@ const {
 
 //three main routes to think about:
 //router.post('/login')
-//router.post('/signup')
 //router.get('/me')
 
 //@desc: create new user
@@ -49,6 +48,37 @@ router.post(
       token,
       user: newUser.excludePasswordField(),
     });
+  })
+);
+
+//@desc: existing user login
+router.post(
+  "/login",
+  asyncHandler(async (req, res, next) => {
+    //1. make sure email and password were both provided
+    const { email, password } = req.body;
+    if (!email || !password) {
+      const error = new Error("Please enter an email address and password");
+      error.status = 400;
+      throw error;
+    }
+    //2. check email and password against database
+    const user = await User.findOne({
+      where: { email },
+    });
+    if (!user) {
+      const error = new Error("User does not exist in our database");
+      error.status = 401;
+      throw error;
+    }
+    if (!(await user.checkPassword(password))) {
+      const error = new Error("Password is incorrect.");
+      error.status = 401;
+      throw error;
+    }
+    //3. return token and user info
+    const token = user.generateToken();
+    res.status(200).json({ token, user: user.excludePasswordField() });
   })
 );
 
