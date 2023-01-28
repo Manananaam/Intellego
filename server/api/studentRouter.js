@@ -13,10 +13,9 @@ const {
 router.get(
   "/:studentId",
   asyncHandler(async (req, res, next) => {
-    const students = await Student.findByPk(req.params.studentId, {
-      include: [{ model: Course }],
-    });
-    res.send(students);
+    const students = await Student.findByPk(req.params.studentId);
+    const enrollments = await students.getCourses();
+    res.send(enrollments);
   })
 );
 
