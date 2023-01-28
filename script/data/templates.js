@@ -28,7 +28,7 @@ const questionSeed = [
   {
     id: 1,
     questionText: "This is a sample question",
-    assessmentsId: 5,
+    assessmentId: 5,
   },
 ];
 const studentSeed = [
