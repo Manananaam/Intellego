@@ -7,6 +7,17 @@ const {
   models: { Student, Course, Course_Student },
 } = require("../db");
 
+// @desc: get individual student's information
+// @route: GET /api/students/:studentId
+// @access: public
+router.get(
+  "/:studentId",
+  asyncHandler(async (req, res, next) => {
+    const students = await Student.findByPk(req.params.studentId);
+    res.status(200).json(students);
+  })
+);
+
 // @desc: get individual student's enrollments
 // @route: GET /api/students/:studentId
 // @access: public
