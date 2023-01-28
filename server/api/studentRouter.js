@@ -19,10 +19,10 @@ router.get(
 );
 
 // @desc: get individual student's enrollments
-// @route: GET /api/students/:studentId
+// @route: GET /api/students/:studentId/enrollments
 // @access: public
 router.get(
-  "/:studentId",
+  "/:studentId/enrollments",
   asyncHandler(async (req, res, next) => {
     const students = await Student.findByPk(req.params.studentId);
     const enrollments = await students.getCourses();
