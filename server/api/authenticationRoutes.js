@@ -7,7 +7,7 @@ const {
 } = require("../db");
 
 //@desc: middleware that checks user authentication for protected routes and, if the user is logged in and validated, adds the user info to the req
-const protect = asyncHandler(async (req, res, next) => {
+const protectedRoute = asyncHandler(async (req, res, next) => {
   //check the request header for the token
   //if bearer token is present in header, store it as a variable (remove 'bearer' from start)
   //if request header does not contain token, throw error
