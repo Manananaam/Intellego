@@ -23,6 +23,13 @@ const courseSeed = [
     gradeLevel: 3,
     userId: 1,
   },
+  {
+    id: 1,
+    name: "art",
+    subject: "ELA",
+    gradeLevel: 2,
+    userId: 1,
+  },
 ];
 const questionSeed = [
   {
