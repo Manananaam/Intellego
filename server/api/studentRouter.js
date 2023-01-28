@@ -7,7 +7,7 @@ const {
   models: { Student, Course, Course_Student },
 } = require("../db");
 
-// @desc: get the student and a list of courses that student enrolled
+// @desc: get individual student's enrollments
 // @route: GET /api/students/:studentId
 // @access: public
 router.get(
