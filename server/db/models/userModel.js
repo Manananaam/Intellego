@@ -72,7 +72,7 @@ User.prototype.checkPassword = async function (candidatePwd) {
 };
 
 // @desc: find user by token. If user doesn't exist, or token is invalid, throw error
-User.checkToken = async function (token) {
+User.prototype.checkToken = async function (token) {
   try {
     const decode = await jwt.verify(token, keys.JWT_SECRET);
     return decode;
@@ -81,6 +81,17 @@ User.checkToken = async function (token) {
     error.status = 401;
     throw error;
   }
+};
+// @desc: check if password has been changed since token was originally generated
+User.prototype.tokenPrecedesPWChange = function (jwtTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    return jwtTimestamp < changedTimestamp;
+  }
+  return false;
 };
 
 module.exports = User;
