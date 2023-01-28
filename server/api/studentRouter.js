@@ -38,6 +38,43 @@ router.post(
   })
 );
 
+// @desc: create and enroll student to course, also handle if the student already exist
+// @route: POST /api/students/courses/:courseId
+// @access: public
+router.post(
+  "/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    // 1. check if the student has been created
+    //? assume the the fullname of student is unique, there is not case that 2 students have exactly same name.
+
+    const existedStudent = await Student.findOne({
+      where: {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      },
+    });
+
+    //  2. enroll student to course
+    if (existedStudent) {
+      const enrollResult = await Course_Student.create({
+        courseId: req.params.courseId,
+        studentId: existedStudent.id,
+      });
+      res.status(201).json(enrollResult);
+    } else {
+      const newStudent = await Student.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      });
+      const enrollResult = await Course_Student.create({
+        courseId: req.params.courseId,
+        studentId: newStudent.id,
+      });
+      res.status(201).json(enrollResult);
+    }
+  })
+);
+
 // @desc: unenroll individual student
 // @route: DELETE /api/students/:studentId/courses/courseId
 // @access: public
