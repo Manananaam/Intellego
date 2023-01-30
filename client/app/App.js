@@ -13,7 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<h1>That's start our Capstone project!</h1>} />
         <Route path="/test" element={<SamplePieChart />} />
-        <Route path="/reports/students" element={<StudentReportScreen />} />
+        <Route path="/report/students" element={<StudentReportScreen />} />
       </Routes>
     </div>
   );
