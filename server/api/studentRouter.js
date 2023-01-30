@@ -288,7 +288,7 @@ router.post(
 );
 
 // @desc: unenroll individual student
-// @route: DELETE /api/students/:studentId/courses/courseId
+// @route: DELETE /api/students/:studentId/courses/:courseId
 // @access: public
 router.delete(
   "/:studentId/courses/:courseId",
