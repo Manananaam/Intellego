@@ -92,4 +92,3 @@ router.get(
 );
 
 module.exports = router;
-console.log(module);
