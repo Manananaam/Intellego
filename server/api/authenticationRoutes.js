@@ -7,9 +7,6 @@ const {
 } = require("../db");
 const protectedRoute = require("./middleware");
 
-//three main routes to think about:
-//router.get('/me')
-
 //@desc: create new user
 router.post(
   "/signup",
