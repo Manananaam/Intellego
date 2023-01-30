@@ -188,6 +188,22 @@ router.get(
   })
 );
 
+// @desc: get student's list that belong to this course
+// @route: GET /api/students/courses/:courseId
+// @access: public
+router.get(
+  "/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const students = await course.getStudents({ order: ["id"] });
+
+    res.status(200).json({
+      numOfStudents: students.length,
+      students,
+    });
+  })
+);
+
 // @desc: get individual student's enrollments
 // @route: GET /api/students/:studentId/enrollments
 // @access: public
