@@ -250,15 +250,18 @@ router.post(
 
     //  2. enroll student to course
     if (existedStudent) {
-      const enrollResult = await existedStudent.addCourse(course);
-      res.status(201).json(enrollResult);
+      await existedStudent.addCourse(course);
+      res.status(201).json({
+        student: existedStudent,
+        course,
+      });
     } else {
       const newStudent = await Student.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
       });
-      const enrollResult = await newStudent.addCourse(course);
-      res.status(201).json(enrollResult);
+      await newStudent.addCourse(course);
+      res.status(201).json({ student: newStudent, course });
     }
   })
 );
