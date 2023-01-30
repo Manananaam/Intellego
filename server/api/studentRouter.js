@@ -195,8 +195,20 @@ router.get(
   "/:studentId/enrollments",
   asyncHandler(async (req, res, next) => {
     const students = await Student.findByPk(req.params.studentId);
-    const enrollments = await students.getCourses();
-    res.send(enrollments);
+    const enrollments = await students.getCourses({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.status(200).json({
+      results: enrollments.length,
+      enrollments: enrollments.map((el) => {
+        return {
+          id: el.id,
+          name: el.name,
+          subject: el.subject,
+          gradeLevel: el.gradeLevel,
+        };
+      }),
+    });
   })
 );
 
