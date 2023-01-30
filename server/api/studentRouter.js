@@ -222,11 +222,13 @@ router.post(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     //!500 sequelize error: student had enrolled to this course
-    const enrollResult = await Course_Student.create({
-      courseId: req.params.courseId,
-      studentId: req.params.studentId,
+    const student = await Student.findByPk(req.params.studentId);
+    const course = await Course.findByPk(req.params.courseId);
+    await student.addCourse(course);
+    res.status(201).json({
+      student,
+      course,
     });
-    res.status(201).json(enrollResult);
   })
 );
 
