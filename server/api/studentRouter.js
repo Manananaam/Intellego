@@ -75,7 +75,6 @@ router.get(
       order: ["id"],
     });
     // 3. return
-    console.log(submission[0].toJSON());
     const results = students.map((el, idx) => {
       return {
         id: el.id,
