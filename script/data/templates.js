@@ -35,7 +35,17 @@ const questionSeed = [
   {
     id: 1,
     questionText: "This is a sample question",
-    assessmentsId: 5,
+    assessmentId: 5,
+  },
+  {
+    id: 2,
+    questionText: "This is a sample question",
+    assessmentId: 5,
+  },
+  {
+    id: 3,
+    questionText: "This is a sample question",
+    assessmentId: 5,
   },
 ];
 const studentSeed = [
@@ -44,13 +54,43 @@ const studentSeed = [
     firstName: "Miso",
     lastName: "Cat",
   },
+  {
+    id: 1,
+    firstName: "john",
+    lastName: "doe",
+  },
+  {
+    id: 12,
+    firstName: "denny",
+    lastName: "Cat",
+  },
+  {
+    id: 3,
+    firstName: "test",
+    lastName: "Cat",
+  },
 ];
 const submissionSeed = [
   {
-    id: 8,
+    id: 1,
     response: "This is a sample response.",
     questionId: 1,
     studentId: 100,
+    grade: 1,
+  },
+  {
+    id: 2,
+    response: "This is a sample response.",
+    questionId: 2,
+    studentId: 100,
+    grade: 2,
+  },
+  {
+    id: 3,
+    response: "This is a sample response.",
+    questionId: 3,
+    studentId: 100,
+    grade: 0,
   },
 ];
 

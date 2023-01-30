@@ -1,11 +1,43 @@
 const express = require("express");
 const router = express.Router();
-
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 const asyncHandler = require("express-async-handler");
 const AppError = require("../utils/appError");
 const {
-  models: { Student, Course, Course_Student },
+  models: { Student, Course, Course_Student, Question, Submission },
 } = require("../db");
+// test
+
+// @desc: fetch the student's grade in this assessment
+// @route: /api/students/:studentId/assessment/:assessmentId
+// @access: -
+router.get(
+  "/:studentId/assessment/:assessmentId",
+  asyncHandler(async (req, res, next) => {
+    //  1. use assessmentId to get all question related to this assessment
+    const questions = await Question.findAll({
+      where: {
+        assessmentId: req.params.assessmentId,
+      },
+    });
+
+    // 2. use questionId and studentId to fetch all submission that related to this assessment this student submit
+    const questionIds = questions.map((question) => question.id);
+    const submissions = await Submission.findAll({
+      where: {
+        questionId: {
+          [Op.in]: questionIds,
+        },
+        studentId: req.params.studentId,
+      },
+    });
+
+    // return the grade of assessment this student made
+    const grade = submissions.reduce((acc, curr) => acc + curr.grade, 0);
+    res.json(grade);
+  })
+);
 
 // @desc: get individual student's information
 // @route: GET /api/students/:studentId
