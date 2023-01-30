@@ -11,5 +11,6 @@ router.use("/template", require("./templateRouter"));
 router.use("/students", require("./studentRouter"));
 router.use("/courses", require("./courseRouter"));
 router.use("/submissions", require("./submissionRouter"));
+router.use("/authentication", require("./authenticationRoutes"));
 
 module.exports = router;
