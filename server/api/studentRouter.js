@@ -137,10 +137,9 @@ router.get(
     // 1. get all assessments related to this course
     // 2. find all question related to this assessments
     // 3. get all submission this student submit and related to this assessment's question
-    const assessments = await Assessment.findAll({
-      where: {
-        courseId: req.params.courseId,
-      },
+
+    const course = await Course.findByPk(req.params.courseId);
+    const assessments = await course.getAssessments({
       attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         {
@@ -156,7 +155,10 @@ router.get(
         },
       ],
     });
+
     // 4. return list of grade for each assessment
+    const student = await Student.findByPk(req.params.studentId);
+
     const listOfGrade = assessments.map((assessment) => {
       const total_grade = assessment.questions.reduce(
         (acc, curr) => acc + curr.submissions[0].toJSON().grade,
@@ -170,6 +172,7 @@ router.get(
     });
 
     res.json({
+      student,
       results: listOfGrade.length,
       listOfGrade,
     });
