@@ -91,6 +91,44 @@ router.get(
   })
 );
 
+// @desc: fetch individual student's overall grade in this class
+// @route: GET /api/students/:studentId/courses/:courseId
+// @access: public
+router.get(
+  "/:studentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const assessments = await course.getAssessments();
+    const questions = await Question.findAll({
+      where: {
+        assessmentId: {
+          [Op.in]: assessments.map((el) => el.id),
+        },
+      },
+    });
+
+    const submissions = await Submission.findAll({
+      where: {
+        studentId: req.params.studentId,
+        questionId: {
+          [Op.in]: questions.map((el) => el.id),
+        },
+      },
+    });
+
+    const student = await Student.findByPk(req.params.studentId, {
+      attributes: ["id", "firstName", "lastName"],
+    });
+
+    res.status(200).json({
+      student: {
+        ...student.toJSON(),
+        overall_grade: submissions.reduce((acc, curr) => acc + curr.grade, 0),
+      },
+    });
+  })
+);
+
 // @desc: get individual student's information
 // @route: GET /api/students/:studentId
 // @access: public
