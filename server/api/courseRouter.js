@@ -1,9 +1,15 @@
 const router = require("express").Router();
 const {
-  models: { Student, Course },
+  models: { Student, Course, Assessment },
 } = require("../db");
 const asyncHandler = require("express-async-handler");
-// const AppError = require("../utils/appError");
+
+/*
+courses/:courseid/assessments
+courses/:courseid/students
+courses/:courseid/assessments/:assessmentid
+courses/:courseid/students/:studentid
+*/
 
 // get all course list
 router.get(
@@ -13,26 +19,24 @@ router.get(
   })
 );
 
-// get all courses with students (eager loading)
+// coursed assessments
 router.get(
-  "/students",
+  "/:courseid/assessments",
   asyncHandler(async (req, res, next) => {
     res.status(200).json(
       await Course.findAll({
-        include: {
-          model: Student,
-        },
+        include: Assessment,
       })
     );
   })
 );
 
-// get courses with single students
+// get all courses with students
 router.get(
-  "/students/:studentId",
+  "/:courseid/students",
   asyncHandler(async (req, res, next) => {
     res.status(200).json(
-      await Course.findByPk(req.params.studentId, {
+      await Course.findAll({
         include: Student,
       })
     );
@@ -55,5 +59,17 @@ router.put(
     res.status(200).send(await course.update(req.body));
   })
 );
+
+// get courses with single students
+// router.get(
+//   "/students/:studentId",
+//   asyncHandler(async (req, res, next) => {
+//     res.status(200).json(
+//       await Course.findByPk(req.params.studentId, {
+//         include: Student,
+//       })
+//     );
+//   })
+// );
 
 module.exports = router;
