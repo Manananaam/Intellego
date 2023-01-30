@@ -3,6 +3,7 @@ import { SamplePieChart } from "./screen/TestChart";
 
 // Router
 import { Routes, Route } from "react-router-dom";
+import CourseReport from "./componenets/CourseReport";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path='/' element={<h1>That's start our Capstone project!</h1>} />
         <Route path='/test' element={<SamplePieChart />} />
+        <Route path='/reports/' element={<CourseReport/>} />
       </Routes>
     </div>
   );
