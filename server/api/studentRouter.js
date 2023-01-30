@@ -195,11 +195,16 @@ router.get(
   "/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
-    const students = await course.getStudents({ order: ["id"] });
+    const students = await course.getStudents({
+      order: ["id"],
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
 
     res.status(200).json({
       numOfStudents: students.length,
-      students,
+      students: students.map((el) => {
+        return { id: el.id, firstName: el.firstName, lastName: el.lastName };
+      }),
     });
   })
 );
