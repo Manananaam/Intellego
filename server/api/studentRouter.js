@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 const asyncHandler = require("express-async-handler");
 const AppError = require("../utils/appError");
 const {
-  models: { Student, Course, Course_Student, Question, Submission },
+  models: { Student, Course, Course_Student, Question, Submission, Assessment },
 } = require("../db");
 // test
 
@@ -36,6 +36,58 @@ router.get(
     // return the grade of assessment this student made
     const grade = submissions.reduce((acc, curr) => acc + curr.grade, 0);
     res.json(grade);
+  })
+);
+
+// @desc: fetch a list of students' grade for this assessment
+// @route: /api/students/assessment/:assessmentId
+// @access: -
+router.get(
+  "/assessment/:assessmentId",
+  asyncHandler(async (req, res, next) => {
+    // 1. use assessmentId to get all question related to this assessment
+    const questions = await Question.findAll({
+      where: {
+        assessmentId: req.params.assessmentId,
+      },
+    });
+    // 2. group submission by questionId and studentId
+    const submission = await Submission.findAll({
+      where: {
+        questionId: {
+          [Op.in]: questions.map((el) => el.id),
+        },
+      },
+      attributes: [
+        "studentId",
+        [Sequelize.fn("SUM", Sequelize.col("grade")), "total_grade"],
+      ],
+      group: ["studentId"],
+      order: ["studentId"],
+    });
+
+    const students = await Student.findAll({
+      where: {
+        id: {
+          [Op.in]: submission.map((el) => el.studentId),
+        },
+      },
+      order: ["id"],
+    });
+    // 3. return
+    console.log(submission[0].toJSON());
+    const results = students.map((el, idx) => {
+      return {
+        id: el.id,
+        firstName: el.firstName,
+        lastName: el.lastName,
+        total_grade: submission[idx].toJSON().total_grade,
+      };
+    });
+
+    res.json({
+      results,
+    });
   })
 );
 
