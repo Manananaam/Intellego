@@ -98,3 +98,5 @@ router.delete(
     res.send(await deletedSubmission.destroy());
   })
 );
+
+module.exports = router;
