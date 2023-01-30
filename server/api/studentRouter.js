@@ -129,6 +129,54 @@ router.get(
   })
 );
 
+// @desc: fetch individual student's grade for each assessment
+// @route: GET /api/students/:studentId/courses/:courseId/assessments
+// @access: public
+router.get(
+  "/:studentId/courses/:courseId/assessments",
+  asyncHandler(async (req, res, next) => {
+    // 1. get all assessments related to this course
+    // 2. find all question related to this assessments
+    // 3. get all submission this student submit and related to this assessment's question
+    const assessments = await Assessment.findAll({
+      where: {
+        courseId: req.params.courseId,
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: Question,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: {
+            model: Submission,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+            where: {
+              studentId: req.params.studentId,
+            },
+          },
+        },
+      ],
+    });
+    // 4. return list of grade for each assessment
+    const listOfGrade = assessments.map((assessment) => {
+      const total_grade = assessment.questions.reduce(
+        (acc, curr) => acc + curr.submissions[0].toJSON().grade,
+        0
+      );
+      return {
+        id: assessment.id,
+        title: assessment.title,
+        total_grade: total_grade,
+      };
+    });
+
+    res.json({
+      results: listOfGrade.length,
+      listOfGrade,
+    });
+  })
+);
+
 // @desc: get individual student's information
 // @route: GET /api/students/:studentId
 // @access: public
