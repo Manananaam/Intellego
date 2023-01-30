@@ -6,14 +6,10 @@ const HomeScreen = () => {
     <>
       <p>hello! welcome to intellego!</p>
       <p>
-        <Link to={"/login"}>
-          <p>log in here</p>
-        </Link>
+        <Link to={"/login"}>log in here</Link>
       </p>
       <p>
-        <Link to={"/signup"}>
-          <p>sign up here</p>
-        </Link>
+        <Link to={"/signup"}>sign up here</Link>
       </p>
     </>
   );
