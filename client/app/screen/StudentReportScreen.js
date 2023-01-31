@@ -95,21 +95,23 @@ export default function StudentReportScreen() {
           })}
         </Dropdown.Menu>
       </Dropdown>
-      <Dropdown>
-        <Dropdown.Toggle>Students</Dropdown.Toggle>
-        <Dropdown.Menu>
-          {students.map((student) => {
-            return (
-              <Dropdown.Item
-                key={student.id}
-                onClick={() => handleStudentGradeReport(student)}
-              >
-                {student.firstName} {student.lastName}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
+      {currentCourse && (
+        <Dropdown>
+          <Dropdown.Toggle>Students</Dropdown.Toggle>
+          <Dropdown.Menu>
+            {students.map((student) => {
+              return (
+                <Dropdown.Item
+                  key={student.id}
+                  onClick={() => handleStudentGradeReport(student)}
+                >
+                  {student.firstName} {student.lastName}
+                </Dropdown.Item>
+              );
+            })}
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
       <p className="text-start">
         {student && `${student.firstName} ${student.lastName}`}
       </p>
