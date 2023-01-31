@@ -3,22 +3,34 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { editCourse } from "../store/slices/courseSlices";
+import { useParams, Link } from "react-router-dom";
 
 const CourseCreate = ({
-  id,
-  setShow,
-  show,
-  handleEditSubmit,
+  setShowEdit,
+  showEdit,
   setname,
   setsubject,
   setgradelevel,
 }) => {
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShowEdit(false);
+  const dispatch = useDispatch();
+  const { courseId } = useParams();
+
+  const [name, setName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [gradeLevel, setGradeLevel] = useState("");
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    dispatch(editCourse({ courseId, name, subject, gradeLevel }));
+    setShowEdit(false);
+  };
 
   return (
     <>
-      {console.log("test")}
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showEdit} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Class</Modal.Title>
         </Modal.Header>
@@ -31,7 +43,7 @@ const CourseCreate = ({
                 placeholder="Class Name"
                 autoFocus
                 ref={setname}
-                onChange={(e) => setname(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="">
@@ -40,7 +52,7 @@ const CourseCreate = ({
                 type="text"
                 placeholder="Subject Name"
                 ref={setsubject}
-                onChange={(e) => setsubject(e.target.value)}
+                onChange={(e) => setSubject(e.target.value)}
               />
             </Form.Group>
 
@@ -50,7 +62,7 @@ const CourseCreate = ({
                 type="text"
                 placeholder="Grade"
                 ref={setgradelevel}
-                onChange={(e) => setgradelevel(e.target.value)}
+                onChange={(e) => setGradeLevel(e.target.value)}
               />
             </Form.Group>
           </Form>

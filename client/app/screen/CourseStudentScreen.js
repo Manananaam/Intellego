@@ -45,7 +45,7 @@ const CourseStudentScreen = () => {
                     <td>{student.lastName}</td>
                     <td>{student.id}</td>
                     <td>
-                      <a href="/report/students">View Report</a>
+                      <Link to={"/report/students"}>View report</Link>
                     </td>
                   </tr>
                 );

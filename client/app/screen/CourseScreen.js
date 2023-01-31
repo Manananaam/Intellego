@@ -20,6 +20,7 @@ import CourseStudentScreen from "./CourseStudentScreen";
 
 const CousreScreen = () => {
   const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
@@ -33,6 +34,7 @@ const CousreScreen = () => {
   }, [dispatch]);
 
   const handleShow = () => setShow(true);
+  const handleShowEdit = () => setShowEdit(true);
 
   const handleCreateSubmit = (e) => {
     e.preventDefault();
@@ -40,11 +42,11 @@ const CousreScreen = () => {
     setShow(false);
   };
 
-  const handleEditSubmit = (e) => {
-    e.preventDefault();
-    dispatch(editCourse({ name, subject, gradeLevel }));
-    setShow(false);
-  };
+  // const handleEditSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(editCourse({ name, subject, gradeLevel }));
+  //   setShow(false);
+  // };
 
   return (
     <div>
@@ -85,7 +87,7 @@ const CousreScreen = () => {
                           </Dropdown.Item>
                           <Dropdown.Item>Assessments</Dropdown.Item>
                           <Dropdown.Item>Report</Dropdown.Item>
-                          <Dropdown.Item onClick={handleShow}>
+                          <Dropdown.Item onClick={handleShowEdit}>
                             Edit
                           </Dropdown.Item>
                           <Dropdown.Item>Archive</Dropdown.Item>
@@ -109,6 +111,8 @@ const CousreScreen = () => {
         setsubject={setSubject}
         setgradelevel={setGradeLevel}
       />
+
+      <CourseEdit showEidt={showEdit} setShowEdit={setShowEdit} />
     </div>
   );
 };
