@@ -31,12 +31,12 @@ router.get(
   })
 );
 
-// get all courses with students
+// get individual courses with students
 router.get(
   "/:courseid/students",
   asyncHandler(async (req, res, next) => {
     res.status(200).json(
-      await Course.findAll({
+      await Course.findByPk(req.params.courseid, {
         include: Student,
       })
     );
