@@ -2,12 +2,13 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllAssessments, selectAllAssessments } from "../store/slices/assessmentsTableSlice";
 import Table from 'react-bootstrap/Table';
+import { NavLink } from "react-router-dom";
 
 const AssessmentsTable = () => {
   const allAssessments = useSelector(selectAllAssessments).assessments;
   const dispatch = useDispatch();
 
-  useEffect( () => {
+  useEffect(() => {
     dispatch(fetchAllAssessments());
   }, [dispatch])
 
@@ -24,7 +25,7 @@ const AssessmentsTable = () => {
       <tbody>
         {allAssessments && allAssessments.length ? allAssessments.map((assessment) => (
         <tr key={assessment.id}>
-          <td>{assessment.title}</td>
+          <td><NavLink to={`/assessments/${assessment.id}`}>{assessment.title}</NavLink></td>
         </tr>
         )) : <tr><td>No Assessments Yet!</td></tr>}
       </tbody>
