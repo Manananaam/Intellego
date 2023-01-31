@@ -5,19 +5,32 @@ const asyncHandler = require("express-async-handler");
 const {
   models: { Assessment, Question },
 } = require("../db");
-
+const protectedRoute = require("./middleware");
 
 //GET all assessments for a specific teacher
 //(teacher id will be handled in a different way...)
+// router.get(
+//   "/",
+//   protectedRoute,
+//   asyncHandler(async (req, res, next) => {
+//     const assessments = await Assessment.findAll({
+//       where: {
+//         userId: req.user.id,
+//       },
+//     });
+//     res.status(200).json({
+//       data: {
+//         assessments,
+//       },
+//     });
+//   })
+// );
+
 router.get(
   "/",
   asyncHandler(async (req, res, next) => {
     const assessments = await Assessment.findAll();
-    res.status(200).json({
-      data: {
-        assessments,
-      },
-    });
+    res.status(200).json(assessments);
   })
 );
 
