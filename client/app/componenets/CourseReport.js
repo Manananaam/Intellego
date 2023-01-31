@@ -1,63 +1,73 @@
-import React, {
-  Dispatch,
-  useEffect
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Chart as ChartJS, BarController, BarElement, Tooltip, Legend } from "chart.js";
+import React from "react";
+import {
+  Chart as ChartJS,
+  BarElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Bar } from "react-chartjs-2";
-ChartJS.register(Tooltip, Legend);
-// import { fetchCourseReportAsync, selectCourseReport } from "../store/slices/CourseReportSlice";
+ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
-// const labels = Utils.months({count: 7});
-// const data = {
-//   labels: labels,
-//   datasets: [{
-//     axis: 'y',
-//     label: 'My First Dataset',
-//     data: [65, 59, 80, 81, 56, 55, 40],
-//     fill: false,
-//     backgroundColor: [
-//       'rgba(255, 99, 132, 0.2)',
-//       'rgba(255, 159, 64, 0.2)',
-//       'rgba(255, 205, 86, 0.2)',
-//       'rgba(75, 192, 192, 0.2)',
-//       'rgba(54, 162, 235, 0.2)',
-//       'rgba(153, 102, 255, 0.2)',
-//       'rgba(201, 203, 207, 0.2)'
-//     ],
-//     borderColor: [
-//       'rgb(255, 99, 132)',
-//       'rgb(255, 159, 64)',
-//       'rgb(255, 205, 86)',
-//       'rgb(75, 192, 192)',
-//       'rgb(54, 162, 235)',
-//       'rgb(153, 102, 255)',
-//       'rgb(201, 203, 207)'
-//     ],
-//     borderWidth: 1
-//   }]
-// };
-// const config = {
-//   type: 'bar',
-//   data: data,
-//   options: {
-//     indexAxis: 'y',
-//   }
-// };
+const dummyData = [
+  {
+    id: 1,
+    studentName: "Student A",
+    gradeAverage: 82,
+  },
+  {
+    id: 2,
+    studentName: "Student B",
+    gradeAverage: 79,
+  },
+  {
+    id: 3,
+    studentName: "Student C",
+    gradeAverage: 85,
+  },
+  {
+    id: 4,
+    studentName: "Student D",
+    gradeAverage: 86,
+  },
+  {
+    id: 5,
+    studentName: "Student F",
+    gradeAverage: 84,
+  },
+  {
+    id: 6,
+    studentName: "Student G",
+    gradeAverage: 82,
+  },
+];
 
-const CourseReport = () => {
-  // const dispatch = useDispatch();
-  // const assessments = useSelector(selectCourseReport)
-  // console.log(assessments)
+export default function CourseReport () {
+  const data = {
+    labels: dummyData.map((student) => student.studentName),
 
-  // useEffect(() => {
-  //   dispatch(fetchCourseReportAsync());
-  // }, [dispatch])
+    datasets: [
+      {
+        label: "Course Report",
+        data: dummyData.map((average) => average.gradeAverage),
 
+        backgroundColor: "aqua",
+        borderColor: "#000",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true
+  };
   return (
-    <div>Hi</div>
-    // <Bar data={data} />
-  )
-}
-
-export default CourseReport;
+    <div>
+      <p className="">Course Report</p>
+      <div style={{ width: "50%" }}>
+        <Bar data={data} options={options}></Bar>
+      </div>
+    </div>
+  );
+};
