@@ -22,3 +22,4 @@ const store = configureStore({
 export default store;
 
 export { example } from "./slices/templateSlices";
+export { fetchStudentList } from "./slices/studentEnrollSlice";

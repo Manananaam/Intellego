@@ -1,5 +1,8 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
+import React, { useEffect } from "react";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudentList } from "../store";
 
 // Chart
 import {
@@ -29,6 +32,13 @@ const response_data = [
 ];
 
 export default function StudentReportScreen() {
+  // fetch a list of student belongs to the course
+  const dispatch = useDispatch();
+  const { students } = useSelector((state) => state.studentEnroll);
+  useEffect(() => {
+    dispatch(fetchStudentList({ courseId: 20 }));
+  }, []);
+
   const data = {
     labels: response_data.map((el) => el.title),
 
