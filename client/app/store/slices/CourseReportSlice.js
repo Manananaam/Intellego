@@ -12,6 +12,17 @@ export const fetchCourseReportAsync = createAsyncThunk(
   }}
   );
 
+  export const fetchCourseList = createAsyncThunk(
+    "courses/:courseId/fetchCourse", async({ courseId }) => {
+      try {
+        const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
+        return data;
+      }
+      catch (err) {
+      next (err)
+    }}
+    )
+
 export const CourseReportSlice = createSlice ({
   name: "report",
   initialState: {},
@@ -23,5 +34,5 @@ export const CourseReportSlice = createSlice ({
   }
 })
 
-export const selectCourseReport = (state) => state.reports;
 export const courseReportReducer = CourseReportSlice.reducer;
+export const { selectCourseReport } = CourseReportSlice.actions;

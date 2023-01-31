@@ -29,14 +29,10 @@ export default function CourseReportScreen() {
   const dispatch = useDispatch();
   // get current course
   const [currentCourse, setCurrentCourse] = useState(null);
-  const { students } = useSelector((state) => state.studentEnroll);
   const { grades, student } = useSelector((state) => state.courseReport);
 
   useEffect(() => {
-    if (currentCourse) {
-      // fetch a list of students that belongs to the current Course
       dispatch(fetchStudentList({ courseId: currentCourse }));
-    }
   }, [currentCourse]);
 
   // get grade report belongs to the student

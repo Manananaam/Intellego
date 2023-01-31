@@ -3,7 +3,7 @@ import { SamplePieChart } from "./screen/TestChart";
 
 // Router
 import { Routes, Route } from "react-router-dom";
-import CourseReport from "./componenets/CourseReport";
+import CourseReportScreen from "./componenets/CourseReport";
 
 export default function App() {
   return (
