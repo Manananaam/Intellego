@@ -93,6 +93,11 @@ const questionSeed = [
     questionText: "To be or not to be: what do you think?",
     assessmentId: 110,
   },
+  {
+    id: 106,
+    questionText: "Who is your favorite WNBA player?",
+    assessmentId: 111,
+  },
 ];
 const studentSeed = [
   {
