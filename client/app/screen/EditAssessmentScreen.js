@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchAssessment, selectAssessment } from "../store/slices/singleAssessmentSlice";
@@ -7,16 +7,26 @@ import Navbar from "react-bootstrap/Navbar"
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+//right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
+
 const EditAssessmentScreen = () => {
   const assessment = useSelector(selectAssessment).assessment.data;
   const dispatch = useDispatch();
   const { assessmentId } = useParams();
+  const [questionText, setQuestionText] = useState("");
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
   }, [dispatch])
 
-  console.log("assessment is:", assessment)
+  const handleNewQuestion = (e) => {
+    e.preventDefault();
+    dispatch(createQuestion({ questionText }));
+    setQuestionText("");
+  }
+//attach this to when someone types in the question field... or clicks out of it? Not sure...
+
+//new handler, as soon as someone types anything into new question field, need to render another new question form item
 
   return (
     <>
@@ -33,7 +43,7 @@ const EditAssessmentScreen = () => {
         <br />
         {assessment && assessment.assessment.questions.length ?
           assessment.assessment.questions.map((question) => (
-            <Form.Group>
+            <Form.Group key={question.id}>
               <Form.Control as="textarea" rows={6} placeholder={question.questionText}></Form.Control>
             </Form.Group>
           )) : <></>}
