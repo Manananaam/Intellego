@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudentList } from "../store";
+import { fetchStudentList, fetchGradeForEachAssessment } from "../store";
 
 // Chart
 import {
@@ -21,35 +21,31 @@ import { Bar } from "react-chartjs-2";
 
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
-const response_data = [
-  {
-    id: 1,
-    title: "Test Assessment 1 ",
-    total_grade: 1,
-  },
-  {
-    id: 5,
-    title: "Test Assessment 2",
-    total_grade: 3,
-  },
-];
-
 export default function StudentReportScreen() {
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
   const { students } = useSelector((state) => state.studentEnroll);
+  const { grades, student } = useSelector((state) => state.studentReport);
+
   useEffect(() => {
     dispatch(fetchStudentList({ courseId: 20 }));
   }, []);
 
-  const data = {
-    labels: response_data.map((el) => el.title),
+  const handleStudentGradeReport = (student) => {
+    console.log(student);
+    dispatch(
+      fetchGradeForEachAssessment({ studentId: student.id, courseId: 20 })
+    );
+  };
 
+  console.log(student, grades);
+
+  const data = {
+    labels: grades.map((el) => el.title),
     datasets: [
       {
         label: "Test chart",
-        data: response_data.map((el) => el.total_grade),
-
+        data: grades.map((el) => el.total_grade),
         backgroundColor: "aqua",
         borderColor: "#000",
         borderWidth: 1,
@@ -66,14 +62,19 @@ export default function StudentReportScreen() {
         <Dropdown.Menu>
           {students.map((student) => {
             return (
-              <Dropdown.Item key={student.id}>
+              <Dropdown.Item
+                key={student.id}
+                onClick={() => handleStudentGradeReport(student)}
+              >
                 {student.firstName} {student.lastName}
               </Dropdown.Item>
             );
           })}
         </Dropdown.Menu>
       </Dropdown>
-      <p className="text-start">student name</p>
+      <p className="text-start">
+        {student && `${student.firstName} ${student.lastName}`}
+      </p>
       <div style={{ width: "50%" }}>
         <Bar data={data} options={options}></Bar>
       </div>
