@@ -16,8 +16,9 @@ export default function CourseReportScreen() {
   const dispatch = useDispatch();
   // get current course
   const [currentCourse, setCurrentCourse] = useState("");
-  const [ courseReport, setCourseReport ] = useSelector((state) => state.report);
+  const { courseReport } = useSelector((state) => state.report);
 
+  console.log(courseReport)
   useEffect(() => {
       dispatch(fetchCourseList({ courseId: currentCourse }));
   }, [currentCourse]);
