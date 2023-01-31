@@ -5,8 +5,10 @@ import axios from "axios";
 export const login = createAsyncThunk("authentication/login", async (user) => {
   //user will be an object that contains at least "email" and "password" values for user
   try {
-    const { data } = await axios.post("authentication/login", user);
+    console.log("logging user info", user);
+    const { data } = await axios.post("api/authentication/login", user);
     //this should return the user data, except for the password
+    console.log("hello from thunk, here is data", data);
     return data;
   } catch {
     throw new Error(error.response.data);
@@ -19,7 +21,7 @@ export const signup = createAsyncThunk(
   async (user) => {
     //note: user should be an object with at least firstname, lastname, email, password
     try {
-      const { data } = await axios.post("/authentication/signup", user);
+      const { data } = await axios.post("/api/authentication/signup", user);
       return data;
     } catch (error) {
       throw new Error(error.response.data);
@@ -36,7 +38,7 @@ export const getUserInfo = createAsyncThunk("authentication/user", async () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data } = await axios.get("authentication/user", config);
+    const { data } = await axios.get("api/authentication/user", config);
     return data;
   } catch {
     throw new Error(error.response.data);
@@ -71,6 +73,11 @@ const authSlice = createSlice({
     //2. add reducer for successful login
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoading = false;
+      console.log(
+        "hello from reducer, about to log action payload",
+        action.payload
+      );
+
       state.user = action.payload.user;
       localStorage.setItem("jwt", JSON.stringify(action.payload.token));
       localStorage.setItem("user", JSON.stringify(action.payload.user));
