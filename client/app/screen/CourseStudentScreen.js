@@ -10,7 +10,6 @@ import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import {
-  fetchAllCourses,
   fetchCourseStudents,
   selectCourses,
 } from "../store/slices/courseSlices";
@@ -34,16 +33,20 @@ const CourseStudentScreen = () => {
             <th>Student ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Report</th>
           </tr>
         </thead>
         <tbody>
           {course.students && course.students.length
             ? course.students.map((student) => {
                 return (
-                  <tr key={student.id} href={"/courses"}>
+                  <tr key={student.id} href="">
                     <td>{student.firstName}</td>
                     <td>{student.lastName}</td>
                     <td>{student.id}</td>
+                    <td>
+                      <a href="/report/students">View Report</a>
+                    </td>
                   </tr>
                 );
               })
