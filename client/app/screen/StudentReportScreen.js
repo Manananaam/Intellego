@@ -40,9 +40,16 @@ const courses = [
 ];
 
 export default function StudentReportScreen() {
-  // Router
+  // Router to fetch courseId, studentId
   const location = useLocation();
-  console.log(location);
+  const [courseId, studentId] = location.search
+    .split("?")[1]
+    .split("&")
+    .map((el) => {
+      const [key, value] = el.split("=");
+      return { [key]: value };
+    });
+  console.log(courseId, studentId);
 
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
