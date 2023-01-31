@@ -7,6 +7,8 @@ import { templateReducer } from "./slices/templateSlices";
 import { courseReportReducer } from "./slices/CourseReportSlice"
 //authentication slice
 import { authReducer } from "./slices/authSlice";
+import allAssessmentsReducer from "./slices/assessmentsTableSlice";
+import assessmentReducer from "./slices/singleAssessmentSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ const store = configureStore({
     report: courseReportReducer,
     courses: courseSlice,
     auth: authReducer,
+    assessments: allAssessmentsReducer,
+    assessment: assessmentReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

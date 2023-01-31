@@ -37,6 +37,11 @@ const assessmentSeed = [
     title: "Quiz on Hamlet",
     userId: 102,
   },
+  {
+    id: 111,
+    title: "Quiz 1",
+    userId: 103,
+  },
 ];
 const courseSeed = [
   {
@@ -47,11 +52,18 @@ const courseSeed = [
     userId: 101,
   },
   {
-    id: 20,
+    id: 120,
     name: "Shakespeare II Class",
     subject: "ELA",
     gradeLevel: 8,
     userId: 102,
+  },
+  {
+    id: 121,
+    name: "WNBA 101",
+    subject: "sports",
+    gradeLevel: 4,
+    userId: 103,
   },
 ];
 const questionSeed = [
@@ -75,6 +87,16 @@ const questionSeed = [
     questionText:
       "What is a movie or book that reminds you of Romeo and Juliet? Why?",
     assessmentId: 108,
+  },
+  {
+    id: 105,
+    questionText: "To be or not to be: what do you think?",
+    assessmentId: 110,
+  },
+  {
+    id: 106,
+    questionText: "Who is your favorite WNBA player?",
+    assessmentId: 111,
   },
 ];
 const studentSeed = [
@@ -105,12 +127,14 @@ const submissionSeed = [
     response: "This is a sample response.",
     questionId: 101,
     studentId: 100,
+    grade: 98,
   },
   {
     id: 109,
     response: "Mercutio",
     questionId: 102,
     studentId: 100,
+    grade: 90,
   },
   {
     id: 110,
@@ -118,18 +142,21 @@ const submissionSeed = [
       "My favorite character is Rosalind, because she was smart not to get together with Romeo.",
     questionId: 102,
     studentId: 101,
+    grade: 100,
   },
   {
     id: 111,
     response: "Superman.",
     questionId: 102,
     studentId: 102,
+    grade: 0,
   },
   {
     id: 112,
     response: "They are too different to get along",
     questionId: 103,
     studentId: 100,
+    grade: 70,
   },
   {
     id: 113,
@@ -137,30 +164,56 @@ const submissionSeed = [
       "It goes back to some slight so insignificant that no one knows what it is or who started it.",
     questionId: 103,
     studentId: 101,
+    grade: 100,
   },
   {
     id: 114,
     response: "idk",
     questionId: 103,
     studentId: 102,
+    grade: 0,
   },
   {
     id: 115,
     response: "Any movie where they are in love",
     questionId: 104,
     studentId: 100,
+    grade: 75,
   },
   {
     id: 116,
     response: "West Side Story.",
     questionId: 104,
     studentId: 101,
+    grade: 90,
   },
   {
     id: 117,
     response: "Captain Underpants",
     questionId: 104,
     studentId: 102,
+    grade: 60,
+  },
+  {
+    id: 118,
+    response: "ok answer",
+    questionId: 105,
+    studentId: 100,
+    grade: 80,
+  },
+  {
+    id: 119,
+    response: "great answer.",
+    questionId: 105,
+    studentId: 101,
+    grade: 100,
+  },
+  {
+    id: 120,
+    response: "answer without a lot of thought",
+    questionId: 105,
+    studentId: 102,
+    grade: 65,
   },
 ];
 
@@ -175,6 +228,8 @@ const courseRosterSeed = [
   { studentId: 100, courseId: 120 },
   { studentId: 101, courseId: 120 },
   { studentId: 102, courseId: 120 },
+  { studentId: 102, courseId: 121 },
+  { studentId: 103, courseId: 121 },
 ];
 
 module.exports = {

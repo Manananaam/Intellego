@@ -35,7 +35,7 @@ router.get(
 
     // return the grade of assessment this student made
     const grade = submissions.reduce((acc, curr) => acc + curr.grade, 0);
-    res.json(grade);
+    res.json(Math.round(grade / submissions.length));
   })
 );
 
