@@ -16,12 +16,9 @@ const Course = db.define("course", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
-  // studentId: {
-  //   type: Sequelize.INTEGER,
-  //   references: {
-  //     model: "Student",
-  //     referencesKey: "id",
-  //   },
-  // },
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true,
+  },
 });
 module.exports = Course;
