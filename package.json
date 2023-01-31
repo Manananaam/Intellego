@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.2.3",
     "chart.js": "^4.2.0",
     "compression": "^1.7.4",
     "dotenv": "^16.0.3",
@@ -29,6 +30,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "pg": "^8.8.0",
+    "react-bootstrap": "^2.7.0",
     "react-chartjs-2": "^5.2.0",
     "sequelize": "^6.25.3"
   },
@@ -42,6 +44,7 @@
     "axios-mock-adapter": "^1.21.2",
     "babel-loader": "^8.2.5",
     "chai": "^4.3.6",
+    "css-loader": "^6.7.3",
     "esm": "^3.2.25",
     "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
@@ -50,6 +53,7 @@
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "redux-logger": "^3.0.6",
+    "style-loader": "^3.3.1",
     "supertest": "^6.3.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
