@@ -45,6 +45,9 @@ router.get(
 );
 
 // @desc: fetch a list of students' grade for this assessment
+// ! what if the student didn't submit any submission yet? that case the grade belongs to that student won't exist.
+// ? I only can get a list of student's grade for those who had submit their answer
+// TODO: At front-end, for those student who haven't made any submission, show "missing" as grade
 // @route: /api/students/assessment/:assessmentId
 // @access: -
 router.get(
@@ -55,41 +58,38 @@ router.get(
       where: {
         assessmentId: req.params.assessmentId,
       },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
     });
-    // 2. group submission by questionId and studentId
-    const submission = await Submission.findAll({
-      where: {
-        questionId: {
-          [Op.in]: questions.map((el) => el.id),
-        },
-      },
-      attributes: [
-        "studentId",
-        [Sequelize.fn("SUM", Sequelize.col("grade")), "total_grade"],
-      ],
-      group: ["studentId"],
-      order: ["studentId"],
-    });
-
+    // 2. get a list of student with their submission in the assessment
     const students = await Student.findAll({
-      where: {
-        id: {
-          [Op.in]: submission.map((el) => el.studentId),
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        {
+          model: Submission,
+          where: {
+            questionId: {
+              [Op.in]: questions.map((el) => el.id),
+            },
+          },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
-      },
+      ],
       order: ["id"],
     });
-    // 3. return
-    const results = students.map((el, idx) => {
+    // 3. calculate the grade
+    const results = students.map((el) => {
       return {
         id: el.id,
         firstName: el.firstName,
         lastName: el.lastName,
-        total_grade: submission[idx].toJSON().total_grade,
+        total_grade: Math.round(
+          el.submissions.reduce((acc, curr) => acc + curr.grade, 0) /
+            el.submissions.length
+        ),
       };
     });
 
-    res.json({
+    res.status(200).json({
       results,
     });
   })
