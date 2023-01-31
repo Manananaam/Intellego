@@ -30,7 +30,18 @@ const EditAssessmentScreen = () => {
           <Form.Label>Assessment Title</Form.Label>
           <Form.Control size="lg" type="text" placeholder={assessment ? assessment.assessment.title : "Your Title Here"}></Form.Control>
         </Form.Group>
+        <br />
+        {assessment && assessment.assessment.questions.length ?
+          assessment.assessment.questions.map((question) => (
+            <Form.Group>
+              <Form.Control as="textarea" rows={6} placeholder={question.questionText}></Form.Control>
+            </Form.Group>
+          )) : <></>}
+        <Form.Group>
+          <Form.Control as="textarea" rows={6} placeholder="Add a Question +"></Form.Control>
+        </Form.Group>
       </Form>
+      <Button as="input" type="submit" value="Submit"></Button>
     </>
   );
 };
