@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+//Bootstrap
+import Dropdown from "react-bootstrap/Dropdown";
+
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentList } from "../store";
@@ -58,7 +61,19 @@ export default function StudentReportScreen() {
 
   return (
     <div>
-      <p className="">student name</p>
+      <Dropdown>
+        <Dropdown.Toggle>Students</Dropdown.Toggle>
+        <Dropdown.Menu>
+          {students.map((student) => {
+            return (
+              <Dropdown.Item key={student.id}>
+                {student.firstName} {student.lastName}
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
+      <p className="text-start">student name</p>
       <div style={{ width: "50%" }}>
         <Bar data={data} options={options}></Bar>
       </div>
