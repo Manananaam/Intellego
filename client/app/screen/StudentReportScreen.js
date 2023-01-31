@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+//Router
+import { useLocation } from "react-router-dom";
+
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -37,6 +40,10 @@ const courses = [
 ];
 
 export default function StudentReportScreen() {
+  // Router
+  const location = useLocation();
+  console.log(location);
+
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
   // get current course
