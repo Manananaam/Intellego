@@ -3,10 +3,12 @@ import logger from "redux-logger";
 
 // From templateSlices
 import { templateReducer } from "./slices/templateSlices";
+//authentication slice
+import { authReducer } from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
-    template: templateReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
