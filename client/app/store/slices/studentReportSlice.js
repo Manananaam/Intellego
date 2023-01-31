@@ -26,7 +26,7 @@ const studentReportSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(fetchGradeForEachAssessment.fulfilled, (state, action) => {
       state.student = action.payload.student;
-      state.grades = action.payload.listOfGrade;
+      state.grades = action.payload.gradeAtEachAssessment;
     });
   },
 });
