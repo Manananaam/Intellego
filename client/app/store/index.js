@@ -9,10 +9,12 @@ import { studentReportReducer } from "./slices/studentReportSlice";
 
 //na: From student enroll slice
 import { studentEnrollReducer } from "./slices/studentEnrollSlice";
+//authentication slice
+import { authReducer } from "./slices/authSlice";
 
 const store = configureStore({
   reducer: {
-    template: templateReducer,
+    auth: authReducer,
     studentReport: studentReportReducer,
     studentEnroll: studentEnrollReducer,
   },
