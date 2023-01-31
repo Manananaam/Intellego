@@ -22,6 +22,7 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 // dummy data for a list of courses that teacher is in charge of
+// TODO: in courseRouter, get all course might involved authentication to get userId. that's why this router haven't completed yet, so I just use the dummy response to render to course dropdown menu
 const courses = [
   {
     id: 14,
@@ -38,16 +39,19 @@ const courses = [
 export default function StudentReportScreen() {
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
+  // get current course
   const [currentCourse, setCurrentCourse] = useState(null);
   const { students } = useSelector((state) => state.studentEnroll);
   const { grades, student } = useSelector((state) => state.studentReport);
 
   useEffect(() => {
     if (currentCourse) {
+      // fetch a list of students that belongs to the current Course
       dispatch(fetchStudentList({ courseId: currentCourse }));
     }
   }, [currentCourse]);
 
+  // get grade report belongs to the student
   const handleStudentGradeReport = (student) => {
     dispatch(
       fetchGradeForEachAssessment({
@@ -57,12 +61,14 @@ export default function StudentReportScreen() {
     );
   };
 
+  // get current course
   const handleCurrentCourse = (course) => {
     setCurrentCourse(course.id);
   };
 
   console.log(student, grades);
 
+  // chart data
   const data = {
     labels: grades.map((el) => el.title),
     datasets: [
@@ -75,7 +81,6 @@ export default function StudentReportScreen() {
       },
     ],
   };
-
   const options = {};
 
   return (
