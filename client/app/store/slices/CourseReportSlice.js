@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchCourseReportAsync = createAsyncThunk(
+export const fetchCourseReport = createAsyncThunk(
   "courses/report/fetchGrades", async({ courseId }) => {
     try {
       const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
@@ -21,14 +21,18 @@ export const fetchCourseReportAsync = createAsyncThunk(
       catch (err) {
       next (err)
     }}
-    )
+    );
+
 
 export const CourseReportSlice = createSlice ({
   name: "report",
   initialState: {},
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAllCourseReportAsync.fulfilled, (state, action) => {
+    builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
+      return action.payload;
+    });
+    builder.addCase(fetchCourseList.fulfilled, (state, action) => {
       return action.payload;
     })
   }

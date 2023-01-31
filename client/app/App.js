@@ -21,6 +21,7 @@ export default function App() {
           element={<CourseStudentScreen />} />
         <Route path='/login' element={<LogInScreen />} />
         <Route path='/signup' element={<SignUpScreen />} />
+        <Route path='/report/courses/:courseId' element={<CourseReportScreen />} />
       </Routes>
     </div>
   );
