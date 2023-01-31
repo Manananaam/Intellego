@@ -5,7 +5,7 @@ import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 
-//Redux & Routers
+//React related imports
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCourses,
@@ -13,10 +13,10 @@ import {
   createCourse,
   editCourse,
 } from "../store/slices/courseSlices";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import CourseCreate from "../componenets/CourseCreate";
 import CourseEdit from "../componenets/CourseEdit";
+import CourseStudentScreen from "./CourseStudentScreen";
 
 const CousreScreen = () => {
   const [show, setShow] = useState(false);
@@ -25,8 +25,8 @@ const CousreScreen = () => {
   const [gradeLevel, setGradeLevel] = useState("");
 
   const courses = useSelector(selectCourses);
+  console.log(courses);
   const dispatch = useDispatch();
-  const { id } = useParams();
 
   useEffect(() => {
     dispatch(fetchAllCourses());
@@ -78,7 +78,11 @@ const CousreScreen = () => {
                       <Dropdown>
                         <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item>Students</Dropdown.Item>
+                          <Dropdown.Item
+                            href={`/courses/${course.id}/students`}
+                          >
+                            Students
+                          </Dropdown.Item>
                           <Dropdown.Item>Assessments</Dropdown.Item>
                           <Dropdown.Item>Report</Dropdown.Item>
                           <Dropdown.Item onClick={handleShow}>

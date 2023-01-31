@@ -11,12 +11,12 @@ export const fetchAllCourses = createAsyncThunk("/courses", async () => {
   }
 });
 
-//fetching all courses with assessments
+//fetching individual courses with assessments
 export const fetchCourseAssesments = createAsyncThunk(
   "/coursesAssessments",
   async (courseId) => {
     try {
-      const { data } = await axios.get(`/api/${courseId}/assessments`);
+      const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
       return data;
     } catch (error) {
       return error.message;
@@ -24,12 +24,12 @@ export const fetchCourseAssesments = createAsyncThunk(
   }
 );
 
-//fetching all courses with students
+//fetching individual courses with students
 export const fetchCourseStudents = createAsyncThunk(
-  "/coursesStudents",
+  "/:courseId/students",
   async (courseId) => {
     try {
-      const { data } = await axios.get(`/api/${courseId}/students`);
+      const { data } = await axios.get(`/api/courses/${courseId}/students`);
       return data;
     } catch (error) {
       return error.message;
