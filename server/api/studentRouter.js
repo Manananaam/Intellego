@@ -173,8 +173,12 @@ router.get(
         ),
       };
     });
+    const student = await Student.findByPk(req.params.studentId, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
 
     res.status(200).json({
+      student,
       gradeAtEachAssessment,
     });
   })
