@@ -189,6 +189,27 @@ const submissionSeed = [
     studentId: 102,
     grade: 60,
   },
+  {
+    id: 118,
+    response: "ok answer",
+    questionId: 105,
+    studentId: 100,
+    grade: 80,
+  },
+  {
+    id: 119,
+    response: "great answer.",
+    questionId: 105,
+    studentId: 101,
+    grade: 100,
+  },
+  {
+    id: 120,
+    response: "answer without a lot of thought",
+    questionId: 105,
+    studentId: 102,
+    grade: 65,
+  },
 ];
 
 const courseAssessmentsSeed = [
