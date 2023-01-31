@@ -102,33 +102,35 @@ router.get(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments();
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: {
-          [Op.in]: assessments.map((el) => el.id),
+    const assessments = await course.getAssessments({
+      include: [
+        {
+          model: Question,
+          include: [
+            {
+              model: Submission,
+              where: {
+                studentId: req.params.studentId,
+              },
+            },
+          ],
         },
-      },
+      ],
     });
 
-    const submissions = await Submission.findAll({
-      where: {
-        studentId: req.params.studentId,
-        questionId: {
-          [Op.in]: questions.map((el) => el.id),
-        },
-      },
-    });
-
-    const student = await Student.findByPk(req.params.studentId, {
-      attributes: ["id", "firstName", "lastName"],
+    const gradeAtEachAssessment = assessments.map((el) => {
+      return Math.round(
+        el.questions.reduce((acc, curr) => acc + curr.submissions[0].grade, 0) /
+          el.questions.length
+      );
     });
 
     res.status(200).json({
-      student: {
-        ...student.toJSON(),
-        overall_grade: submissions.reduce((acc, curr) => acc + curr.grade, 0),
-      },
+      gradeAtEachAssessment,
+      overall_grade: Math.round(
+        gradeAtEachAssessment.reduce((acc, curr) => acc + curr, 0) /
+          gradeAtEachAssessment.length
+      ),
     });
   })
 );
