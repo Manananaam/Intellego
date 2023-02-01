@@ -29,8 +29,12 @@ const protectedRoute = require("./middleware");
 router.get(
   "/",
   asyncHandler(async (req, res, next) => {
-    const assessments = await Assessment.findAll();
-    res.status(200).json({results: assessments.length, assessments});
+    const assessments = await Assessment.findAll({
+      include: {
+        model: Question,
+      }
+    });
+    res.status(200).json({assessments});
   })
 );
 

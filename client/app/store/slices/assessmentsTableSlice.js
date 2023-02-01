@@ -5,7 +5,7 @@ const initialState = {
   assessments: [],
 };
 
-//fetch all assessments 
+//fetch all assessments that are active
 export const fetchAllAssessments = createAsyncThunk(
   "allAssessments",
   async () => {
