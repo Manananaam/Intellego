@@ -3,12 +3,14 @@ const {
   models: { Student, Course, Assessment },
 } = require("../db");
 const asyncHandler = require("express-async-handler");
+const Submission = require("../db/models/submissionModel");
 
 /*
 courses/:courseid/assessments
 courses/:courseid/students
 courses/:courseid/assessments/:assessmentid
 courses/:courseid/students/:studentid
+courses/:courseid/submissions
 */
 
 // get all course list
@@ -71,5 +73,22 @@ router.put(
 //     );
 //   })
 // );
+
+//@desc fetch grades for every assessment in a particular course
+
+router.get(
+  "/:courseid/submissions",
+  asyncHandler(async (req, res, next) => {
+    //see all students in this class:
+    const allStudents = await Course.findByPk(req.params.courseid, {
+      include: Student,
+    });
+    //see all assessments for this class:
+    const allAssessments = await Course.findByPk(req.params.courseid, {
+      include: Assessment,
+    });
+    res.json({ allStudents, allAssessments });
+  })
+);
 
 module.exports = router;
