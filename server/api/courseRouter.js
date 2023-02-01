@@ -79,15 +79,13 @@ router.put(
 router.get(
   "/:courseid/submissions",
   asyncHandler(async (req, res, next) => {
-    //see all students in this class:
-    const allStudents = await Course.findByPk(req.params.courseid, {
-      include: Student,
-    });
-    //see all assessments for this class:
-    const allAssessments = await Course.findByPk(req.params.courseid, {
-      include: Assessment,
-    });
-    res.json({ allStudents, allAssessments });
+    res.json(
+      await Submission.findAll({
+        where: {
+          courseId: req.params.courseid,
+        },
+      })
+    );
   })
 );
 
