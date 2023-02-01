@@ -28,7 +28,7 @@ ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 // TODO: in courseRouter, get all course might involved authentication to get userId. that's why this router haven't completed yet, so I just use the dummy response to render to course dropdown menu
 const courses = [
   {
-    id: 14,
+    id: 114,
     name: "Test Course",
     subject: "ELA",
     gradeLevel: 3,
@@ -42,14 +42,14 @@ const courses = [
 export default function StudentReportScreen() {
   // Router to fetch courseId, studentId
   const location = useLocation();
-  const [courseId, studentId] = location.search
-    .split("?")[1]
-    .split("&")
-    .map((el) => {
-      const [key, value] = el.split("=");
-      return { [key]: value };
-    });
-  console.log(courseId, studentId);
+  // const [courseId, studentId] = location.search
+  //   .split("?")[1]
+  //   .split("&")
+  //   .map((el) => {
+  //     const [key, value] = el.split("=");
+  //     return { [key]: value };
+  //   });
+  // console.log(courseId, studentId);
 
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ export default function StudentReportScreen() {
     datasets: [
       {
         label: "Test chart",
-        data: grades.map((el) => el.total_grade),
+        data: grades.map((el) => el.grade),
         backgroundColor: "aqua",
         borderColor: "#000",
         borderWidth: 1,
