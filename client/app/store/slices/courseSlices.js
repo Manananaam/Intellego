@@ -90,7 +90,8 @@ export const courseSlice = createSlice({
       state.push(action.payload);
     });
     builder.addCase(editCourse.fulfilled, (state, action) => {
-      return action.payload;
+      // return action.payload;
+      return state.filter((course) => course.courseId !== action.payload);
     });
   },
 });
