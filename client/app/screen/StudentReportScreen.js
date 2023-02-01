@@ -37,7 +37,7 @@ export default function StudentReportScreen() {
           .split("?")[1]
           .split("&")
           .map((el) => {
-            const [key, value] = el.split("=");
+            const [_, value] = el.split("=");
             return { id: value };
           })
       : [null, null];
@@ -106,7 +106,7 @@ export default function StudentReportScreen() {
     setCurrentStudent(null);
   };
   // update current student when user click dropdown item
-  const handleStudentGradeReport = (student) => {
+  const handleCurrentStudent = (student) => {
     setCurrentStudent(student);
   };
 
@@ -158,7 +158,7 @@ export default function StudentReportScreen() {
               return (
                 <Dropdown.Item
                   key={student.id}
-                  onClick={() => handleStudentGradeReport(student)}
+                  onClick={() => handleCurrentStudent(student)}
                 >
                   {student.firstName} {student.lastName}
                 </Dropdown.Item>
