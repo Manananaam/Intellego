@@ -4,22 +4,21 @@ const {
 } = require("../db");
 const asyncHandler = require("express-async-handler");
 
-/*
-courses/:courseid/assessments
-courses/:courseid/students
-courses/:courseid/assessments/:assessmentid
-courses/:courseid/students/:studentid
-*/
-
-// get all course list
+// GET all course list
 router.get(
   "/",
   asyncHandler(async (req, res, next) => {
-    res.status(200).json(await Course.findAll());
+    res.status(200).json(
+      await Course.findAll({
+        where: {
+          isActive: true,
+        },
+      })
+    );
   })
 );
 
-// coursed assessments
+// GET indiviual courses with assessments
 router.get(
   "/:courseid/assessments",
   asyncHandler(async (req, res, next) => {
@@ -31,7 +30,7 @@ router.get(
   })
 );
 
-// get individual courses with students
+// GET individual courses with students
 router.get(
   "/:courseid/students",
   asyncHandler(async (req, res, next) => {
@@ -43,7 +42,7 @@ router.get(
   })
 );
 
-// create new courses
+// POST(create) a courses
 router.post(
   "/",
   asyncHandler(async (req, res, next) => {
@@ -51,7 +50,7 @@ router.post(
   })
 );
 
-// Edit a course
+// PUT(update) a course
 router.put(
   "/:courseId",
   asyncHandler(async (req, res, next) => {
@@ -60,16 +59,13 @@ router.put(
   })
 );
 
-// get courses with single students
-// router.get(
-//   "/students/:studentId",
-//   asyncHandler(async (req, res, next) => {
-//     res.status(200).json(
-//       await Course.findByPk(req.params.studentId, {
-//         include: Student,
-//       })
-//     );
-//   })
-// );
+//PUT(update) isActive
+router.put(
+  "/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const courseActive = await Course.findByPk(req.params.courseId);
+    res.status(200).send(await courseActive.update(req.body.isActive));
+  })
+);
 
 module.exports = router;

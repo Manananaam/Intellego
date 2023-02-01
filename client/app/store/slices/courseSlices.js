@@ -71,6 +71,21 @@ export const editCourse = createAsyncThunk(
   }
 );
 
+//archive course
+export const isActiveCourse = createAsyncThunk(
+  "/courseActive",
+  async ({ courseId, isActive }) => {
+    try {
+      const { data } = await axios.put(`/api/courses/${courseId}`, {
+        isActive,
+      });
+      return data;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
 //Slices
 export const courseSlice = createSlice({
   name: "courses",
@@ -90,8 +105,14 @@ export const courseSlice = createSlice({
       state.push(action.payload);
     });
     builder.addCase(editCourse.fulfilled, (state, action) => {
-      // return action.payload;
       return state.filter((course) => course.courseId !== action.payload);
+    });
+    builder.addCase(isActiveCourse.fulfilled, (state, action) => {
+      // return state.filter((course) => {
+      //   console.log(course.isActive, action.payload.isActive);
+      //   return course.isActive !== action.payload.isActive;
+      // });
+      return action.payload;
     });
   },
 });
