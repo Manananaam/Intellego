@@ -15,6 +15,9 @@ import CourseAssessmentsScreen from "./screen/CourseAssessmentsScreen";
 // Screen
 import StudentReportScreen from "./screen/StudentReportScreen";
 
+// Screen
+import StudentReportScreen from "./screen/StudentReportScreen";
+
 export default function App() {
   return (
     <div>
@@ -24,6 +27,11 @@ export default function App() {
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/" element={<HomeScreen />} />
+
+        <Route path="/test" element={<SamplePieChart />} />
+        <Route path="/login" element={<LogInScreen />} />
+        <Route path="/signup" element={<SignUpScreen />} />
+
         <Route path="/courses" element={<CousreScreen />} />
         <Route
           path="/courses/:courseId/students"
