@@ -39,6 +39,9 @@ Submission.belongsTo(Course);
 Assessment.hasMany(Question);
 Question.belongsTo(Assessment);
 
+Assessment.hasMany(Submission);
+Submission.belongsTo(Assessment);
+
 module.exports = {
   db,
   models: {

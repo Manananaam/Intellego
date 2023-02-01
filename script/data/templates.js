@@ -129,6 +129,7 @@ const submissionSeed = [
     studentId: 100,
     grade: 98,
     courseId: 114,
+    assessmentId: 105,
   },
   {
     id: 109,
@@ -137,6 +138,7 @@ const submissionSeed = [
     studentId: 100,
     grade: 90,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 110,
@@ -146,6 +148,7 @@ const submissionSeed = [
     studentId: 101,
     grade: 100,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 111,
@@ -154,6 +157,7 @@ const submissionSeed = [
     studentId: 102,
     grade: 0,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 112,
@@ -162,6 +166,7 @@ const submissionSeed = [
     studentId: 100,
     grade: 70,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 113,
@@ -171,6 +176,7 @@ const submissionSeed = [
     studentId: 101,
     grade: 100,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 114,
@@ -179,6 +185,7 @@ const submissionSeed = [
     studentId: 102,
     grade: 0,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 115,
@@ -187,6 +194,7 @@ const submissionSeed = [
     studentId: 100,
     grade: 75,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 116,
@@ -195,6 +203,7 @@ const submissionSeed = [
     studentId: 101,
     grade: 90,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 117,
@@ -203,6 +212,7 @@ const submissionSeed = [
     studentId: 102,
     grade: 60,
     courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 118,
@@ -211,6 +221,7 @@ const submissionSeed = [
     studentId: 100,
     grade: 80,
     courseId: 120,
+    assessmentId: 110,
   },
   {
     id: 119,
@@ -219,6 +230,7 @@ const submissionSeed = [
     studentId: 101,
     grade: 100,
     courseId: 120,
+    assessmentId: 110,
   },
   {
     id: 120,
@@ -227,6 +239,7 @@ const submissionSeed = [
     studentId: 102,
     grade: 65,
     courseId: 120,
+    assessmentId: 110,
   },
 ];
 

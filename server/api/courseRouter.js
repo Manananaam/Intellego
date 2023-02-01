@@ -79,13 +79,13 @@ router.put(
 router.get(
   "/:courseid/submissions",
   asyncHandler(async (req, res, next) => {
-    res.json(
-      await Submission.findAll({
-        where: {
-          courseId: req.params.courseid,
-        },
-      })
-    );
+    const allSubmissions = await Submission.findAll({
+      where: {
+        courseId: req.params.courseid,
+      },
+    });
+    const ungraded = [];
+    const graded = [];
   })
 );
 
