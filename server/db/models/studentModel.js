@@ -47,4 +47,23 @@ Student.prototype.calculateGradeAtAssessment = async function (assessmentId) {
   return total_grade;
 };
 
+Student.prototype.calculateOverallGradeAtCourse = async function (course) {
+  const assessments = await course.getAssessments();
+  const gradeAtEachAssessment = await Promise.all(
+    assessments.map(async (assessement) => {
+      return {
+        id: assessement.id,
+        title: assessement.title,
+        grade: await this.calculateGradeAtAssessment(assessement.id),
+      };
+    })
+  );
+  const overall_grade = Math.round(
+    gradeAtEachAssessment.reduce((acc, curr) => acc + curr.grade, 0) /
+      assessments.length
+  );
+
+  return overall_grade;
+};
+
 module.exports = Student;
