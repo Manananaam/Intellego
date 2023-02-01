@@ -63,12 +63,15 @@ export default function StudentReportScreen() {
     ) {
       setCurrentCourse(courses);
       setCurrentStudent(courses.students.find((el) => el.id === studentId));
-      dispatch(
-        fetchGradeForEachAssessment({
-          courseId,
-          studentId,
-        })
-      );
+      // check query string both exsit, to prevent send invalid id as request to server
+      if (courseId && studentId) {
+        dispatch(
+          fetchGradeForEachAssessment({
+            courseId,
+            studentId,
+          })
+        );
+      }
     }
   }, [courses, courseId, studentId]);
 
@@ -169,7 +172,7 @@ export default function StudentReportScreen() {
         {currentStudent &&
           `${currentStudent.firstName} ${currentStudent.lastName}`}
       </p>
-      {chart}
+      {currentCourse ? chart : <p>Please select a course</p>}
     </div>
   );
 }
