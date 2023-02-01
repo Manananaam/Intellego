@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 //Router
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
@@ -31,18 +31,12 @@ ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 export default function StudentReportScreen() {
   // use router hook to fetch current courseId and studentId
-  const location = useLocation();
-  const [courseId, studentId] =
-    location.search.length > 0
-      ? location.search
-          .split("?")[1]
-          .split("&")
-          .map((el) => {
-            const [_, value] = el.split("=");
-            return { id: Number(value) };
-          })
-      : [null, null];
+  let [searchParams, setSearchParams] = useSearchParams();
 
+  const [courseId, studentId] = [
+    searchParams.get("courseId"),
+    searchParams.get("studentId"),
+  ];
   const dispatch = useDispatch();
   // initial current course ans current student
   const [currentCourse, setCurrentCourse] = useState(null);
@@ -61,18 +55,16 @@ export default function StudentReportScreen() {
     if (courseId && studentId) {
       if (Object.keys(courses).length && courses.students) {
         setCurrentCourse(courses);
-        setCurrentStudent(
-          courses.students.find((el) => el.id === studentId.id)
-        );
+        setCurrentStudent(courses.students.find((el) => el.id === studentId));
         dispatch(
           fetchGradeForEachAssessment({
-            courseId: courseId.id,
-            studentId: studentId.id,
+            courseId,
+            studentId,
           })
         );
       } else {
         // fetch course with student if user refresh page in path:/report/students?courseId=${courseId}&studentId=${student.id}
-        dispatch(fetchCourseStudents(courseId.id));
+        dispatch(fetchCourseStudents(courseId));
       }
     }
   }, [courses]);
@@ -103,11 +95,16 @@ export default function StudentReportScreen() {
 
   // update current course when user click dropdown item
   const handleCurrentCourse = (course) => {
+    searchParams.set("courseId", course.id);
+    searchParams.delete("studentId");
+    setSearchParams(searchParams);
     setCurrentCourse(course);
     setCurrentStudent(null);
   };
   // update current student when user click dropdown item
   const handleCurrentStudent = (student) => {
+    searchParams.set("studentId", student.id);
+    setSearchParams(searchParams);
     setCurrentStudent(student);
   };
 
