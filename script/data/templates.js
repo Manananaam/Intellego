@@ -128,6 +128,8 @@ const submissionSeed = [
     questionId: 101,
     studentId: 100,
     grade: 98,
+    courseId: 114,
+    assessmentId: 105,
   },
   {
     id: 109,
@@ -135,6 +137,8 @@ const submissionSeed = [
     questionId: 102,
     studentId: 100,
     grade: 90,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 110,
@@ -143,6 +147,8 @@ const submissionSeed = [
     questionId: 102,
     studentId: 101,
     grade: 100,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 111,
@@ -150,6 +156,8 @@ const submissionSeed = [
     questionId: 102,
     studentId: 102,
     grade: 0,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 112,
@@ -157,6 +165,8 @@ const submissionSeed = [
     questionId: 103,
     studentId: 100,
     grade: 70,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 113,
@@ -165,6 +175,8 @@ const submissionSeed = [
     questionId: 103,
     studentId: 101,
     grade: 100,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 114,
@@ -172,6 +184,8 @@ const submissionSeed = [
     questionId: 103,
     studentId: 102,
     grade: 0,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 115,
@@ -179,6 +193,8 @@ const submissionSeed = [
     questionId: 104,
     studentId: 100,
     grade: 75,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 116,
@@ -186,6 +202,8 @@ const submissionSeed = [
     questionId: 104,
     studentId: 101,
     grade: 90,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 117,
@@ -193,6 +211,8 @@ const submissionSeed = [
     questionId: 104,
     studentId: 102,
     grade: 60,
+    courseId: 120,
+    assessmentId: 108,
   },
   {
     id: 118,
@@ -200,6 +220,8 @@ const submissionSeed = [
     questionId: 105,
     studentId: 100,
     grade: 80,
+    courseId: 120,
+    assessmentId: 110,
   },
   {
     id: 119,
@@ -207,6 +229,8 @@ const submissionSeed = [
     questionId: 105,
     studentId: 101,
     grade: 100,
+    courseId: 120,
+    assessmentId: 110,
   },
   {
     id: 120,
@@ -214,6 +238,8 @@ const submissionSeed = [
     questionId: 105,
     studentId: 102,
     grade: 65,
+    courseId: 120,
+    assessmentId: 110,
   },
 ];
 
