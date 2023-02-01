@@ -8,8 +8,11 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStudentList, fetchGradeForEachAssessment } from "../store";
-import { fetchAllCourses } from "../store/slices/courseSlices";
+import {
+  fetchStudentList,
+  fetchGradeForEachAssessment,
+  getCourses,
+} from "../store";
 
 // Chart
 import {
@@ -50,24 +53,31 @@ export default function StudentReportScreen() {
   console.log("current course", currentCourse);
   // redux state
   const courses = useSelector((state) => state.courses);
-  const { students } = useSelector((state) => state.studentEnroll);
+  const { students, allcourses } = useSelector((state) => state.studentEnroll);
   const { student, grades } = useSelector((state) => state.studentReport);
 
   useEffect(() => {
-    if (courseId && studentId && Object.keys(courses).length) {
+    if (
+      courseId &&
+      studentId &&
+      Object.keys(courses).length &&
+      courses.students
+    ) {
       setCurrentCourse(courses);
-      setCurrentStudent(courses.students[0]);
+      setCurrentStudent(
+        courses.students.find((el) => el.id === Number(studentId.id))
+      );
       dispatch(
         fetchGradeForEachAssessment({
-          studentId: courseId.id,
-          courseId: studentId.id,
+          courseId: courseId.id,
+          studentId: studentId.id,
         })
       );
     }
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAllCourses());
+    dispatch(getCourses());
   }, []);
 
   useEffect(() => {
@@ -119,9 +129,9 @@ export default function StudentReportScreen() {
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {courses &&
-            courses.length &&
-            courses.map((course) => {
+          {allcourses &&
+            allcourses.length &&
+            allcourses.map((course) => {
               return (
                 <Dropdown.Item
                   key={course.id}
