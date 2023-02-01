@@ -12,7 +12,7 @@ const {
 // @route: /api/students/courses/:courseId
 // @access: -
 router.get(
-  "/courses/:courseId",
+  "/courses/:courseId/overallGrade",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
     const students = await course.getStudents();
