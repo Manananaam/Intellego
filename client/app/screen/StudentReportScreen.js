@@ -34,8 +34,8 @@ export default function StudentReportScreen() {
   let [searchParams, setSearchParams] = useSearchParams();
 
   const [courseId, studentId] = [
-    searchParams.get("courseId"),
-    searchParams.get("studentId"),
+    Number(searchParams.get("courseId")),
+    Number(searchParams.get("studentId")),
   ];
   const dispatch = useDispatch();
   // initial current course ans current student
