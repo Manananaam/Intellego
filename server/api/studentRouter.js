@@ -15,28 +15,9 @@ const {
 router.get(
   "/:studentId/assessment/:assessmentId",
   asyncHandler(async (req, res, next) => {
-    //  1. use assessmentId to get all question related to this assessment
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: req.params.assessmentId,
-      },
-    });
-
-    // 2. use questionId and studentId to fetch all submission that related to this assessment this student submit
-    const questionIds = questions.map((question) => question.id);
-    const submissions = await Submission.findAll({
-      where: {
-        questionId: {
-          [Op.in]: questionIds,
-        },
-        studentId: req.params.studentId,
-      },
-    });
-
-    // return the grade of assessment this student made
-    const total_grade = Math.round(
-      submissions.reduce((acc, curr) => acc + curr.grade, 0) /
-        submissions.length
+    const student = await Student.findByPk(req.params.studentId);
+    const total_grade = await student.calculateGradeAtAssessment(
+      req.params.assessmentId
     );
     res.status(200).json({
       total_grade,
@@ -51,46 +32,29 @@ router.get(
 // @route: /api/students/assessment/:assessmentId
 // @access: -
 router.get(
-  "/assessment/:assessmentId",
+  "/courses/:courseId/assessment/:assessmentId",
   asyncHandler(async (req, res, next) => {
-    // 1. use assessmentId to get all question related to this assessment
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: req.params.assessmentId,
-      },
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
-    // 2. get a list of student with their submission in the assessment
-    const students = await Student.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-        {
-          model: Submission,
-          where: {
-            questionId: {
-              [Op.in]: questions.map((el) => el.id),
-            },
-          },
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-        },
-      ],
-      order: ["id"],
-    });
-    // 3. calculate the grade
-    const results = students.map((el) => {
-      return {
-        id: el.id,
-        firstName: el.firstName,
-        lastName: el.lastName,
-        total_grade: Math.round(
-          el.submissions.reduce((acc, curr) => acc + curr.grade, 0) /
-            el.submissions.length
-        ),
-      };
-    });
+    // 1. fetch a list of student, who had been assigned to this assessment in the course
+    const course = await Course.findByPk(req.params.courseId);
+    const students = await course.getStudents();
+
+    // 2. calculate the grade belongs to each student in the assessment
+    const gradeForEachStudent = await Promise.all(
+      students.map(async (student) => {
+        return {
+          id: student.id,
+          firstName: student.firstName,
+          lastName: student.lastName,
+          total_grade: await student.calculateGradeAtAssessment(
+            req.params.assessmentId
+          ),
+        };
+      })
+    );
 
     res.status(200).json({
-      results,
+      numsOfStudents: students.length,
+      gradeForEachStudent,
     });
   })
 );
@@ -102,36 +66,19 @@ router.get(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments({
-      include: [
-        {
-          model: Question,
-          include: [
-            {
-              model: Submission,
-              where: {
-                studentId: req.params.studentId,
-              },
-            },
-          ],
-        },
-      ],
-    });
+    const assessments = await course.getAssessments();
+    const student = await Student.findByPk(req.params.studentId);
+    const gradeAtEachAssessment = await Promise.all(
+      assessments.map((assessement) => {
+        return student.calculateGradeAtAssessment(assessement.id);
+      })
+    );
+    const overall_grade = Math.round(
+      gradeAtEachAssessment.reduce((acc, curr) => acc + curr, 0) /
+        assessments.length
+    );
 
-    const gradeAtEachAssessment = assessments.map((el) => {
-      return Math.round(
-        el.questions.reduce((acc, curr) => acc + curr.submissions[0].grade, 0) /
-          el.questions.length
-      );
-    });
-
-    res.status(200).json({
-      gradeAtEachAssessment,
-      overall_grade: Math.round(
-        gradeAtEachAssessment.reduce((acc, curr) => acc + curr, 0) /
-          gradeAtEachAssessment.length
-      ),
-    });
+    res.status(200).json({ overall_grade });
   })
 );
 
@@ -141,44 +88,20 @@ router.get(
 router.get(
   "/:studentId/courses/:courseId/assessments",
   asyncHandler(async (req, res, next) => {
-    // 1. get all assessments related to this course
-    // 2. find all question related to this assessments
-    // 3. get all submission this student submit and related to this assessment's question
     const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments({
-      include: [
-        {
-          model: Question,
-          include: [
-            {
-              model: Submission,
-              where: {
-                studentId: req.params.studentId,
-              },
-            },
-          ],
-        },
-      ],
-    });
-
-    const gradeAtEachAssessment = assessments.map((el) => {
-      return {
-        id: el.id,
-        title: el.title,
-        total_grade: Math.round(
-          el.questions.reduce(
-            (acc, curr) => acc + curr.submissions[0].grade,
-            0
-          ) / el.questions.length
-        ),
-      };
-    });
-    const student = await Student.findByPk(req.params.studentId, {
-      attributes: { exclude: ["createdAt", "updatedAt"] },
-    });
+    const assessments = await course.getAssessments();
+    const student = await Student.findByPk(req.params.studentId);
+    const gradeAtEachAssessment = await Promise.all(
+      assessments.map(async (assessement) => {
+        return {
+          id: assessement.id,
+          title: assessement.title,
+          grade: await student.calculateGradeAtAssessment(assessement.id),
+        };
+      })
+    );
 
     res.status(200).json({
-      student,
       gradeAtEachAssessment,
     });
   })
