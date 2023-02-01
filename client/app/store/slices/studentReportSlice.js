@@ -19,6 +19,7 @@ export const fetchGradeForEachAssessment = createAsyncThunk(
 const studentReportSlice = createSlice({
   name: "template",
   initialState: {
+    student: null,
     grades: [],
   },
   reducers: {},
