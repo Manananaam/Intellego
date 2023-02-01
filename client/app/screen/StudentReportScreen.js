@@ -13,6 +13,7 @@ import {
   fetchGradeForEachAssessment,
   getCourses,
 } from "../store";
+import { fetchCourseStudents } from "../store/slices/courseSlices";
 
 // Chart
 import {
@@ -38,7 +39,7 @@ export default function StudentReportScreen() {
           .split("&")
           .map((el) => {
             const [_, value] = el.split("=");
-            return { id: value };
+            return { id: Number(value) };
           })
       : [null, null];
 
@@ -57,24 +58,24 @@ export default function StudentReportScreen() {
 
   // initial current course and student and get the grades for each assessment if user navigate from course student page
   useEffect(() => {
-    if (
-      courseId &&
-      studentId &&
-      Object.keys(courses).length &&
-      courses.students
-    ) {
-      setCurrentCourse(courses);
-      setCurrentStudent(
-        courses.students.find((el) => el.id === Number(studentId.id))
-      );
-      dispatch(
-        fetchGradeForEachAssessment({
-          courseId: courseId.id,
-          studentId: studentId.id,
-        })
-      );
+    if (courseId && studentId) {
+      if (Object.keys(courses).length && courses.students) {
+        setCurrentCourse(courses);
+        setCurrentStudent(
+          courses.students.find((el) => el.id === studentId.id)
+        );
+        dispatch(
+          fetchGradeForEachAssessment({
+            courseId: courseId.id,
+            studentId: studentId.id,
+          })
+        );
+      } else {
+        // fetch course with student if user refresh page in path:/report/students?courseId=${courseId}&studentId=${student.id}
+        dispatch(fetchCourseStudents(courseId.id));
+      }
     }
-  }, []);
+  }, [courses]);
 
   // fetch a list of courses
   useEffect(() => {
