@@ -90,17 +90,8 @@ router.get(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments();
     const student = await Student.findByPk(req.params.studentId);
-    const gradeAtEachAssessment = await Promise.all(
-      assessments.map((assessement) => {
-        return student.calculateGradeAtAssessment(assessement.id);
-      })
-    );
-    const overall_grade = Math.round(
-      gradeAtEachAssessment.reduce((acc, curr) => acc + curr, 0) /
-        assessments.length
-    );
+    const overall_grade = await student.calculateOverallGradeAtCourse(course);
 
     res.status(200).json({ overall_grade });
   })
