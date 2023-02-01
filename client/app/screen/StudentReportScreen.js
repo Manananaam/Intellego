@@ -118,12 +118,15 @@ export default function StudentReportScreen() {
         <Bar data={data} options={options}></Bar>
       </div>
     );
-  } else if (grades.length === 0) {
-    chart = <p>This course have 0 assessment.</p>;
-  } else if (!currentStudent) {
-    chart = <p>Please select a student</p>;
+  } else {
+    if (studentId && currentStudent && grades.length === 0) {
+      // current student don’t have any submission for the assessments in the course
+      chart = <p>Missing grades </p>;
+    } else if (!studentId || (studentId && !currentStudent)) {
+      // student have the studentId don’t belong to this course
+      chart = <p>Please select a student who belongs to this course. </p>;
+    }
   }
-
   return (
     <div>
       <Dropdown>
