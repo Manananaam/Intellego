@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 const asyncHandler = require("express-async-handler");
 const AppError = require("../utils/appError");
 const {
-  models: { Student, Course, Course_Student, Question, Submission, Assessment },
+  models: { Student, Course },
 } = require("../db");
 
 // @desc: fetch a list of overall grade of student in the course
