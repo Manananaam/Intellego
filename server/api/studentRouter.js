@@ -7,7 +7,31 @@ const AppError = require("../utils/appError");
 const {
   models: { Student, Course, Course_Student, Question, Submission, Assessment },
 } = require("../db");
-// test
+
+// @desc: fetch a list of overall grade of student in the course
+// @route: /api/students/courses/:courseId
+// @access: -
+router.get(
+  "/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const students = await course.getStudents();
+    const overallGradeForEachStudent = await Promise.all(
+      students.map(async (student) => {
+        return {
+          id: student.id,
+          firstName: student.firstName,
+          lastName: student.lastName,
+          overall_grade: await student.calculateOverallGradeAtCourse(course),
+        };
+      })
+    );
+    res.json({
+      numOfStudents: students.length,
+      overallGradeForEachStudent,
+    });
+  })
+);
 
 // @desc: fetch the student's grade in this assessment
 // @route: /api/students/:studentId/assessment/:assessmentId
