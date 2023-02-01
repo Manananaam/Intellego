@@ -84,8 +84,28 @@ router.get(
         courseId: req.params.courseid,
       },
     });
-    const ungraded = [];
-    const graded = [];
+    const ungraded = {};
+    const graded = {};
+    allSubmissions.forEach((element) => {
+      if (element.grade === null) {
+        if (!ungraded[element.assessmentId]) {
+          ungraded[element.assessmentId] = {};
+        }
+        if (!ungraded[element.assessmentId][element.studentId]) {
+          ungraded[element.assessmentId][element.studentId] = [];
+        }
+        ungraded[element.assessmentId][element.studentId].push(element);
+      } else {
+        if (!graded[element.assessmentId]) {
+          graded[element.assessmentId] = {};
+        }
+        if (!graded[element.assessmentId][element.studentId]) {
+          graded[element.assessmentId][element.studentId] = [];
+        }
+        graded[element.assessmentId][element.studentId].push(element);
+      }
+    });
+    res.json({ graded, ungraded });
   })
 );
 
