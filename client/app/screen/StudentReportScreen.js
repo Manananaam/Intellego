@@ -8,11 +8,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchStudentList,
-  fetchGradeForEachAssessment,
-  getCourses,
-} from "../store";
+import { fetchGradeForEachAssessment, getCourses } from "../store";
 import { fetchCourseStudents } from "../store/slices/courseSlices";
 
 // Chart
@@ -37,84 +33,59 @@ export default function StudentReportScreen() {
     Number(searchParams.get("courseId")),
     Number(searchParams.get("studentId")),
   ];
+
   const dispatch = useDispatch();
   // initial current course ans current student
   const [currentCourse, setCurrentCourse] = useState(null);
   const [currentStudent, setCurrentStudent] = useState(null);
 
   // redux state
-  // courses data if user navigate from course student page
+  // course with list of students belong to that course
   const courses = useSelector((state) => state.courses);
-  // fetch a list of students belong to the course
-  const { students, allcourses } = useSelector((state) => state.studentEnroll);
-  // fetch grades of each assessment and the student information
-  const { student, grades } = useSelector((state) => state.studentReport);
+  // fetch a list of courses managed by current user
+  const { allcourses } = useSelector((state) => state.studentEnroll);
+  // fetch grades of each assessment belong to the student
+  const { grades } = useSelector((state) => state.studentReport);
 
-  // clear query strin if one of courseId or studentId are missing
+  // update courses and it's students list once courseId eixt in url or dropdown menu click a course to update courseId in url
   useEffect(() => {
-    if (!courseId || !studentId) {
-      searchParams.delete("courseId"),
-        searchParams.delete("studentId"),
-        setSearchParams(searchParams);
+    if (courseId) {
+      dispatch(fetchCourseStudents(courseId));
     }
-  }, []);
+  }, [courseId]);
 
-  // initial current course and student and get the grades for each assessment if user navigate from course student page
+  // update current course, current student, student report
   useEffect(() => {
-    if (courseId && studentId) {
-      if (Object.keys(courses).length && courses.students) {
-        setCurrentCourse(courses);
-        setCurrentStudent(courses.students.find((el) => el.id === studentId));
-        dispatch(
-          fetchGradeForEachAssessment({
-            courseId,
-            studentId,
-          })
-        );
-      } else {
-        // fetch course with student if user refresh page in path:/report/students?courseId=${courseId}&studentId=${student.id}
-        dispatch(fetchCourseStudents(courseId));
-      }
+    if (
+      Object.keys(courses).length &&
+      courses.id === courseId &&
+      courses.students
+    ) {
+      setCurrentCourse(courses);
+      setCurrentStudent(courses.students.find((el) => el.id === studentId));
+      dispatch(
+        fetchGradeForEachAssessment({
+          courseId,
+          studentId,
+        })
+      );
     }
-  }, [courses]);
+  }, [courses, courseId, studentId]);
 
-  // fetch a list of courses
+  // fetch a list of courses to display at course dropdown menu
   useEffect(() => {
     dispatch(getCourses());
   }, []);
 
-  // if current course has changed, update the list of students
-  useEffect(() => {
-    if (currentCourse) {
-      dispatch(fetchStudentList({ courseId: currentCourse.id }));
-    }
-  }, [currentCourse]);
-
-  // if current student has changed, update the grades of each assessment
-  useEffect(() => {
-    if (currentStudent) {
-      dispatch(
-        fetchGradeForEachAssessment({
-          studentId: currentStudent.id,
-          courseId: currentCourse.id,
-        })
-      );
-    }
-  }, [currentStudent]);
-
   // update current course when user click dropdown item
   const handleCurrentCourse = (course) => {
     searchParams.set("courseId", course.id);
-    searchParams.delete("studentId");
     setSearchParams(searchParams);
-    setCurrentCourse(course);
-    setCurrentStudent(null);
   };
   // update current student when user click dropdown item
   const handleCurrentStudent = (student) => {
     searchParams.set("studentId", student.id);
     setSearchParams(searchParams);
-    setCurrentStudent(student);
   };
 
   // chart data
@@ -131,6 +102,20 @@ export default function StudentReportScreen() {
     ],
   };
   const options = {};
+
+  // conditional render chart or alert message
+  let chart;
+  if (currentStudent && grades.length) {
+    chart = (
+      <div style={{ width: "50%" }}>
+        <Bar data={data} options={options}></Bar>
+      </div>
+    );
+  } else if (grades.length === 0) {
+    chart = <p>This course have 0 assessment.</p>;
+  } else if (!currentStudent) {
+    chart = <p>Please select a student</p>;
+  }
 
   return (
     <div>
@@ -161,25 +146,26 @@ export default function StudentReportScreen() {
               : "Student"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {students.map((student) => {
-              return (
-                <Dropdown.Item
-                  key={student.id}
-                  onClick={() => handleCurrentStudent(student)}
-                >
-                  {student.firstName} {student.lastName}
-                </Dropdown.Item>
-              );
-            })}
+            {courses &&
+              courses.id === courseId &&
+              courses.students.map((student) => {
+                return (
+                  <Dropdown.Item
+                    key={student.id}
+                    onClick={() => handleCurrentStudent(student)}
+                  >
+                    {student.firstName} {student.lastName}
+                  </Dropdown.Item>
+                );
+              })}
           </Dropdown.Menu>
         </Dropdown>
       )}
-      <p className="text-start">
-        {student && `${student.firstName} ${student.lastName}`}
+      <p>
+        {currentStudent &&
+          `${currentStudent.firstName} ${currentStudent.lastName}`}
       </p>
-      <div style={{ width: "50%" }}>
-        <Bar data={data} options={options}></Bar>
-      </div>
+      {chart}
     </div>
   );
 }
