@@ -36,6 +36,21 @@ export const fetchCourseReport = createAsyncThunk(
       }
     });
 
+    export const fetchGradeForEachAssessment = createAsyncThunk(
+      "report/student/fetchGradeForEachAssessment",
+      async ({ studentId, courseId }, { rejectWithValue }) => {
+        try {
+          const { data } = await axios.get(
+            `/api/students/${studentId}/courses/${courseId}/assessments`
+          );
+          console.log(data)
+          return data;
+        } catch (err) {
+          return rejectWithValue(err.message);
+        }
+      }
+    );
+
 export const CourseReportSlice = createSlice ({
   name: "report",
   initialState: {
@@ -52,13 +67,15 @@ export const CourseReportSlice = createSlice ({
   extraReducers: (builder) => {
     builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
       state.currentCourse = action.payload.currentCourse;
-      state.allGrades = action.payload.allGrades;
     });
     builder.addCase(fetchCourseList.fulfilled, (state, action) => {
       state.allCourses = action.payload.allCourses;
+    });
+    builder.addCase(fetchGradeForEachAssessment.fulfilled, (state, action) => {
+      state.allGrades = action.payload.allGrades;
     })
   }
 });
 
-export const selectCourseReport = CourseReportSlice.actions;
+export const selectCourseReport = (state) => state.report;
 export const courseReportReducer = CourseReportSlice.reducer;

@@ -1,5 +1,4 @@
 import React from "react";
-import { SamplePieChart } from "./screen/TestChart";
 import HomeScreen from "./screen/HomeScreen";
 import LogInScreen from "./screen/LogInScreen";
 import SignUpScreen from "./screen/SignUpScreen";
@@ -10,6 +9,7 @@ import EditAssessmentScreen from "./screen/EditAssessmentScreen";
 import { Routes, Route } from "react-router-dom";
 import CousreScreen from "./screen/CousreScreen";
 import CourseStudentScreen from "./screen/CourseStudentScreen";
+import CourseReport from "./componenets/CourseReport";
 import CourseReportScreen from "./componenets/CourseReport";
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
           element={<CourseStudentScreen />} />
         <Route path='/login' element={<LogInScreen />} />
         <Route path='/signup' element={<SignUpScreen />} />
-        <Route path='/report/courses/:courseId' element={<CourseReportScreen />} />
+        <Route path='/report/courses/' element={<CourseReportScreen />} />
         <Route path="/assessments" element={<AssessmentsScreen />} />
         <Route path="/assessments/:assessmentId" element={<EditAssessmentScreen />} />
       </Routes>
