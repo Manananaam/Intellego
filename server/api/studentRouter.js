@@ -105,7 +105,9 @@ router.get(
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
     const assessments = await course.getAssessments();
-    const student = await Student.findByPk(req.params.studentId);
+    const student = await Student.findByPk(req.params.studentId, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
     const gradeAtEachAssessment = await Promise.all(
       assessments.map(async (assessement) => {
         return {
@@ -117,6 +119,7 @@ router.get(
     );
 
     res.status(200).json({
+      student,
       gradeAtEachAssessment,
     });
   })
