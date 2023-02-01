@@ -45,7 +45,6 @@ const CousreScreen = () => {
       <Table>
         <thead>
           <tr>
-            <th>Select</th>
             <th>Name</th>
             <th>Subject</th>
             <th>Grade</th>
@@ -58,9 +57,6 @@ const CousreScreen = () => {
                 const courseId = course.id;
                 return (
                   <tr key={course.id}>
-                    <td>
-                      <Form.Check type="checkbox" />
-                    </td>
                     <td>{course.name}</td>
                     <td>{course.subject}</td>
                     <td>{course.gradeLevel}</td>
@@ -108,8 +104,6 @@ const CousreScreen = () => {
             : null}
         </tbody>
       </Table>
-
-      <Button variant="danger">Archive</Button>
     </div>
   );
 };
