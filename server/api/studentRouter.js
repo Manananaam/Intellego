@@ -9,7 +9,7 @@ const {
 } = require("../db");
 
 // @desc: fetch a list of overall grade of student in the course
-// @route: /api/students/courses/:courseId
+// @route: /api/students/courses/:courseId/overallGrade
 // @access: -
 router.get(
   "/courses/:courseId/overallGrade",
