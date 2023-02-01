@@ -29,9 +29,8 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 export default function StudentReportScreen() {
-  // Router to fetch courseId, studentId
+  // use router hook to fetch current courseId and studentId
   const location = useLocation();
-
   const [courseId, studentId] =
     location.search.length > 0
       ? location.search
@@ -42,20 +41,21 @@ export default function StudentReportScreen() {
             return { id: value };
           })
       : [null, null];
-  console.log("search query", courseId, studentId);
 
-  // fetch a list of student belongs to the course
   const dispatch = useDispatch();
-  // get current course
+  // initial current course ans current student
   const [currentCourse, setCurrentCourse] = useState(null);
   const [currentStudent, setCurrentStudent] = useState(null);
 
-  console.log("current course", currentCourse);
   // redux state
+  // courses data if user navigate from course student page
   const courses = useSelector((state) => state.courses);
+  // fetch a list of students belong to the course
   const { students, allcourses } = useSelector((state) => state.studentEnroll);
+  // fetch grades of each assessment and the student information
   const { student, grades } = useSelector((state) => state.studentReport);
 
+  // initial current course and student and get the grades for each assessment if user navigate from course student page
   useEffect(() => {
     if (
       courseId &&
@@ -76,16 +76,19 @@ export default function StudentReportScreen() {
     }
   }, []);
 
+  // fetch a list of courses
   useEffect(() => {
     dispatch(getCourses());
   }, []);
 
+  // if current course has changed, update the list of students
   useEffect(() => {
     if (currentCourse) {
       dispatch(fetchStudentList({ courseId: currentCourse.id }));
     }
   }, [currentCourse]);
 
+  // if current student has changed, update the grades of each assessment
   useEffect(() => {
     if (currentStudent) {
       dispatch(
@@ -97,12 +100,12 @@ export default function StudentReportScreen() {
     }
   }, [currentStudent]);
 
-  // get current course
+  // update current course when user click dropdown item
   const handleCurrentCourse = (course) => {
     setCurrentCourse(course);
     setCurrentStudent(null);
   };
-  // get current student
+  // update current student when user click dropdown item
   const handleStudentGradeReport = (student) => {
     setCurrentStudent(student);
   };
