@@ -10,18 +10,19 @@ import {
 import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 import Dropdown from "react-bootstrap/Dropdown";
-import { fetchCourseReport, fetchCourseList } from "../store/slices/CourseReportSlice";
+import { fetchCourseReport, fetchCourseList } from "../store/slices/courseReportSlice";
 
 export default function CourseReportScreen() {
   const dispatch = useDispatch();
   // get current course
-  const [currentCourse, setCurrentCourse] = useState("");
-  const { courseReport } = useSelector((state) => state.report);
+  // const [currentCourse, setCurrentCourse] = useState("");
+  const { allCourses, currentCourse, allGrades, id } = useSelector((state) => state.report);
 
-  console.log(courseReport)
+  // console.log(courseReport)
   useEffect(() => {
-      dispatch(fetchCourseList({ courseId: currentCourse }));
+      dispatch(fetchCourseList(id));
   }, [currentCourse]);
+  console.log(currentCourse)
 
   // get grade report belongs to the class
   const handleCourseGradeReport = (student) => {
