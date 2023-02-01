@@ -5,9 +5,33 @@ const Op = Sequelize.Op;
 const asyncHandler = require("express-async-handler");
 const AppError = require("../utils/appError");
 const {
-  models: { Student, Course, Course_Student, Question, Submission, Assessment },
+  models: { Student, Course },
 } = require("../db");
-// test
+
+// @desc: fetch a list of overall grade of student in the course
+// @route: /api/students/courses/:courseId/overallGrade
+// @access: -
+router.get(
+  "/courses/:courseId/overallGrade",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const students = await course.getStudents();
+    const overallGradeForEachStudent = await Promise.all(
+      students.map(async (student) => {
+        return {
+          id: student.id,
+          firstName: student.firstName,
+          lastName: student.lastName,
+          overall_grade: await student.calculateOverallGradeAtCourse(course),
+        };
+      })
+    );
+    res.json({
+      numOfStudents: students.length,
+      overallGradeForEachStudent,
+    });
+  })
+);
 
 // @desc: fetch the student's grade in this assessment
 // @route: /api/students/:studentId/assessment/:assessmentId
@@ -15,77 +39,46 @@ const {
 router.get(
   "/:studentId/assessment/:assessmentId",
   asyncHandler(async (req, res, next) => {
-    //  1. use assessmentId to get all question related to this assessment
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: req.params.assessmentId,
-      },
+    const student = await Student.findByPk(req.params.studentId);
+    const total_grade = await student.calculateGradeAtAssessment(
+      req.params.assessmentId
+    );
+    res.status(200).json({
+      total_grade,
     });
-
-    // 2. use questionId and studentId to fetch all submission that related to this assessment this student submit
-    const questionIds = questions.map((question) => question.id);
-    const submissions = await Submission.findAll({
-      where: {
-        questionId: {
-          [Op.in]: questionIds,
-        },
-        studentId: req.params.studentId,
-      },
-    });
-
-    // return the grade of assessment this student made
-    const grade = submissions.reduce((acc, curr) => acc + curr.grade, 0);
-    res.json(Math.round(grade / submissions.length));
   })
 );
 
 // @desc: fetch a list of students' grade for this assessment
+// ! what if the student didn't submit any submission yet? that case the grade belongs to that student won't exist.
+// ? I only can get a list of student's grade for those who had submit their answer
+// TODO: At front-end, for those student who haven't made any submission, show "missing" as grade
 // @route: /api/students/assessment/:assessmentId
 // @access: -
 router.get(
-  "/assessment/:assessmentId",
+  "/courses/:courseId/assessment/:assessmentId",
   asyncHandler(async (req, res, next) => {
-    // 1. use assessmentId to get all question related to this assessment
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: req.params.assessmentId,
-      },
-    });
-    // 2. group submission by questionId and studentId
-    const submission = await Submission.findAll({
-      where: {
-        questionId: {
-          [Op.in]: questions.map((el) => el.id),
-        },
-      },
-      attributes: [
-        "studentId",
-        [Sequelize.fn("SUM", Sequelize.col("grade")), "total_grade"],
-      ],
-      group: ["studentId"],
-      order: ["studentId"],
-    });
+    // 1. fetch a list of student, who had been assigned to this assessment in the course
+    const course = await Course.findByPk(req.params.courseId);
+    const students = await course.getStudents();
 
-    const students = await Student.findAll({
-      where: {
-        id: {
-          [Op.in]: submission.map((el) => el.studentId),
-        },
-      },
-      order: ["id"],
-    });
-    // 3. return
-    const results = students.map((el, idx) => {
-      return {
-        id: el.id,
-        firstName: el.firstName,
-        lastName: el.lastName,
-        total_grade: submission[idx].toJSON().total_grade,
-      };
-    });
+    // 2. calculate the grade belongs to each student in the assessment
+    const gradeForEachStudent = await Promise.all(
+      students.map(async (student) => {
+        return {
+          id: student.id,
+          firstName: student.firstName,
+          lastName: student.lastName,
+          total_grade: await student.calculateGradeAtAssessment(
+            req.params.assessmentId
+          ),
+        };
+      })
+    );
 
-    res.json({
-      results,
+    res.status(200).json({
+      numsOfStudents: students.length,
+      gradeForEachStudent,
     });
   })
 );
@@ -97,34 +90,10 @@ router.get(
   "/:studentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
     const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments();
-    const questions = await Question.findAll({
-      where: {
-        assessmentId: {
-          [Op.in]: assessments.map((el) => el.id),
-        },
-      },
-    });
+    const student = await Student.findByPk(req.params.studentId);
+    const overall_grade = await student.calculateOverallGradeAtCourse(course);
 
-    const submissions = await Submission.findAll({
-      where: {
-        studentId: req.params.studentId,
-        questionId: {
-          [Op.in]: questions.map((el) => el.id),
-        },
-      },
-    });
-
-    const student = await Student.findByPk(req.params.studentId, {
-      attributes: ["id", "firstName", "lastName"],
-    });
-
-    res.status(200).json({
-      student: {
-        ...student.toJSON(),
-        overall_grade: submissions.reduce((acc, curr) => acc + curr.grade, 0),
-      },
-    });
+    res.status(200).json({ overall_grade });
   })
 );
 
@@ -134,44 +103,24 @@ router.get(
 router.get(
   "/:studentId/courses/:courseId/assessments",
   asyncHandler(async (req, res, next) => {
-    // 1. get all assessments related to this course
-    // 2. find all question related to this assessments
-    // 3. get all submission this student submit and related to this assessment's question
-    const assessments = await Assessment.findAll({
-      where: {
-        courseId: req.params.courseId,
-      },
+    const course = await Course.findByPk(req.params.courseId);
+    const assessments = await course.getAssessments();
+    const student = await Student.findByPk(req.params.studentId, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
-      include: [
-        {
-          model: Question,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-          include: {
-            model: Submission,
-            attributes: { exclude: ["createdAt", "updatedAt"] },
-            where: {
-              studentId: req.params.studentId,
-            },
-          },
-        },
-      ],
     });
-    // 4. return list of grade for each assessment
-    const listOfGrade = assessments.map((assessment) => {
-      const total_grade = assessment.questions.reduce(
-        (acc, curr) => acc + curr.submissions[0].toJSON().grade,
-        0
-      );
-      return {
-        id: assessment.id,
-        title: assessment.title,
-        total_grade: total_grade,
-      };
-    });
+    const gradeAtEachAssessment = await Promise.all(
+      assessments.map(async (assessement) => {
+        return {
+          id: assessement.id,
+          title: assessement.title,
+          grade: await student.calculateGradeAtAssessment(assessement.id),
+        };
+      })
+    );
 
-    res.json({
-      results: listOfGrade.length,
-      listOfGrade,
+    res.status(200).json({
+      student,
+      gradeAtEachAssessment,
     });
   })
 );
