@@ -10,6 +10,7 @@ import EditAssessmentScreen from "./screen/EditAssessmentScreen";
 import { Routes, Route } from "react-router-dom";
 import CousreScreen from "./screen/CourseScreen";
 import CourseStudentScreen from "./screen/CourseStudentScreen";
+import CourseAssessmentsScreen from "./screen/CourseAssessmentsScreen";
 
 export default function App() {
   return (
@@ -20,6 +21,10 @@ export default function App() {
         <Route
           path="/courses/:courseId/students"
           element={<CourseStudentScreen />}
+        />{" "}
+        <Route
+          path="/courses/:courseId/assessments"
+          element={<CourseAssessmentsScreen />}
         />
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />

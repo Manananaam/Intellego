@@ -56,7 +56,6 @@ const CousreScreen = () => {
           {courses && courses.length
             ? courses.map((course) => {
                 const courseId = course.id;
-
                 return (
                   <tr key={course.id}>
                     <td>
@@ -74,7 +73,11 @@ const CousreScreen = () => {
                           >
                             Students
                           </Dropdown.Item>
-                          <Dropdown.Item>Assessments</Dropdown.Item>
+                          <Dropdown.Item
+                            href={`/courses/${course.id}/assessments`}
+                          >
+                            Assessments
+                          </Dropdown.Item>
                           <Dropdown.Item>Report</Dropdown.Item>
                           <Dropdown.Divider />
                           <Dropdown.Item onClick={handleShowEdit}>

@@ -108,11 +108,7 @@ export const courseSlice = createSlice({
       return state.filter((course) => course.courseId !== action.payload);
     });
     builder.addCase(isActiveCourse.fulfilled, (state, action) => {
-      // return state.filter((course) => {
-      //   console.log(course.isActive, action.payload.isActive);
-      //   return course.isActive !== action.payload.isActive;
-      // });
-      return action.payload;
+      return state.filter((course) => course.isActive);
     });
   },
 });

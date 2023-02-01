@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 
 //Bootstrap imports
-import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import Dropdown from "react-bootstrap/Dropdown";
-import Form from "react-bootstrap/Form";
 
 //React related imports
 import { useDispatch, useSelector } from "react-redux";
