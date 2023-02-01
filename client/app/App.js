@@ -11,19 +11,30 @@ import { Routes, Route } from "react-router-dom";
 import CousreScreen from "./screen/CousreScreen";
 import CourseStudentScreen from "./screen/CourseStudentScreen";
 
+// Screen
+import StudentReportScreen from "./screen/StudentReportScreen";
+
 export default function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<HomeScreen />} />
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/test" element={<SamplePieChart />} />
+        <Route path="/login" element={<LogInScreen />} />
+        <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/courses" element={<CousreScreen />} />
         <Route
           path="/courses/:courseId/students"
-          element={<CourseStudentScreen />} />
-        <Route path='/login' element={<LogInScreen />} />
-        <Route path='/signup' element={<SignUpScreen />} />
+          element={<CourseStudentScreen />}
+        />
+        <Route path="/login" element={<LogInScreen />} />
+        <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/assessments" element={<AssessmentsScreen />} />
-        <Route path="/assessments/:assessmentId" element={<EditAssessmentScreen />} />
+        <Route
+          path="/assessments/:assessmentId"
+          element={<EditAssessmentScreen />}
+        />
+        <Route path="/report/students" element={<StudentReportScreen />} />
       </Routes>
     </div>
   );
