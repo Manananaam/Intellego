@@ -28,14 +28,18 @@ ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 export default function StudentReportScreen() {
   // Router to fetch courseId, studentId
   const location = useLocation();
-  // const [courseId, studentId] = location.search
-  //   .split("?")[1]
-  //   .split("&")
-  //   .map((el) => {
-  //     const [key, value] = el.split("=");
-  //     return { [key]: value };
-  //   });
-  // console.log(courseId, studentId);
+
+  const [courseId, studentId] =
+    location.search.length > 0
+      ? location.search
+          .split("?")[1]
+          .split("&")
+          .map((el) => {
+            const [key, value] = el.split("=");
+            return { id: value };
+          })
+      : [null, null];
+  console.log("search query", courseId, studentId);
 
   // fetch a list of student belongs to the course
   const dispatch = useDispatch();
@@ -43,10 +47,24 @@ export default function StudentReportScreen() {
   const [currentCourse, setCurrentCourse] = useState(null);
   const [currentStudent, setCurrentStudent] = useState(null);
 
+  console.log("current course", currentCourse);
   // redux state
   const courses = useSelector((state) => state.courses);
   const { students } = useSelector((state) => state.studentEnroll);
-  const { grades } = useSelector((state) => state.studentReport);
+  const { student, grades } = useSelector((state) => state.studentReport);
+
+  useEffect(() => {
+    if (courseId && studentId && Object.keys(courses).length) {
+      setCurrentCourse(courses);
+      setCurrentStudent(courses.students[0]);
+      dispatch(
+        fetchGradeForEachAssessment({
+          studentId: courseId.id,
+          courseId: studentId.id,
+        })
+      );
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(fetchAllCourses());
@@ -54,7 +72,7 @@ export default function StudentReportScreen() {
 
   useEffect(() => {
     if (currentCourse) {
-      dispatch(fetchStudentList({ courseId: currentCourse }));
+      dispatch(fetchStudentList({ courseId: currentCourse.id }));
     }
   }, [currentCourse]);
 
@@ -63,7 +81,7 @@ export default function StudentReportScreen() {
       dispatch(
         fetchGradeForEachAssessment({
           studentId: currentStudent.id,
-          courseId: currentCourse,
+          courseId: currentCourse.id,
         })
       );
     }
@@ -71,7 +89,8 @@ export default function StudentReportScreen() {
 
   // get current course
   const handleCurrentCourse = (course) => {
-    setCurrentCourse(course.id);
+    setCurrentCourse(course);
+    setCurrentStudent(null);
   };
   // get current student
   const handleStudentGradeReport = (student) => {
@@ -96,7 +115,9 @@ export default function StudentReportScreen() {
   return (
     <div>
       <Dropdown>
-        <Dropdown.Toggle>Course</Dropdown.Toggle>
+        <Dropdown.Toggle>
+          {currentCourse ? currentCourse.name : "Course"}
+        </Dropdown.Toggle>
         <Dropdown.Menu>
           {courses &&
             courses.length &&
@@ -114,7 +135,11 @@ export default function StudentReportScreen() {
       </Dropdown>
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle>Students</Dropdown.Toggle>
+          <Dropdown.Toggle>
+            {currentStudent
+              ? `${currentStudent.firstName} ${currentStudent.lastName}`
+              : "Student"}
+          </Dropdown.Toggle>
           <Dropdown.Menu>
             {students.map((student) => {
               return (
@@ -130,8 +155,7 @@ export default function StudentReportScreen() {
         </Dropdown>
       )}
       <p className="text-start">
-        {currentStudent &&
-          `${currentStudent.firstName} ${currentStudent.lastName}`}
+        {student && `${student.firstName} ${student.lastName}`}
       </p>
       <div style={{ width: "50%" }}>
         <Bar data={data} options={options}></Bar>
