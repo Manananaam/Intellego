@@ -25,7 +25,7 @@ const store = configureStore({
     studentReport: studentReportReducer,
     studentEnroll: studentEnrollReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;

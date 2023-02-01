@@ -22,10 +22,10 @@ Student.belongsToMany(Course, { through: Course_Student });
 
 Course.belongsToMany(Assessment, { through: Course_Assessment });
 Assessment.belongsToMany(Course, { through: Course_Assessment });
-Course.hasMany(Assessment);
-Assessment.hasMany(Course);
-Course.belongsTo(Assessment);
-Assessment.belongsTo(Course);
+// Course.hasMany(Assessment);
+// Assessment.hasMany(Course);
+// Course.belongsTo(Assessment);
+// Assessment.belongsTo(Course);
 
 Question.hasMany(Submission);
 Submission.belongsTo(Question);
