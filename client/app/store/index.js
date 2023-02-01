@@ -8,6 +8,7 @@ import { templateReducer } from "./slices/templateSlices";
 import { authReducer } from "./slices/authSlice";
 import allAssessmentsReducer from "./slices/assessmentsTableSlice";
 import assessmentReducer from "./slices/singleAssessmentSlice";
+import questionReducer from "./slices/questionSlice"
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     auth: authReducer,
     assessments: allAssessmentsReducer,
     assessment: assessmentReducer,
+    question: questionReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

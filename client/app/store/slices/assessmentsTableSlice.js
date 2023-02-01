@@ -5,6 +5,7 @@ const initialState = {
   assessments: [],
 };
 
+//fetch all assessments 
 export const fetchAllAssessments = createAsyncThunk(
   "allAssessments",
   async () => {
@@ -18,14 +19,35 @@ export const fetchAllAssessments = createAsyncThunk(
   }
 );
 
+//create a new assessment
+//probably need to add some grabbing of teacher ID in here as well
+//also how do we set courseID?
+//does the course_assessmentModel associate them?
+//how does this work with questions? will they associate in their own slice?
+//{questions: [{...}, {...}]}
+export const createAssessment = createAsyncThunk("/assessmentCreate", async({ title, questionText }) => {
+  try {
+    const { data } = await axios.post("/api/assessments", {
+      title,
+      questionText,
+    });
+    return data;
+  } catch (err) {
+    return err.message;
+  }
+})
+
 export const assessmentsSlice = createSlice({
   name: "assessments",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchAllAssessments.fulfilled, (state, action) => {
-      state.assessments = action.payload;
-    });
+      state.assessments = action.payload.assessments;
+    })
+    .addCase(createAssessment.fulfilled, (state, action) => {
+      state.assessments.push(action.payload.data.newAssessment);
+    })
   },
 });
 

@@ -30,7 +30,7 @@ router.get(
   "/",
   asyncHandler(async (req, res, next) => {
     const assessments = await Assessment.findAll();
-    res.status(200).json(assessments);
+    res.status(200).json({results: assessments.length, assessments});
   })
 );
 
@@ -58,9 +58,14 @@ router.post(
     const newAssessment = await Assessment.create({
       title: req.body.title,
     });
+    const newQuestion = await Question.create({
+      questionText: req.body.questionText,
+    });
+    await newQuestion.setAssessment(newAssessment);
     res.status(201).json({
       data: {
         newAssessment,
+        newQuestion,
       },
     });
   })

@@ -10,7 +10,7 @@ const AssessmentsTable = () => {
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
-  }, [dispatch])
+  }, [])
 
   return (
     <>
