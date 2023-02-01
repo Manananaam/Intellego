@@ -50,6 +50,15 @@ export default function StudentReportScreen() {
   // fetch grades of each assessment and the student information
   const { student, grades } = useSelector((state) => state.studentReport);
 
+  // clear query strin if one of courseId or studentId are missing
+  useEffect(() => {
+    if (!courseId || !studentId) {
+      searchParams.delete("courseId"),
+        searchParams.delete("studentId"),
+        setSearchParams(searchParams);
+    }
+  }, []);
+
   // initial current course and student and get the grades for each assessment if user navigate from course student page
   useEffect(() => {
     if (courseId && studentId) {
