@@ -57,6 +57,7 @@ export default function StudentReportScreen() {
   // update current course, current student, student report
   useEffect(() => {
     if (
+      courses &&
       Object.keys(courses).length &&
       courses.id === courseId &&
       courses.students
