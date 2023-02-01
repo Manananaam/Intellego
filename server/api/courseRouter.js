@@ -105,6 +105,22 @@ router.get(
         graded[element.assessmentId][element.studentId].push(element);
       }
     });
+    for (let assessment in graded) {
+      let studentGrades = [];
+      for (let student in graded[assessment]) {
+        const studentAverage = Math.round(
+          graded[assessment][student].reduce(
+            (acc, curr) => acc + curr.grade,
+            0
+          ) / graded[assessment][student].length
+        );
+        studentGrades.push(studentAverage);
+      }
+      graded[assessment]["overallAverage"] = Math.round(
+        studentGrades.reduce((acc, curr) => acc + curr, 0) /
+          studentGrades.length
+      );
+    }
     res.json({ graded, ungraded });
   })
 );
