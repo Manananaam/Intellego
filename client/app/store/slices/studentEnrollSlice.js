@@ -13,9 +13,23 @@ export const fetchStudentList = createAsyncThunk(
   }
 );
 
+export const getCourses = createAsyncThunk(
+  "courses/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get("/api/courses");
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const studentEnrollSlice = createSlice({
   name: "template",
   initialState: {
+    allcourses: null,
+
     numOfStudents: 0,
     students: [],
   },
@@ -24,6 +38,10 @@ const studentEnrollSlice = createSlice({
     builder.addCase(fetchStudentList.fulfilled, (state, action) => {
       state.numOfStudents = action.payload.numOfStudents;
       state.students = action.payload.students;
+    });
+
+    builder.addCase(getCourses.fulfilled, (state, action) => {
+      state.allcourses = action.payload;
     });
   },
 });
