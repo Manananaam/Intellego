@@ -101,7 +101,11 @@ export default function StudentReportScreen() {
       },
     ],
   };
-  const options = {};
+  const options = {
+    animation: {
+      duration: 0,
+    },
+  };
 
   // conditional render chart or alert message
   let chart;
