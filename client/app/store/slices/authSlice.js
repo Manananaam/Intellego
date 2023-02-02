@@ -10,7 +10,7 @@ export const login = createAsyncThunk("authentication/login", async (user) => {
     //this should return the user data, except for the password
     console.log("hello from thunk, here is data", data);
     return data;
-  } catch {
+  } catch (error) {
     throw new Error(error.response.data);
   }
 });
@@ -40,7 +40,7 @@ export const getUserInfo = createAsyncThunk("authentication/user", async () => {
     };
     const { data } = await axios.get("api/authentication/user", config);
     return data;
-  } catch {
+  } catch (error) {
     throw new Error(error.response.data);
   }
 });
