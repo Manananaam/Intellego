@@ -4,6 +4,7 @@ import {
   fetchAllAssessments,
   selectAllAssessments,
 } from "../store/slices/assessmentsTableSlice";
+import { fetchAssessment, selectAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
@@ -13,6 +14,9 @@ import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
 const AssessmentsTable = () => {
   const allAssessments = useSelector(selectAllAssessments).assessments;
   const dispatch = useDispatch();
+  // const singleAssessment = useSelector(selectAssessment).assessment;
+
+  console.log("all assessments:", allAssessments)
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
@@ -45,7 +49,7 @@ const AssessmentsTable = () => {
                   <td>Average for Course % Here</td>
                   <td>Total Average % Here</td>
                   <td>
-                    <Archive />
+                    {(assessment.questions.filter((question) => question.submissions.length)).length ? <Archive /> : <Trash3 />}
                   </td>
                 </tr>
               ))
