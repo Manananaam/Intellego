@@ -4,7 +4,7 @@ import axios from "axios";
 
 const initialState = {
   assessment: {
-    assessmentName: "",
+    assessmentTitle: "",
     questions: [],
     associatedCourses: [],
     isActive: null,
@@ -46,15 +46,17 @@ export const assessmentSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchAssessment.fulfilled, (state, action) => {
-        state.assessment = action.payload;
-      })
-      .addCase(createAssessment.fulfilled, (state, action) => {
-        console.log("state.assessment:", state.assessment);
-        console.log("action.payload:", action.payload);
-        state.assessment = action.payload.data.newAssessment;
-      });
+    builder.addCase(fetchAssessment.fulfilled, (state, action) => {
+      console.log("payload babe", action.payload.data.assessment);
+      state.assessment.assessmentTitle = action.payload.data.assessment.title;
+      state.assessment.questions = action.payload.data.assessment.questions;
+      state.assessment.isActive = action.payload.data.assessment.isActive;
+    });
+    // .addCase(createAssessment.fulfilled, (state, action) => {
+    //   console.log("state.assessment:", state.assessment);
+    //   console.log("action.payload:", action.payload);
+    //   state.assessment = action.payload.data.newAssessment;
+    // });
   },
 });
 
