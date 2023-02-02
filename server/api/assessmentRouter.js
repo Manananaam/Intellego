@@ -3,7 +3,7 @@ const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
 const {
-  models: { Assessment, Question },
+  models: { Assessment, Question, Submission },
 } = require("../db");
 const protectedRoute = require("./middleware");
 
@@ -39,12 +39,16 @@ router.get(
 );
 
 //GET: assessment and all questions for a given assessment
+//also get all associated submissions
 router.get(
   "/:assessmentId",
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
       include: {
         model: Question,
+        include: {
+          model: Submission,
+        }
       },
     });
     res.status(200).json({
