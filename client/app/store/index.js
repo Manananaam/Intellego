@@ -10,7 +10,7 @@ import { studentReportReducer } from "./slices/studentReportSlice";
 
 //na: From student enroll slice
 import { studentEnrollReducer } from "./slices/studentEnrollSlice";
-import { courseReportReducer } from "./slices/CourseReportSlice"
+import { courseReportReducer } from "./slices/courseReportSlice"
 //authentication slice
 import { authReducer } from "./slices/authSlice";
 import allAssessmentsReducer from "./slices/assessmentsTableSlice";

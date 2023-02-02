@@ -1,49 +1,48 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const fetchCourseList = createAsyncThunk("/courses", async () => {
+  try {
+    const data = await axios.get("/api/courses");
+    return data;
+  } catch (error) {
+    return rejectWithValue(err.message);
+  }
+});
+
+
+// //route to put in course id and you get back all grades for the course and it includes grades?
+// export const fetchSubmissions = createAsyncThunk(`courses/:courseId/assessments/:assessmentId/submissions`, async({ courseId }) => {
+//   try {
+//     const { data } = await axios.get(`/apicourses/${courseId}/assessments/${assessmentId}/submissions`);
+//     return data;
+//   }
+//   catch (err) {
+//   return rejectWithValue(err.message);
+//   }
+// });
+
+
+//get report for specific class
 export const fetchCourseReport = createAsyncThunk(
   "courses/report/fetchGrades", async({ courseId }) => {
     try {
-      const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
-      console.log(data)
+      const data = await axios.get(`/api/courses/${courseId}/assessments`);
       return data;
     }
     catch (err) {
-    next (err)
+    return rejectWithValue(err.message);
   }}
   );
 
-  export const fetchCourseList = createAsyncThunk(
-    "courses/:courseId/fetchCourse", async({ courseId }) => {
-      try {
-        const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
-        console.log(data)
-        return data;
-      }
-      catch (err) {
-      next (err)
-    }}
-    );
-//route to put in course id and you get back all grades for the course and it includes grades
-    export const fetchSubmissions = createAsyncThunk("courses/:courseId/assessments/:assessmentId/submissions", async({ courseId }) => {
-      try {
-        const { data } = await axios.get(`/apicourses/:courseId/assessments/:assessmentId/submissions`);
-        console.log(data)
-        return data;
-      }
-      catch (err) {
-        next (err)
-      }
-    });
 
     export const fetchGradeForEachAssessment = createAsyncThunk(
       "report/student/fetchGradeForEachAssessment",
-      async ({ studentId, courseId }, { rejectWithValue }) => {
+      async ({ courseId }) => {
         try {
-          const { data } = await axios.get(
-            `/api/students/${studentId}/courses/${courseId}/assessments`
+          const data = await axios.get(
+            `/api/courses/${courseId}/submissions`
           );
-          console.log(data)
           return data;
         } catch (err) {
           return rejectWithValue(err.message);
@@ -60,16 +59,18 @@ export const CourseReportSlice = createSlice ({
     currentCourse: 0,
     //list of grades from current course
     allGrades: [],
+    //user id
     id: 0
-
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
-      state.currentCourse = action.payload.currentCourse;
+      console.log(action.payload)
+      state.currentCourse = action.payload;
     });
+
     builder.addCase(fetchCourseList.fulfilled, (state, action) => {
-      state.allCourses = action.payload.allCourses;
+      state.allCourses = action.payload;
     });
     builder.addCase(fetchGradeForEachAssessment.fulfilled, (state, action) => {
       state.allGrades = action.payload.allGrades;

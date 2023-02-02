@@ -10,8 +10,7 @@ import CreateAssessmentScreen from "./screen/CreateAssessmentScreen";
 import { Routes, Route } from "react-router-dom";
 import CousreScreen from "./screen/CourseScreen";
 import CourseStudentScreen from "./screen/CourseStudentScreen";
-import CourseReport from "./componenets/CourseReport";
-import CourseReportScreen from "./componenets/CourseReport";
+import CourseReportScreen from "./screen/CourseReportScreen";
 import CourseAssessmentsScreen from "./screen/CourseAssessmentsScreen";
 
 // Screen
@@ -22,8 +21,6 @@ export default function App() {
     <div>
       <Routes>
         <Route path="/" element={<HomeScreen />} />
-
-        <Route path="/test" element={<SamplePieChart />} />
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,145 +12,93 @@ import {
 import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 import Dropdown from "react-bootstrap/Dropdown";
-import { fetchCourseReport, fetchCourseList } from "../store/slices/courseReportSlice";
+import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchSubmissions } from "../store/slices/courseReportSlice";
 import { fetchCourseAssesments } from "../store/slices/courseSlices";
+import { current } from "@reduxjs/toolkit";
+import { fetchGradeForEachAssessment } from "../store";
 
 export default function CourseReportScreen() {
-  // const [ course, setCurrentCourse ] = UseState("")
-  const { id } = useParams();
-  const course = useSelector(selectCourseReport);
+  // use router hook to fetch current courseId and studentId
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  const courseId = Number(searchParams.get("courseId"));
+
   const dispatch = useDispatch();
 
-  console.log(course)
-  console.log(id)
+  const allCourses = useSelector(selectCourseReport);
+
+  const [currentCourse, setCurrentCourse] = useState(null);
+  const [allGrades, setAllGrades] = useState(null);
+
+  console.log(allCourses)
+  console.log(currentCourse)
 
   useEffect(() => {
-    dispatch(fetchCourseList(id));
-  }, [dispatch, id]);
+    dispatch(fetchCourseList());
+  }, []);
 
-  // get current course
-  // const [searchParams, setSearchParams] = //useSearchParams();
-  // const [courseId] =[Number(searchParams.get//("courseId"))];
+  useEffect(() => {
+    dispatch(fetchCourseReport());
+  }, []);
 
-  // //initial state = no course selected yet
-  // const [ currentCourse, setCurrentCourse ] = useState(null);
-  // const [ courses, getCourses ] = useState(null);
 
-  // //redux
-  // //get course list
-  // // const { allCourses, id } = useSelector((state) => state.report);
+    const data = {
+      labels: allGrades.map((student) => student.studentName),
 
-  // //select course and fetch list of students and assessments
+      datasets: [
+        {
+          label: "Course Report",
+          data: allGrades.map((average) => average.gradeAverage),
 
-  // const course = useSelector((state) => state.course)
-  // const students = useSelector((state) => state.students)
-  // const grades = useSelector((state) => state.report)
-  // const dispatch = useDispatch();
+          backgroundColor: "aqua",
+          borderColor: "#000",
+          borderWidth: 1,
+        },
+      ],
+    };
 
-  // //update selected list with the id or updated courseId in URL
-  // useEffect(() => {
-  //   if (courseId) {
-  //     dispatch(fetchCourseList(courseId))
-  //   };
-  // }, [courseId]);
+    let chart;
+    if (currentCourse && allGrades.length) {
+      chart = (
+        <div>
+        <p className="">Course Report</p>
+        <div style={{ width: "50%" }}>
+          <Bar data={data} options={options}></Bar>
+        </div>
+      </div>)
+    } else {
+      chart = <p>Please select an active course. </p>;
+    }
 
-  // //get grade report belonging to the class
-  //   useEffect(() => {
-  //     if (
-  //       Object.keys(courses).length && courses.id === courseId
-  //     ) {
-  //       setCurrentCourse(course);
-  //       if (courseId) {
-  //         dispatch(
-  //           fetchCourseReport({
-  //             courseId
-  //           })
-  //         )
-  //       }
-  //     }
-  //   }, [course, courseId])
 
-  // // fetch a list of courses to display at course dropdown menu
-  // useEffect(() => {
-  //   dispatch(getCourses());
-  // }, []);
 
-  //   // update current course when user click dropdown item
-  //   const handleCurrentCourse = (course) => {
-  //     searchParams.set("courseId", course.id);
-  //     setSearchParams(searchParams);
-  //   };
 
-  // const handleCourseGradeReport = (student) => {
-  //   dispatch(
-  //     fetchCourseReport({
-  //       courseId: currentCourse,
-  //     })
-  //   );
-  // };
-
-  // get current course
-  // const handleCurrentCourse = (course) => {
-  //   setCurrentCourse(course.id);
-  //   console.log(course.id)
-  // };
-
-  // chart data
-  // const data = {
-  //   labels: grades.map((el) => el.title),
-  //   datasets: [
-  //     {
-  //       label: "Test chart",
-  //       data: grades.map((el) => el.total_grade),
-  //       backgroundColor: "aqua",
-  //       borderColor: "#000",
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-
-  const options = {};
+    const options = {
+      responsive: true
+    };
 
   return (
-    <div>Hi
-      {/* <Dropdown>
-        <Dropdown.Toggle>Course</Dropdown.Toggle>
+ <div>
+      <Dropdown>
+        <Dropdown.Toggle>
+          {currentCourse ? currentCourse.id : "Course"}
+        </Dropdown.Toggle>
         <Dropdown.Menu>
-          {courses.map((course) => {
-            return (
-              <Dropdown.Item
-                key={course.id}
-                onClick={() => handleCurrentCourse(course)}
-              >
-                {course.name}
-              </Dropdown.Item>
-            );
-          })}
-        </Dropdown.Menu>
-      </Dropdown>
-      {currentCourse && (
-        <Dropdown>
-          <Dropdown.Toggle>Students</Dropdown.Toggle>
-          <Dropdown.Menu>
-            {students.map((student) => {
+          {allCourses &&
+            allCourses.length &&
+            allCourses.map((course) => {
               return (
                 <Dropdown.Item
-                  key={student.id}
-                  onClick={() => handleCourseGradeReport(student)}
+                  key={course.id}
+                  // onClick={() => handleCurrentCourse(course)}
                 >
-                  {student.firstName} {student.lastName}
+                  {course.name}
                 </Dropdown.Item>
               );
             })}
-          </Dropdown.Menu>
-        </Dropdown>
-      )}
-      <p className="text-start">
-        {student && `${student.firstName} ${student.lastName}`}
-      </p>
-      <div style={{ width: "50%" }}>
-        <Bar data={data} options={options}></Bar>
-      </div> */}
+        </Dropdown.Menu>
+      </Dropdown>
+      {currentCourse ? chart : <p>Please select a course</p>}
     </div>
-  );
+  )
 };
