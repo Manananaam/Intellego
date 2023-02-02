@@ -23,11 +23,11 @@ const EditAssessmentScreen = () => {
     dispatch(fetchAssessment(assessmentId));
   }, [dispatch]);
 
-  const handleNewQuestion = (e) => {
-    e.preventDefault();
-    dispatch(createQuestion({ questionText }));
-    setQuestionText("");
-  };
+  // const handleNewQuestion = (e) => {
+  //   e.preventDefault();
+  //   dispatch(createQuestion({ questionText }));
+  //   setQuestionText("");
+  // };
   //attach this to when someone types in the question field... or clicks out of it? Not sure...
 
   //new handler, as soon as someone types anything into new question field, need to render another new question form item
