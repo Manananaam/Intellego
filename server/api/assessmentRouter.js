@@ -47,6 +47,18 @@ router.get(
 router.get(
   "/:assessmentId/courses/:courseId/questions",
   asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId, {
+      where: {
+        isActive: true,
+      },
+    });
+    if (!course) {
+      throw new AppError(
+        `The course with id (${req.params.courseId}) is not exist or active.`,
+        400
+      );
+    }
+
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
       where: {
         isActive: true,
@@ -56,20 +68,14 @@ router.get(
       },
     });
 
-    // 1. check if the assessment with the id exist or active
+    // 2. check if the assessment with the id exist or active
     if (!assessment) {
       throw new AppError(
-        "The assessment belong to this assessment Id don't exist.",
+        `The assessment belong to this assessment Id (${req.params.assessmentId}) don't exist or active.`,
         400
       );
     }
-    // 2. check if the assessment had been assigned to the course?
-    const course = await Course.findByPk(req.params.courseId, {
-      where: {
-        isActive: true,
-      },
-    });
-
+    // 3. check if the assessment had been assigned to the course?
     if (!(await course.hasAssessment(assessment))) {
       throw new AppError(
         `The assessment (${assessment.title}) haven't been assigned to course(${course.name}) .`,
