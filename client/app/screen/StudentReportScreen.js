@@ -5,6 +5,10 @@ import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Sidebar from "../components/Sidebar";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -130,53 +134,63 @@ export default function StudentReportScreen() {
   }
   return (
     <div>
-      <Dropdown>
-        <Dropdown.Toggle>
-          {currentCourse ? currentCourse.name : "Course"}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {allcourses &&
-            allcourses.length &&
-            allcourses.map((course) => {
-              return (
-                <Dropdown.Item
-                  key={course.id}
-                  onClick={() => handleCurrentCourse(course)}
-                >
-                  {course.name}
-                </Dropdown.Item>
-              );
-            })}
-        </Dropdown.Menu>
-      </Dropdown>
-      {currentCourse && (
-        <Dropdown>
-          <Dropdown.Toggle>
-            {currentStudent
-              ? `${currentStudent.firstName} ${currentStudent.lastName}`
-              : "Student"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {courses &&
-              courses.id === courseId &&
-              courses.students.map((student) => {
-                return (
-                  <Dropdown.Item
-                    key={student.id}
-                    onClick={() => handleCurrentStudent(student)}
-                  >
-                    {student.firstName} {student.lastName}
-                  </Dropdown.Item>
-                );
-              })}
-          </Dropdown.Menu>
-        </Dropdown>
-      )}
-      <p>
-        {currentStudent &&
-          `${currentStudent.firstName} ${currentStudent.lastName}`}
-      </p>
-      {currentCourse ? chart : <p>Please select a course</p>}
+      <Container>
+        <Row>
+          <Col xs={3} id="sidebar-wrapper">
+            <Sidebar />
+          </Col>
+          <Col xs={9} id="page-content-wrapper">
+            <h1>Students Report</h1>
+            <Dropdown>
+              <Dropdown.Toggle>
+                {currentCourse ? currentCourse.name : "Course"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {allcourses &&
+                  allcourses.length &&
+                  allcourses.map((course) => {
+                    return (
+                      <Dropdown.Item
+                        key={course.id}
+                        onClick={() => handleCurrentCourse(course)}
+                      >
+                        {course.name}
+                      </Dropdown.Item>
+                    );
+                  })}
+              </Dropdown.Menu>
+            </Dropdown>
+            {currentCourse && (
+              <Dropdown>
+                <Dropdown.Toggle>
+                  {currentStudent
+                    ? `${currentStudent.firstName} ${currentStudent.lastName}`
+                    : "Student"}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {courses &&
+                    courses.id === courseId &&
+                    courses.students.map((student) => {
+                      return (
+                        <Dropdown.Item
+                          key={student.id}
+                          onClick={() => handleCurrentStudent(student)}
+                        >
+                          {student.firstName} {student.lastName}
+                        </Dropdown.Item>
+                      );
+                    })}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+            <p>
+              {currentStudent &&
+                `${currentStudent.firstName} ${currentStudent.lastName}`}
+            </p>
+            {currentCourse ? chart : <p>Please select a course</p>}
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }
