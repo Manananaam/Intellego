@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 
 export default function StudentViewScreen() {
   const dispatch = useDispatch();
-  const { assessmentId } = useParams();
+  const { assessmentId, courseId } = useParams();
   const {
     isLoadingForFetchAssessmentAndQuestions,
     assessment,
@@ -51,7 +51,9 @@ export default function StudentViewScreen() {
   const handleSubmission = (event) => {
     event.preventDefault();
     console.log({
-      studentId,
+      courseId: Number(courseId),
+      assessmentId: Number(assessmentId),
+      studentId: Number(studentId),
       submission,
     });
   };
