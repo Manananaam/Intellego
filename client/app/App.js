@@ -15,9 +15,6 @@ import CourseAssessmentsScreen from "./screen/CourseAssessmentsScreen";
 // Screen
 import StudentReportScreen from "./screen/StudentReportScreen";
 
-// Screen
-import StudentReportScreen from "./screen/StudentReportScreen";
-
 export default function App() {
   return (
     <div>
