@@ -9,6 +9,7 @@ import {
 import CourseCreate from "../components/CourseCreate";
 import CourseEdit from "../components/CourseEdit";
 import Sidebar from "../components/Sidebar";
+import { useNavigate } from "react-router-dom";
 
 //Bootstrap imports
 import Button from "react-bootstrap/Button";
@@ -28,6 +29,7 @@ const CousreScreen = () => {
   //Redux
   const dispatch = useDispatch();
   const courses = useSelector(selectCourses);
+  const navigate = useNavigate();
 
   //Eventhandlers
   const handleShow = () => setShow(true);
@@ -94,6 +96,7 @@ const CousreScreen = () => {
                                   dispatch(
                                     isActiveCourse({ courseId, isActive })
                                   );
+                                  navigate(0);
                                 }}
                               >
                                 Archive

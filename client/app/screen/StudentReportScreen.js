@@ -140,6 +140,7 @@ export default function StudentReportScreen() {
             <Sidebar />
           </Col>
           <Col xs={9} id="page-content-wrapper">
+            <h1>Students Report</h1>
             <Dropdown>
               <Dropdown.Toggle>
                 {currentCourse ? currentCourse.name : "Course"}
