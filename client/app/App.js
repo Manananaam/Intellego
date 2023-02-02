@@ -5,6 +5,7 @@ import LogInScreen from "./screen/LogInScreen";
 import SignUpScreen from "./screen/SignUpScreen";
 import AssessmentsScreen from "./screen/AssessmentsScreen";
 import EditAssessmentScreen from "./screen/EditAssessmentScreen";
+import CreateAssessmentScreen from "./screen/CreateAssessmentScreen";
 
 // Router
 import { Routes, Route } from "react-router-dom";
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/assessments" element={<AssessmentsScreen />} />
+        <Route path="/assessments/create" element={<CreateAssessmentScreen />}></Route>
         <Route
           path="/assessments/:assessmentId"
           element={<EditAssessmentScreen />}
