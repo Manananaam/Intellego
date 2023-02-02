@@ -1,24 +1,32 @@
+//react stuff
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { editCourse } from "../store/slices/courseSlices";
 
+//bootstrap stuff
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-const CourseCreate = ({
-  id,
-  setShow,
-  show,
-  handleEditSubmit,
-  setname,
-  setsubject,
-  setgradelevel,
-}) => {
-  const handleClose = () => setShow(false);
+const CourseCreate = ({ showEdit, setShowEdit, id }) => {
+  const dispatch = useDispatch();
+
+  const [name, setName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [gradeLevel, setGradeLevel] = useState("");
+
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    dispatch(editCourse({ id, name, subject, gradeLevel }));
+    setShowEdit(false);
+    console.log(showEdit, setShowEdit, id);
+  };
+
+  const handleEditClose = () => setShowEdit(false);
 
   return (
     <>
-      {console.log("test")}
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={showEdit} onHide={handleEditClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Class</Modal.Title>
         </Modal.Header>
@@ -30,8 +38,7 @@ const CourseCreate = ({
                 type="text"
                 placeholder="Class Name"
                 autoFocus
-                ref={setname}
-                onChange={(e) => setname(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="">
@@ -39,8 +46,7 @@ const CourseCreate = ({
               <Form.Control
                 type="text"
                 placeholder="Subject Name"
-                ref={setsubject}
-                onChange={(e) => setsubject(e.target.value)}
+                onChange={(e) => setSubject(e.target.value)}
               />
             </Form.Group>
 
@@ -49,14 +55,13 @@ const CourseCreate = ({
               <Form.Control
                 type="text"
                 placeholder="Grade"
-                ref={setgradelevel}
-                onChange={(e) => setgradelevel(e.target.value)}
+                onChange={(e) => setGradeLevel(e.target.value)}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleEditClose}>
             Close
           </Button>
           <Button variant="primary" type="submit" onClick={handleEditSubmit}>
