@@ -34,6 +34,16 @@ router.get(
   })
 );
 
+//GET individual course
+router.get(
+  "/:courseid",
+  asyncHandler(async (req, res, next) => {
+    res.status(200).json(
+      await Course.findByPk(req.params.courseid)
+    );
+  })
+);
+
 // GET individual courses with students
 router.get(
   "/:courseid/students",

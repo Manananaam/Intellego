@@ -10,6 +10,19 @@ export const fetchCourseList = createAsyncThunk("/courses", async () => {
   }
 });
 
+//fetch a course
+export const fetchCourse = createAsyncThunk(
+  "/coursesAssessments",
+  async (courseId) => {
+    try {
+      const { data } = await axios.get(`/api/courses/${courseId}`);
+      return data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);
+
 
 // //route to put in course id and you get back all grades for the course and it includes grades?
 // export const fetchSubmissions = createAsyncThunk(`courses/:courseId/assessments/:assessmentId/submissions`, async({ courseId }) => {
@@ -36,19 +49,19 @@ export const fetchCourseReport = createAsyncThunk(
   );
 
 
-    export const fetchGradeForEachAssessment = createAsyncThunk(
-      "report/student/fetchGradeForEachAssessment",
-      async ({ courseId }) => {
-        try {
-          const data = await axios.get(
-            `/api/courses/${courseId}/submissions`
-          );
-          return data;
-        } catch (err) {
-          return rejectWithValue(err.message);
-        }
-      }
-    );
+    // export const fetchGradeForEachAssessment = createAsyncThunk(
+    //   "report/student/fetchGradeForEachAssessment",
+    //   async ({ courseId }) => {
+    //     try {
+    //       const data = await axios.get(
+    //         `/api/courses/${courseId}/submissions`
+    //       );
+    //       return data;
+    //     } catch (err) {
+    //       return rejectWithValue(err.message);
+    //     }
+    //   }
+    // );
 
 export const CourseReportSlice = createSlice ({
   name: "report",
@@ -56,7 +69,7 @@ export const CourseReportSlice = createSlice ({
     //array of all the teacher's courses
     allCourses: [],
     //currently selected course
-    currentCourse: 0,
+    currentCourse: [],
     //list of grades from current course
     allGrades: [],
     //user id
@@ -64,15 +77,14 @@ export const CourseReportSlice = createSlice ({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
+    builder.addCase(fetchCourse.fulfilled, (state, action) => {
       console.log(action.payload)
       state.currentCourse = action.payload;
     });
-
     builder.addCase(fetchCourseList.fulfilled, (state, action) => {
       state.allCourses = action.payload;
     });
-    builder.addCase(fetchGradeForEachAssessment.fulfilled, (state, action) => {
+    builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
       state.allGrades = action.payload.allGrades;
     })
   }

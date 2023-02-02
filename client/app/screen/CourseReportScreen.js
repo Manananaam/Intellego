@@ -12,10 +12,7 @@ import {
 import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 import Dropdown from "react-bootstrap/Dropdown";
-import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchSubmissions } from "../store/slices/courseReportSlice";
-import { fetchCourseAssesments } from "../store/slices/courseSlices";
-import { current } from "@reduxjs/toolkit";
-import { fetchGradeForEachAssessment } from "../store";
+import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchCourse } from "../store/slices/courseReportSlice";
 
 export default function CourseReportScreen() {
   // use router hook to fetch current courseId and studentId
@@ -23,55 +20,69 @@ export default function CourseReportScreen() {
 
   const courseId = Number(searchParams.get("courseId"));
 
-  const dispatch = useDispatch();
-
+  //fetch all courses to populate dropdown menu
   const allCourses = useSelector(selectCourseReport);
 
-  const [currentCourse, setCurrentCourse] = useState(null);
-  const [allGrades, setAllGrades] = useState(null);
+  //fetch grade/assessments once selected
+
+  //initial current course
+  const [currentCourse, setCurrentCourse] = useState();
+  // (state) => state.currentCourse
 
   console.log(allCourses)
-  console.log(currentCourse)
+  // console.log(currentCourse)
 
+  //fetch all courses
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCourseList());
   }, []);
 
+  //once course Id exists click course to update courseID in url
   useEffect(() => {
-    dispatch(fetchCourseReport());
-  }, []);
+    if (courseId) {
+      dispatch(fetchCourse(courseId));
+    }
+  }, [courseId]);
+
+  // update current course once selected
+  // useEffect(() => {
+  //   if (allCourses.id === courseId) {
+  //       setCurrentCourse(allCourses);
+  //     } if (courseId) {
+  //       dispatch(fetchCourseReport(courseId))
+  //     }
+  // }, [allCourses, courseId]);
+  // console.log(currentCourse)
 
 
-    const data = {
-      labels: allGrades.map((student) => student.studentName),
+    // const data = {
+    //   labels: allGrades.map((student) => student.studentName),
 
-      datasets: [
-        {
-          label: "Course Report",
-          data: allGrades.map((average) => average.gradeAverage),
+    //   datasets: [
+    //     {
+    //       label: "Course Report",
+    //       data: allGrades.map((average) => average.gradeAverage),
 
-          backgroundColor: "aqua",
-          borderColor: "#000",
-          borderWidth: 1,
-        },
-      ],
-    };
+    //       backgroundColor: "aqua",
+    //       borderColor: "#000",
+    //       borderWidth: 1,
+    //     },
+    //   ],
+    // };
 
     let chart;
-    if (currentCourse && allGrades.length) {
-      chart = (
-        <div>
-        <p className="">Course Report</p>
-        <div style={{ width: "50%" }}>
-          <Bar data={data} options={options}></Bar>
-        </div>
-      </div>)
-    } else {
-      chart = <p>Please select an active course. </p>;
-    }
-
-
-
+    // if (currentCourse && allGrades.length) {
+    //   chart = (
+    //     <div>
+    //     <p className="">Course Report</p>
+    //     <div style={{ width: "50%" }}>
+    //       <Bar data={data} options={options}></Bar>
+    //     </div>
+    //   </div>)
+    // } else {
+    //   chart = <p>Please select an active course. </p>;
+    // }
 
     const options = {
       responsive: true
