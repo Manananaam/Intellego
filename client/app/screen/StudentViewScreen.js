@@ -11,7 +11,10 @@ import Spinner from "react-bootstrap/Spinner";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllQuestions } from "../store/slices/studentViewSlice";
+import {
+  fetchAllQuestions,
+  createSubmission,
+} from "../store/slices/studentViewSlice";
 
 // Router
 import { useParams } from "react-router-dom";
@@ -50,12 +53,14 @@ export default function StudentViewScreen() {
   };
   const handleSubmission = (event) => {
     event.preventDefault();
-    console.log({
-      courseId: Number(courseId),
-      assessmentId: Number(assessmentId),
-      studentId: Number(studentId),
-      submission,
-    });
+    dispatch(
+      createSubmission({
+        courseId: Number(courseId),
+        assessmentId: Number(assessmentId),
+        studentId: Number(studentId),
+        submission,
+      })
+    );
   };
 
   if (isLoadingForFetchAssessmentAndQuestions) {

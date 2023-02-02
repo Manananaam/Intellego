@@ -16,13 +16,33 @@ export const fetchAllQuestions = createAsyncThunk(
   }
 );
 
+export const createSubmission = createAsyncThunk(
+  "studentView/submitAnswer",
+  async ({ courseId, assessmentId, studentId, submission }) => {
+    try {
+      const { data } = await axios.post(
+        `/api/submissions/courses/${courseId}/assessments/${assessmentId}/students/${studentId}`,
+        submission
+      );
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 const studentViewSlice = createSlice({
   name: "studentView",
   initialState: {
+    // state for fetch assessment and question
     isLoadingForFetchAssessmentAndQuestions: false,
     assessment: null,
     questions: null,
     errorForFetchQuestions: null,
+    // state for submission
+    isLoadingForSubmission: false,
+    submissionSuccess: false,
+    errorForSubmission: null,
   },
   reducers: {},
   extraReducers(builder) {
@@ -41,6 +61,11 @@ const studentViewSlice = createSlice({
     builder.addCase(fetchAllQuestions.rejected, (state, action) => {
       state.isLoadingForFetchAssessmentAndQuestions = false;
       state.errorForFetchQuestions = action.error.message;
+    });
+
+    builder.addCase(createSubmission.fulfilled, (state, action) => {
+      state.isLoadingForSubmission = false;
+      state.submissionSuccess = true;
     });
   },
 });
