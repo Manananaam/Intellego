@@ -22,6 +22,25 @@ export const fetchAssessment = createAsyncThunk("assessment", async (id) => {
   }
 });
 
+//edit assessment title
+export const editAssessmentTitle = createAsyncThunk(
+  "assessment/editTitle",
+  async (updatedAssessment) => {
+    try {
+      //note - updatedAssessment should come in as an object with id and title fields
+      const id = updatedAssessment.assessmentId;
+      const title = updatedAssessment.assessmentTitle;
+      const { data } = await axios.put(
+        `/api/assessments/${updatedAssessment.assessmentId}`,
+        { id, title }
+      );
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+
 //create a new assessment
 //mld - taking this out but leaving commented in for now just in case!
 //probably need to add some grabbing of teacher ID in here as well

@@ -32,9 +32,9 @@ router.get(
     const assessments = await Assessment.findAll({
       include: {
         model: Question,
-      }
+      },
     });
-    res.status(200).json({assessments});
+    res.status(200).json({ assessments });
   })
 );
 
@@ -48,7 +48,7 @@ router.get(
         model: Question,
         include: {
           model: Submission,
-        }
+        },
       },
     });
     res.status(200).json({
@@ -79,7 +79,7 @@ router.post(
   })
 );
 
-//PUT: assign assessment to more than one class
+//PUT: assign assessment to more than one class, edit title
 router.put(
   "/:assessmentId",
   asyncHandler(async (req, res, next) => {

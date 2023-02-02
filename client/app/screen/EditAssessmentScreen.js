@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchAssessment,
   selectAssessment,
+  editAssessmentTitle,
 } from "../store/slices/singleAssessmentSlice";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
@@ -15,6 +16,7 @@ import Button from "react-bootstrap/Button";
 const EditAssessmentScreen = () => {
   const assessment = useSelector(selectAssessment);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { assessmentId } = useParams();
   const [assessmentTitle, setAssessmentTitle] = useState("");
 
@@ -37,7 +39,12 @@ const EditAssessmentScreen = () => {
   //attach this to when someone types in the question field... or clicks out of it? Not sure...
 
   //new handler, as soon as someone types anything into new question field, need to render another new question form item
-
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
+    navigate("/assessments");
+  }
+  //NOTE - still not auto updating listview when you navigate back
   return (
     <>
       <Navbar bg='light'>
@@ -45,7 +52,7 @@ const EditAssessmentScreen = () => {
           <Navbar.Brand>Edit Assessment</Navbar.Brand>
         </Container>
       </Navbar>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Assessment Title</Form.Label>
           <Form.Control
@@ -76,11 +83,13 @@ const EditAssessmentScreen = () => {
             placeholder='Add a Question +'
           ></Form.Control>
         </Form.Group>
+        <Button type='submit' value='Submit'>
+          Submit
+        </Button>
+        <Button type='button' onClick={handleAddQuestion}>
+          Add Question
+        </Button>
       </Form>
-      <Button as='input' type='submit' value='Submit'></Button>
-      <Button type='button' onClick={handleAddQuestion}>
-        Add Question
-      </Button>
     </>
   );
 };
