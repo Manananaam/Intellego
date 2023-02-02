@@ -1,4 +1,5 @@
 const express = require("express");
+const Sequelize = require("sequelize");
 const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
@@ -121,6 +122,22 @@ router.post(
       );
     }
 
+    // 6. check if the student had submitted before?
+    const qusetionIds = Object.keys(req.body).map((el) => Number(el));
+    const existedSubmissions = await Submission.findAll({
+      where: {
+        studentId,
+        questionId: {
+          [Sequelize.Op.in]: qusetionIds,
+        },
+      },
+    });
+    if (existedSubmissions.length > 0) {
+      throw new AppError(
+        `The student (${student.firstName} ${student.lastName}) had submitted the answer to the assessment(${assessment.title}) before. You can't submit anymore!`,
+        400
+      );
+    }
     // if everything is ok, store the submission in database
     const submissions = [];
     for (const questionId of Object.keys(req.body)) {
