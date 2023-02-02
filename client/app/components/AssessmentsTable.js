@@ -55,7 +55,7 @@ const AssessmentsTable = () => {
                   <td>Total Average % Here</td>
                   <td>
                     {assessment.questions.filter(
-                      (question) => question.submissions.length
+                      (question) => {return question.submissions.length > 0}
                     ).length ? (
                       <Archive
                         onClick={() => {
