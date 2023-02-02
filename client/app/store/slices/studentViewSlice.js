@@ -3,10 +3,10 @@ import axios from "axios";
 
 export const fetchAllQuestions = createAsyncThunk(
   "studentView/fetchAllQuestion",
-  async ({ assessmentId }, { rejectWithValue }) => {
+  async ({ courseId, assessmentId }) => {
     try {
       const response = await axios.get(
-        `/api/assessments/${assessmentId}/questions`
+        `/api/assessments/${assessmentId}/courses/${courseId}/questions`
       );
       return response.data;
     } catch (err) {

@@ -32,7 +32,7 @@ export default function StudentViewScreen() {
     errorForSubmission,
   } = useSelector((state) => state.studentView);
   useEffect(() => {
-    dispatch(fetchAllQuestions({ assessmentId }));
+    dispatch(fetchAllQuestions({ courseId, assessmentId }));
   }, []);
 
   // handle dynamic number of input field value
@@ -75,7 +75,7 @@ export default function StudentViewScreen() {
       <Alert variant="danger">
         <Alert.Heading>Oops</Alert.Heading>
         <p>{errorForFetchQuestions}</p>
-        <p>Please check if the assessment Id in URL is correct.</p>
+        <p>Please check if the URL is correct.</p>
       </Alert>
     );
   }
