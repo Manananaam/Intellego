@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchCourseList = createAsyncThunk("/courses", async () => {
+export const fetchCourseList = createAsyncThunk("/courses/courseFetch", async () => {
   try {
-    const data = await axios.get("/api/courses");
+    const { data } = await axios.get("/api/courses");
+    console.log(data)
     return data;
   } catch (error) {
     return rejectWithValue(err.message);
@@ -81,8 +82,8 @@ export const CourseReportSlice = createSlice ({
       console.log(action.payload)
       state.currentCourse = action.payload;
     });
-    builder.addCase(fetchCourseList.fulfilled, (state, action) => {
-      state.allCourses = action.payload;
+    builder.addCase(fetchCourseList.fulfilled, (state, action) => {console.log(action.payload)
+      state.allCourses = action.payload.data;
     });
     builder.addCase(fetchCourseReport.fulfilled, (state, action) => {
       state.allGrades = action.payload.allGrades;

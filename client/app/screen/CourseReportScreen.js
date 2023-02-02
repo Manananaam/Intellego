@@ -12,6 +12,10 @@ import {
 import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 import Dropdown from "react-bootstrap/Dropdown";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Sidebar from "../components/Sidebar";
 import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchCourse } from "../store/slices/courseReportSlice";
 
 export default function CourseReportScreen() {
@@ -21,7 +25,7 @@ export default function CourseReportScreen() {
   const courseId = Number(searchParams.get("courseId"));
 
   //fetch all courses to populate dropdown menu
-  const allCourses = useSelector(selectCourseReport);
+  const { allCourses } = useSelector(selectCourseReport);
 
   //fetch grade/assessments once selected
 
@@ -90,6 +94,12 @@ export default function CourseReportScreen() {
 
   return (
  <div>
+      <Container>
+        <Row>
+          <Col xs={3} id="sidebar-wrapper">
+            <Sidebar />
+          </Col>
+          <Col xs={9} id="page-content-wrapper"></Col>
       <Dropdown>
         <Dropdown.Toggle>
           {currentCourse ? currentCourse.id : "Course"}
@@ -110,6 +120,8 @@ export default function CourseReportScreen() {
         </Dropdown.Menu>
       </Dropdown>
       {currentCourse ? chart : <p>Please select a course</p>}
+      </Row>
+      </Container>
     </div>
   )
 };
