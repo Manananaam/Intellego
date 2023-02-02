@@ -5,7 +5,7 @@ import {
   selectAllAssessments,
   isActiveAssessment,
 } from "../store/slices/assessmentsTableSlice";
-// import { fetchAssessment, selectAssessment } from "../store/slices/singleAssessmentSlice";
+import { deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
@@ -22,7 +22,7 @@ const AssessmentsTable = () => {
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
-  }, []);
+  }, [isActive]);
 
   return (
     <>
@@ -65,7 +65,9 @@ const AssessmentsTable = () => {
                         }}
                       />
                     ) : (
-                      <Trash3 />
+                      <Trash3 onClick={() => {
+                      dispatch(deleteAssessment({assessmentId}))
+                      }}/>
                     )}
                   </td>
                 </tr>

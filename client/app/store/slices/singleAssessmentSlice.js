@@ -18,6 +18,15 @@ async (id) => {
   }
 })
 
+//DELETING an assessment (that has no submissions)
+export const deleteAssessment = createAsyncThunk("/deleteAssessment", async ({ assessmentId }) => {
+  try {
+    await axios.delete(`api/assessments/${assessmentId}`);
+  } catch (err) {
+    return err.message;
+  }
+})
+
 //create a new assessment
 //probably need to add some grabbing of teacher ID in here as well
 //also how do we set courseID?
@@ -49,6 +58,9 @@ export const assessmentSlice = createSlice({
       console.log("state.assessment:", state.assessment);
       console.log("action.payload:", action.payload);
       state.assessment = action.payload.data.newAssessment;
+    })
+    .addCase(deleteAssessment.fulfilled, (state, action) => {
+      state.assessment = {};
     })
   }
 })
