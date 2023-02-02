@@ -27,6 +27,9 @@ export default function StudentViewScreen() {
     assessment,
     questions,
     errorForFetchQuestions,
+    isLoadingForSubmission,
+    submissionSuccess,
+    errorForSubmission,
   } = useSelector((state) => state.studentView);
   useEffect(() => {
     dispatch(fetchAllQuestions({ assessmentId }));
@@ -63,7 +66,7 @@ export default function StudentViewScreen() {
     );
   };
 
-  if (isLoadingForFetchAssessmentAndQuestions) {
+  if (isLoadingForFetchAssessmentAndQuestions || isLoadingForSubmission) {
     return <Spinner />;
   }
 
@@ -73,6 +76,23 @@ export default function StudentViewScreen() {
         <Alert.Heading>Oops</Alert.Heading>
         <p>{errorForFetchQuestions}</p>
         <p>Please check if the assessment Id in URL is correct.</p>
+      </Alert>
+    );
+  }
+
+  if (!isLoadingForSubmission && errorForSubmission) {
+    return (
+      <Alert variant="danger">
+        <Alert.Heading>Oops</Alert.Heading>
+        <p>{errorForSubmission}</p>
+      </Alert>
+    );
+  }
+
+  if (!isLoadingForSubmission && !errorForSubmission && submissionSuccess) {
+    return (
+      <Alert variant="success">
+        You have successfully submitted your answers!
       </Alert>
     );
   }

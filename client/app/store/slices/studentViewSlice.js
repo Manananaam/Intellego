@@ -26,7 +26,8 @@ export const createSubmission = createAsyncThunk(
       );
       return data;
     } catch (err) {
-      console.log(err);
+      const errMsg = err.response.data.message;
+      throw new Error(errMsg);
     }
   }
 );
@@ -63,9 +64,21 @@ const studentViewSlice = createSlice({
       state.errorForFetchQuestions = action.error.message;
     });
 
+    // createSubmission
+    builder.addCase(createSubmission.pending, (state, action) => {
+      state.isLoadingForSubmission = true;
+      state.submissionSuccess = false;
+      state.errorForSubmission = null;
+    });
     builder.addCase(createSubmission.fulfilled, (state, action) => {
       state.isLoadingForSubmission = false;
+      state.errorForSubmission = null;
       state.submissionSuccess = true;
+    });
+    builder.addCase(createSubmission.rejected, (state, action) => {
+      state.isLoadingForSubmission = false;
+      state.submissionSuccess = false;
+      state.errorForSubmission = action.error.message;
     });
   },
 });
