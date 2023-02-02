@@ -35,8 +35,14 @@ export default function StudentViewScreen() {
     dispatch(fetchAllQuestions({ courseId, assessmentId }));
   }, []);
 
+  //form validation: studentId should be required and it's should be a integer
+  const [studentId, setStudentId] = useState("");
+  const [studentIdTouch, setStudentIdTouched] = useState(false);
+  const studentIdIsValid =
+    studentId.trim() !== "" && Number.isInteger(Number(studentId));
+  const studentIdInputIsInValid = !studentIdIsValid && studentIdTouch;
+
   // handle dynamic number of input field value
-  const [studentId, setStudentId] = useState(0);
   const [submission, setSubmission] = useState({});
   useEffect(() => {
     if (questions) {
@@ -56,6 +62,9 @@ export default function StudentViewScreen() {
   };
   const handleSubmission = (event) => {
     event.preventDefault();
+    if (studentIdInputIsInValid) {
+      return;
+    }
     dispatch(
       createSubmission({
         courseId: Number(courseId),
@@ -127,19 +136,26 @@ export default function StudentViewScreen() {
     <div>
       <h1>Assessment </h1>
       <hr />
-      <Stack direction="horizontal">
-        <h2> Title: {assessment && assessment.title}</h2>
-        <FloatingLabel label="* Required Student ID" className="ms-auto">
-          <Form.Control
-            type="text"
-            placeholder="verify id"
-            value={studentId || ""}
-            onChange={(e) => setStudentId(Number(e.target.value))}
-          />
-        </FloatingLabel>
-      </Stack>
-      <hr />
       <Form onSubmit={handleSubmission}>
+        <Stack direction="horizontal">
+          <h2> Title: {assessment && assessment.title}</h2>
+          <FloatingLabel label="* Required Student ID" className="ms-auto">
+            <Form.Control
+              type="text"
+              placeholder="verify id"
+              value={studentId}
+              onBlur={(e) => setStudentIdTouched(true)}
+              onChange={(e) => setStudentId(e.target.value)}
+            />
+            {studentIdInputIsInValid && (
+              <Form.Text className="text-danger">
+                Student Id is required and must be integer
+              </Form.Text>
+            )}
+          </FloatingLabel>
+        </Stack>
+        <hr />
+
         {renderListOfQuestion}
 
         <Button variant="primary" type="submit">
