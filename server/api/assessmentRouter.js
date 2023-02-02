@@ -6,6 +6,7 @@ const {
   models: { Assessment, Question, Submission },
 } = require("../db");
 const protectedRoute = require("./middleware");
+const AppError = require("../utils/appError");
 
 //GET all assessments for a specific teacher
 //(teacher id will be handled in a different way...)
@@ -50,6 +51,14 @@ router.get(
         model: Question,
       },
     });
+
+    if (!assessment) {
+      throw new AppError(
+        "The assessment belong to this assessment Id don't exist.",
+        400
+      );
+    }
+
     res.status(200).json({
       data: {
         assessment,
