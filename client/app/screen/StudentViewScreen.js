@@ -6,6 +6,8 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -17,10 +19,15 @@ import { useParams } from "react-router-dom";
 export default function StudentViewScreen() {
   const dispatch = useDispatch();
   const { assessmentId } = useParams();
-  const { assessment, questions } = useSelector((state) => state.studentView);
+  const {
+    isLoadingForFetchAssessmentAndQuestions,
+    assessment,
+    questions,
+    errorForFetchQuestions,
+  } = useSelector((state) => state.studentView);
   useEffect(() => {
     dispatch(fetchAllQuestions({ assessmentId }));
-  });
+  }, []);
 
   // handle dynamic number of input field value
   const [studentId, setStudentId] = useState(0);
@@ -48,6 +55,20 @@ export default function StudentViewScreen() {
       submission,
     });
   };
+
+  if (isLoadingForFetchAssessmentAndQuestions) {
+    return <Spinner />;
+  }
+
+  if (!isLoadingForFetchAssessmentAndQuestions && errorForFetchQuestions) {
+    return (
+      <Alert variant="danger">
+        <Alert.Heading>Oops</Alert.Heading>
+        <p>{errorForFetchQuestions}</p>
+        <p>Please check if the assessment Id in URL is correct.</p>
+      </Alert>
+    );
+  }
 
   const renderListOfQuestion =
     questions &&
