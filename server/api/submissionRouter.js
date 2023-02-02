@@ -8,6 +8,7 @@ const Submission = require("../db/models/submissionModel");
 const Question = require("../db/models/questionModel");
 const Course = require("../db/models/courseModel");
 const Assessment = require("../db/models/assessmentModel");
+const Student = require("../db/models/studentModel");
 
 //Once a question is complete, it becomes a submission.
 
@@ -69,14 +70,66 @@ router.get(
 router.post(
   "/courses/:courseId/assessments/:assessmentId/students/:studentId",
   asyncHandler(async (req, res, next) => {
+    const { courseId, assessmentId, studentId } = req.params;
+    // guard condition before student submit their answer
+    // 1. if the course with the id is exist or active
+    const course = await Course.findByPk(courseId, {
+      where: {
+        isActive: true,
+      },
+    });
+    if (!course) {
+      throw new AppError(
+        `The course with id: ${courseId} is not exist or active`,
+        400
+      );
+    }
+    // 2. if the assessment with the id is exist or active
+    const assessment = await Assessment.findByPk(assessmentId, {
+      where: {
+        isActive: true,
+      },
+    });
+    if (!assessment) {
+      throw new AppError(
+        `The assessment with id: ${assessmentId} is not exist or active`,
+        400
+      );
+    }
+
+    // 3. if the assessment belong to the course?
+    if (!(await course.hasAssessment(assessment))) {
+      throw new AppError(
+        `The assessment (${assessment.title}) haven't been assigned to course(${course.name}) .`,
+        400
+      );
+    }
+
+    // 4. if the student exist
+    const student = await Student.findByPk(studentId);
+    if (!student) {
+      throw new AppError(
+        `The student with id: ${studentId} is not exist.`,
+        400
+      );
+    }
+    // 5.if the student have been enrolled to the course?
+    if (!(await course.hasStudent(student))) {
+      throw new AppError(
+        `The student (${student.firstName} ${student.lastName}) haven't been enrolled to the course(${course.name}) .`,
+        400
+      );
+    }
+
+    // if everything is ok, store the submission in database
     const submissions = [];
     for (const questionId of Object.keys(req.body)) {
       const submission = await Submission.create({
         response: req.body[questionId],
         questionId,
-        courseId: req.params.courseId,
-        assessmentId: req.params.assessmentId,
-        studentId: req.params.studentId,
+        courseId: courseId,
+        assessmentId: assessmentId,
+        studentId: studentId,
       });
       submissions.push(submission);
     }
