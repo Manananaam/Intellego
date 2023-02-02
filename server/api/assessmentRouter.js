@@ -42,16 +42,11 @@ router.get(
 
 // Na: add a route for show assessment and questions in student view screen
 // @desc: fetch assessment and it's questions
-// @route: /api/courses/:courseId/assessments/:assessmentId/questions
+// @route: /api/assessments/:assessmentId/courses/:courseId/questions
 // @access: public
 router.get(
-  "/courses/:courseId/:assessmentId/questions",
+  "/:assessmentId/courses/:courseId/questions",
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId, {
-      where: {
-        isActive: true,
-      },
-    });
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
       where: {
         isActive: true,
@@ -69,7 +64,13 @@ router.get(
       );
     }
     // 2. check if the assessment had been assigned to the course?
-    if (!course.hasAssessment(assessment)) {
+    const course = await Course.findByPk(req.params.courseId, {
+      where: {
+        isActive: true,
+      },
+    });
+
+    if (!(await course.hasAssessment(assessment))) {
       throw new AppError(
         `The assessment (${assessment.title}) haven't been assigned to course(${course.name}) .`,
         400
