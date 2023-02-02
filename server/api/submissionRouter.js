@@ -6,6 +6,8 @@ const AppError = require("../utils/appError");
 
 const Submission = require("../db/models/submissionModel");
 const Question = require("../db/models/questionModel");
+const Course = require("../db/models/courseModel");
+const Assessment = require("../db/models/assessmentModel");
 
 //Once a question is complete, it becomes a submission.
 
@@ -61,16 +63,26 @@ router.get(
   })
 );
 
-//To create a new submission:
-
+// @desc: create a bunch of submission
+// @route: /api/submissions/courses/:coureseId/assessments/:assessmentId/students/:studentId
+// @access: public
 router.post(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId",
+  "/courses/:courseId/assessments/:assessmentId/students/:studentId",
   asyncHandler(async (req, res, next) => {
-    const newSubmission = await Submission.create(req.body);
-    res.status(200).json({
-      data: {
-        newSubmission,
-      },
+    const submissions = [];
+    for (const questionId of Object.keys(req.body)) {
+      const submission = await Submission.create({
+        response: req.body[questionId],
+        questionId,
+        courseId: req.params.courseId,
+        assessmentId: req.params.assessmentId,
+        studentId: req.params.studentId,
+      });
+      submissions.push(submission);
+    }
+
+    res.status(201).json({
+      submissions,
     });
   })
 );
