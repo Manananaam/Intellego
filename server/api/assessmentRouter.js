@@ -32,9 +32,29 @@ router.get(
     const assessments = await Assessment.findAll({
       include: {
         model: Question,
-      }
+      },
     });
-    res.status(200).json({assessments});
+    res.status(200).json({ assessments });
+  })
+);
+
+// Na: add a route for show assessment and questions in student view screen
+// @desc: fetch assessment and it's questions
+// @route: /api/assessments/:assessmentId/questions
+// @access: public
+router.get(
+  "/:assessmentId/questions",
+  asyncHandler(async (req, res, next) => {
+    const assessment = await Assessment.findByPk(req.params.assessmentId, {
+      include: {
+        model: Question,
+      },
+    });
+    res.status(200).json({
+      data: {
+        assessment,
+      },
+    });
   })
 );
 
@@ -48,7 +68,7 @@ router.get(
         model: Question,
         include: {
           model: Submission,
-        }
+        },
       },
     });
     res.status(200).json({
