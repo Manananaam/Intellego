@@ -47,7 +47,6 @@ export const assessmentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchAssessment.fulfilled, (state, action) => {
-      console.log("payload babe", action.payload.data.assessment);
       state.assessment.assessmentTitle = action.payload.data.assessment.title;
       state.assessment.questions = action.payload.data.assessment.questions;
       state.assessment.isActive = action.payload.data.assessment.isActive;

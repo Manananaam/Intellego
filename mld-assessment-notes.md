@@ -7,3 +7,5 @@
 3. you can delete a question (which means deleting the question from the db)
 4. you can edit a question (which means editing the question in the db)
 5. you can edit the assessment information (name of assessment)
+
+NOTE - forget associated courses for now

@@ -13,16 +13,17 @@ import Button from "react-bootstrap/Button";
 //right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
 
 const EditAssessmentScreen = () => {
-  const assessment = useSelector(selectAssessment).assessment.data;
+  const assessment = useSelector(selectAssessment);
   const dispatch = useDispatch();
   const { assessmentId } = useParams();
+  const [assessmentTitle, setAssessmentTitle] = useState("");
 
   // const [questionText, setQuestionText] = useState("");
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
-  }, [dispatch]);
-
+    setAssessmentTitle(assessment.assessment.assessmentTitle);
+  }, [dispatch, assessment.assessment.assessmentTitle]);
   function handleAddQuestion() {
     console.log("adding question, babe");
   }
@@ -36,11 +37,7 @@ const EditAssessmentScreen = () => {
   //attach this to when someone types in the question field... or clicks out of it? Not sure...
 
   //new handler, as soon as someone types anything into new question field, need to render another new question form item
-  console.log(assessment);
-  console.log(assessmentId);
-  if (typeof assessment === "object") {
-    console.log(assessment.assessment);
-  }
+
   return (
     <>
       <Navbar bg='light'>
@@ -54,9 +51,8 @@ const EditAssessmentScreen = () => {
           <Form.Control
             size='lg'
             type='text'
-            placeholder={
-              assessment ? assessment.assessment.title : "Your Title Here"
-            }
+            value={assessmentTitle || ""}
+            onChange={(e) => setAssessmentTitle(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <br />
