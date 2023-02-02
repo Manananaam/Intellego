@@ -45,7 +45,7 @@ export default function App() {
         />
         <Route path="/report/students" element={<StudentReportScreen />} />
         <Route
-          path="/student/assessment/:assessmentId"
+          path="/student/courses/:courseId/assessments/:assessmentId"
           element={<StudentViewScreen />}
         />
       </Routes>
