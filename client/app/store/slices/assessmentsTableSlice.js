@@ -35,6 +35,18 @@ export const createAssessment = createAsyncThunk("/assessmentCreate", async({ ti
   }
 })
 
+//archiving an assessment - PUT request to change active status
+export const isActiveAssessment = createAsyncThunk("/assessmentActive", async ({ assessmentId, isActive }) => {
+  try {
+    const { data } = await axios.put(`api/assessments/${assessmentId}`, {
+      isActive,
+    });
+    return data;
+  } catch (err) {
+    return err.message;
+  }
+})
+
 export const assessmentsSlice = createSlice({
   name: "assessments",
   initialState,
@@ -45,6 +57,9 @@ export const assessmentsSlice = createSlice({
     })
     .addCase(createAssessment.fulfilled, (state, action) => {
       state.assessments.push(action.payload.data.newAssessment);
+    })
+    .addCase(isActiveAssessment.fulfilled, (state, action) => {
+      return state.assessments.filter((assessment) => assessment.isActive)
     })
   },
 });
