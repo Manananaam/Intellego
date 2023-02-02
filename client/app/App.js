@@ -1,8 +1,8 @@
 import React from "react";
 import { SamplePieChart } from "./screen/TestChart";
 import HomeScreen from "./screen/HomeScreen";
-import LogInScreen from "./screen/LogInScreen";
-import SignUpScreen from "./screen/SignUpScreen";
+// import LogInScreen from "./screen/LogInScreen";
+// import SignUpScreen from "./screen/SignUpScreen";
 import AssessmentsScreen from "./screen/AssessmentsScreen";
 import EditAssessmentScreen from "./screen/EditAssessmentScreen";
 import StudentViewScreen from "./screen/StudentViewScreen";
@@ -23,8 +23,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomeScreen />} />
         <Route path="/test" element={<SamplePieChart />} />
-        <Route path="/login" element={<LogInScreen />} />
-        <Route path="/signup" element={<SignUpScreen />} />
+        {/* <Route path="/login" element={<LogInScreen />} />
+        <Route path="/signup" element={<SignUpScreen />} /> */}
         <Route path="/courses" element={<CousreScreen />} />
         <Route
           path="/courses/:courseId/students"
