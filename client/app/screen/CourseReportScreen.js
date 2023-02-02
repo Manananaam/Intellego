@@ -22,6 +22,7 @@ export default function CourseReportScreen() {
   const dispatch = useDispatch();
 
   console.log(course)
+  console.log(id)
 
   useEffect(() => {
     dispatch(fetchCourseList(id));
