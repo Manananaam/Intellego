@@ -7,6 +7,7 @@ const {
 } = require("../db");
 const protectedRoute = require("./middleware");
 const AppError = require("../utils/appError");
+const Course = require("../db/models/courseModel");
 
 //GET all assessments for a specific teacher
 //(teacher id will be handled in a different way...)
@@ -41,24 +42,41 @@ router.get(
 
 // Na: add a route for show assessment and questions in student view screen
 // @desc: fetch assessment and it's questions
-// @route: /api/assessments/:assessmentId/questions
+// @route: /api/courses/:courseId/assessments/:assessmentId/questions
 // @access: public
 router.get(
-  "/:assessmentId/questions",
+  "/courses/:courseId/:assessmentId/questions",
   asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId, {
+      where: {
+        isActive: true,
+      },
+    });
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
+      where: {
+        isActive: true,
+      },
       include: {
         model: Question,
       },
     });
 
+    // 1. check if the assessment with the id exist or active
     if (!assessment) {
       throw new AppError(
         "The assessment belong to this assessment Id don't exist.",
         400
       );
     }
+    // 2. check if the assessment had been assigned to the course?
+    if (!course.hasAssessment(assessment)) {
+      throw new AppError(
+        `The assessment (${assessment.title}) haven't been assigned to course(${course.name}) .`,
+        400
+      );
+    }
 
+    // if everything is ok, send the assessment and questions as response
     res.status(200).json({
       data: {
         assessment,
