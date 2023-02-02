@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Bootstrap
 import Stack from "react-bootstrap/Stack";
@@ -53,9 +53,35 @@ const questions = [
 */
 
 export default function StudentViewScreen() {
+  /* state format
+    {
+      questionId: "",
+      102:""
+    }
+
+  */
+  const [studentId, setStudentId] = useState(0);
+  const [submission, setSubmission] = useState({});
+  useEffect(() => {
+    const initialSubmission = submission;
+    questions.forEach((question) => {
+      initialSubmission[question.id] = "";
+    });
+    setSubmission(initialSubmission);
+  }, []);
+
+  // update submission for the question
+  const handleAnwserChange = (questionId, value) => {
+    setSubmission((prev) => {
+      return { ...prev, [questionId]: value };
+    });
+  };
   const handleSubmission = (event) => {
     event.preventDefault();
-    console.log("submit");
+    console.log({
+      studentId,
+      submission,
+    });
   };
 
   const renderListOfQuestion = questions.map((question, idx) => {
@@ -67,7 +93,15 @@ export default function StudentViewScreen() {
             <p>{question.questionText}</p>
           </Card.Title>
 
-          <Form.Control as="textarea" rows={3} placeholder="Answer" />
+          <Form.Control
+            as="textarea"
+            value={submission[question.id]}
+            rows={3}
+            placeholder="Answer"
+            onChange={(event) =>
+              handleAnwserChange(question.id, event.target.value)
+            }
+          />
         </Card.Body>
       </Card>
     );
@@ -80,7 +114,12 @@ export default function StudentViewScreen() {
       <Stack direction="horizontal">
         <h2> Title: {assessment.title}</h2>
         <FloatingLabel label="* Required Student ID" className="ms-auto">
-          <Form.Control type="text" placeholder="verify id" />
+          <Form.Control
+            type="text"
+            placeholder="verify id"
+            value={studentId || ""}
+            onChange={(e) => setStudentId(Number(e.target.value))}
+          />
         </FloatingLabel>
       </Stack>
       <hr />
