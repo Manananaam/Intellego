@@ -7,6 +7,7 @@ const {
 } = require("../db");
 
 //GET grab a question by id, include all submissions for that question
+//bug > this route isn't working right now and I'm not sure why
 router.get(
   "/:questionId",
   asyncHandler(async (req, res, next) => {
