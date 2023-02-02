@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams, useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,6 +17,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Sidebar from "../components/Sidebar";
 import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchCourse } from "../store/slices/courseReportSlice";
+import { fetchAllCourses } from "../store/slices/courseSlices";
 
 export default function CourseReportScreen() {
   // use router hook to fetch current courseId and studentId
@@ -25,7 +26,7 @@ export default function CourseReportScreen() {
   const courseId = Number(searchParams.get("courseId"));
 
   //fetch all courses to populate dropdown menu
-  const { allCourses } = useSelector(selectCourseReport);
+  const allCourses = useSelector((state) => state.courses);
 
   //fetch grade/assessments once selected
 
@@ -39,7 +40,7 @@ export default function CourseReportScreen() {
   //fetch all courses
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchCourseList());
+    dispatch(fetchAllCourses());
   }, []);
 
   //once course Id exists click course to update courseID in url
