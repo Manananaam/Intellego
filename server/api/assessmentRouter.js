@@ -94,6 +94,7 @@ router.get(
 
 //GET: assessment and all questions for a given assessment
 //also get all associated submissions
+//this is the working route I should use for the front end for submissions confirmation
 router.get(
   "/:assessmentId",
   asyncHandler(async (req, res, next) => {
