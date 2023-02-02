@@ -7,7 +7,7 @@ import {
 } from "../store/slices/assessmentsTableSlice";
 import { deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
 
 //maybe make a baby component here that renders either a trash or an archive depending on if there are submissions or not?
@@ -16,13 +16,14 @@ const AssessmentsTable = () => {
   const [isActive, setIsActive] = useState(false);
   const allAssessments = useSelector(selectAllAssessments).assessments;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const singleAssessment = useSelector(selectAssessment).assessment;
 
   console.log("all assessments:", allAssessments);
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
-  }, [isActive]);
+  }, [dispatch]);
 
   return (
     <>
@@ -62,11 +63,13 @@ const AssessmentsTable = () => {
                           dispatch(
                             isActiveAssessment({ assessmentId, isActive })
                           );
+                          navigate(0)
                         }}
                       />
                     ) : (
                       <Trash3 onClick={() => {
-                      dispatch(deleteAssessment({assessmentId}))
+                      dispatch(deleteAssessment({assessmentId}));
+                      navigate(0)
                       }}/>
                     )}
                   </td>
