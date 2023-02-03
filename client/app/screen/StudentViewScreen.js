@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllQuestions,
   createSubmission,
+  verifyStudentId,
 } from "../store/slices/studentViewSlice";
 
 // Router
@@ -30,10 +31,12 @@ export default function StudentViewScreen() {
     isLoadingForSubmission,
     submissionSuccess,
     errorForSubmission,
+    verifyResult,
   } = useSelector((state) => state.studentView);
   useEffect(() => {
     dispatch(fetchAllQuestions({ courseId, assessmentId }));
   }, []);
+  console.log("verify result", verifyResult);
 
   //form validation: studentId should be required and it's should be a integer
   const [studentId, setStudentId] = useState("");
@@ -62,7 +65,12 @@ export default function StudentViewScreen() {
 
   const handleStudentVerify = (event) => {
     event.preventDefault();
-    console.log(studentId);
+    dispatch(
+      verifyStudentId({
+        courseId: Number(courseId),
+        studentId: Number(studentId),
+      })
+    );
   };
 
   const handleSubmission = (event) => {

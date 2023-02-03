@@ -36,7 +36,7 @@ export const verifyStudentId = createAsyncThunk(
   "studentView/verifyStudentID",
   async ({ studentId, courseId }) => {
     try {
-      const data = await axios.get(
+      const { data } = await axios.get(
         `/api/students/verify/${studentId}/courses/${courseId}`
       );
       return data;
@@ -110,7 +110,7 @@ const studentViewSlice = createSlice({
     builder.addCase(verifyStudentId.fulfilled, (state, action) => {
       state.isLoadingForVerifyStudentID = false;
       state.errorForVerifyStudentId = null;
-      state.verifyResult = action.payload;
+      state.verifyResult = action.payload.result;
     });
     builder.addCase(verifyStudentId.rejected, (state, action) => {
       state.isLoadingForVerifyStudentID = false;
