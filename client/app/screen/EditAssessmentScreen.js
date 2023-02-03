@@ -6,10 +6,9 @@ import {
   selectAssessment,
   editAssessmentTitle,
 } from "../store/slices/singleAssessmentSlice";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Container, Navbar, Form, Button } from "react-bootstrap";
+
+import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
 
 //right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
 
@@ -71,6 +70,7 @@ const EditAssessmentScreen = () => {
                 rows={6}
                 placeholder={question.questionText}
               ></Form.Control>
+              <Trash3 />
             </Form.Group>
           ))
         ) : (
