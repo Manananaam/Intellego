@@ -32,6 +32,21 @@ export const createSubmission = createAsyncThunk(
   }
 );
 
+export const verifyStudentId = createAsyncThunk(
+  "studentView/verifyStudentID",
+  async ({ studentId, courseId }) => {
+    try {
+      const data = await axios.get(
+        `/api/students/verify/${studentId}/courses/${courseId}`
+      );
+      return data;
+    } catch (err) {
+      const errMsg = err.response.data.message;
+      throw new Error(errMsg);
+    }
+  }
+);
+
 const studentViewSlice = createSlice({
   name: "studentView",
   initialState: {
@@ -44,6 +59,11 @@ const studentViewSlice = createSlice({
     isLoadingForSubmission: false,
     submissionSuccess: false,
     errorForSubmission: null,
+
+    // state for verify student ID
+    isLoadingForVerifyStudentID: false,
+    verifyResult: false,
+    errorForVerifyStudentId: null,
   },
   reducers: {},
   extraReducers(builder) {
@@ -79,6 +99,23 @@ const studentViewSlice = createSlice({
       state.isLoadingForSubmission = false;
       state.submissionSuccess = false;
       state.errorForSubmission = action.error.message;
+    });
+
+    // verifyStudentId
+    builder.addCase(verifyStudentId.pending, (state, action) => {
+      state.isLoadingForVerifyStudentID = true;
+      state.verifyResult = false;
+      state.errorForVerifyStudentId = null;
+    });
+    builder.addCase(verifyStudentId.fulfilled, (state, action) => {
+      state.isLoadingForVerifyStudentID = false;
+      state.errorForVerifyStudentId = null;
+      state.verifyResult = action.payload;
+    });
+    builder.addCase(verifyStudentId.rejected, (state, action) => {
+      state.isLoadingForVerifyStudentID = false;
+      state.verifyResult = false;
+      state.errorForVerifyStudentId = action.error.message;
     });
   },
 });
