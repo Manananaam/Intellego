@@ -61,6 +61,7 @@ export default function StudentViewScreen() {
   };
   const handleSubmission = (event) => {
     event.preventDefault();
+    setStudentIdTouched(true);
     if (!studentIdInputIsValid) {
       return;
     }
