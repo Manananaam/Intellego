@@ -38,7 +38,6 @@ export default function StudentViewScreen() {
   useEffect(() => {
     dispatch(fetchAllQuestions({ courseId, assessmentId }));
   }, []);
-  console.log("verify result", verifyResult);
 
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
@@ -74,22 +73,33 @@ export default function StudentViewScreen() {
     }
   }, [verifyResult, studentIdFormHasSubmit]);
 
+  const handleStudentIdChange = (event) => {
+    setStudentIdFormHasSubmit(false);
+    setStudentId(event.target.value);
+  };
+
   const handleStudentVerify = (event) => {
     event.preventDefault();
     setStudentIdFormHasSubmit(true);
+    setStudentIdTouched(true);
     setShowToast(true);
-    dispatch(
-      verifyStudentId({
-        courseId: Number(courseId),
-        studentId: Number(studentId),
-      })
-    );
+    if (studentIdInputIsValid) {
+      dispatch(
+        verifyStudentId({
+          courseId: Number(courseId),
+          studentId: Number(studentId),
+        })
+      );
+    } else {
+      setShowToast(false);
+      setStudentIdFormHasSubmit(false);
+    }
   };
 
   const handleSubmission = (event) => {
     event.preventDefault();
     setStudentIdTouched(true);
-    if (!studentIdInputIsValid) {
+    if (!studentIdInputIsValid || !studentIdFormHasSubmit || !verifyResult) {
       return;
     }
     console.log({
@@ -175,7 +185,11 @@ export default function StudentViewScreen() {
           autohide
         >
           <Toast.Header>Verify Result</Toast.Header>
-          <Toast.Body>{verifyResult ? "Congrate" : "Opps"}</Toast.Body>
+          <Toast.Body>
+            {verifyResult
+              ? "Congrate, your student ID is valid."
+              : "Opps, Your studentId is invalid. Please check your studentID and verify again."}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
 
@@ -190,8 +204,8 @@ export default function StudentViewScreen() {
               type="text"
               placeholder="verify id"
               value={studentId}
-              onBlur={(e) => setStudentIdTouched(true)}
-              onChange={(e) => setStudentId(e.target.value)}
+              onBlur={() => setStudentIdTouched(true)}
+              onChange={handleStudentIdChange}
             />
             {!studentIdIsValid && studentIdTouch && (
               <Form.Text className="text-danger">
@@ -210,6 +224,9 @@ export default function StudentViewScreen() {
         <Button variant="primary" type="submit">
           Submit
         </Button>
+        {studentIdInputIsValid && !studentIdFormHasSubmit && (
+          <p className="text-danger">Please verify Id before submit.</p>
+        )}
       </Form>
     </div>
   );
