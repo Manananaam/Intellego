@@ -1,4 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+//Router
+import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Table from "react-bootstrap/Table";
@@ -10,15 +13,31 @@ import { useDispatch, useSelector } from "react-redux";
 
 const AssessmentReportScreen = () => {
   const dispatch = useDispatch();
+
+  // use router hook to fetch current courseId
+  let [searchParams, setSearchParams] = useSearchParams();
+
+  const [courseId] = [
+    Number(searchParams.get("courseId")),
+  ];
+
+  // initial current course ans current student
+  const [currentCourse, setCurrentCourse] = useState(null);
+
   // redux state
   // fetch a list of courses managed by current user
   const { allcourses } = useSelector((state) => state.studentEnroll);
-  console.log("allcourses:", allcourses)
 
   // fetch a list of courses to display at course dropdown menu
   useEffect(() => {
     dispatch(getCourses());
   }, []);
+
+  // update current course when user clicks dropdown item
+  const handleCurrentCourse = (course) => {
+    searchParams.set("courseId", course.id);
+    setSearchParams(searchParams);
+  };
 
   return (
     <>
@@ -30,7 +49,7 @@ const AssessmentReportScreen = () => {
         <Dropdown.Menu>
           {allcourses && allcourses.length && allcourses.map((course) => {
             return (
-              <Dropdown.Item key={course.id}>{course.name}</Dropdown.Item>
+              <Dropdown.Item key={course.id} onClick={() => handleCurrentCourse(course)}>{course.name}</Dropdown.Item>
             )
           })}
         </Dropdown.Menu>
