@@ -28,7 +28,11 @@ const AssessmentReportScreen = () => {
           Choose Course
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item>Sample Course</Dropdown.Item>
+          {allcourses && allcourses.length && allcourses.map((course) => {
+            return (
+              <Dropdown.Item key={course.id}>{course.name}</Dropdown.Item>
+            )
+          })}
         </Dropdown.Menu>
       </Dropdown>
       <br />
