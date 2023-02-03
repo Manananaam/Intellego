@@ -59,20 +59,32 @@ export default function StudentViewScreen() {
       return { ...prev, [questionId]: value };
     });
   };
+
+  const handleStudentVerify = (event) => {
+    event.preventDefault();
+    console.log(studentId);
+  };
+
   const handleSubmission = (event) => {
     event.preventDefault();
     setStudentIdTouched(true);
     if (!studentIdInputIsValid) {
       return;
     }
-    dispatch(
-      createSubmission({
-        courseId: Number(courseId),
-        assessmentId: Number(assessmentId),
-        studentId: Number(studentId),
-        submission,
-      })
-    );
+    console.log({
+      courseId: Number(courseId),
+      assessmentId: Number(assessmentId),
+      studentId: Number(studentId),
+      submission,
+    });
+    // dispatch(
+    //   createSubmission({
+    //     courseId: Number(courseId),
+    //     assessmentId: Number(assessmentId),
+    //     studentId: Number(studentId),
+    //     submission,
+    //   })
+    // );
   };
 
   if (isLoadingForFetchAssessmentAndQuestions || isLoadingForSubmission) {
@@ -136,10 +148,11 @@ export default function StudentViewScreen() {
     <div>
       <h1>Assessment </h1>
       <hr />
-      <Form onSubmit={handleSubmission}>
-        <Stack direction="horizontal">
-          <h2> Title: {assessment && assessment.title}</h2>
-          <FloatingLabel label="* Required Student ID" className="ms-auto">
+
+      <Stack direction="horizontal">
+        <h2> Title: {assessment && assessment.title}</h2>
+        <Form className="ms-auto" onSubmit={handleStudentVerify}>
+          <FloatingLabel label="* Required Student ID">
             <Form.Control
               type="text"
               placeholder="verify id"
@@ -152,12 +165,15 @@ export default function StudentViewScreen() {
                 Student Id is required and must be integer
               </Form.Text>
             )}
+            <Button variant="primary" type="submit">
+              verify
+            </Button>
           </FloatingLabel>
-        </Stack>
-        <hr />
-
+        </Form>
+      </Stack>
+      <hr />
+      <Form onSubmit={handleSubmission}>
         {renderListOfQuestion}
-
         <Button variant="primary" type="submit">
           Submit
         </Button>
