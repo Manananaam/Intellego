@@ -40,8 +40,7 @@ export default function StudentViewScreen() {
   const [studentIdTouch, setStudentIdTouched] = useState(false);
   const studentIdIsValid =
     studentId.trim() !== "" && Number.isInteger(Number(studentId));
-  const studentIdInputIsInValid = !studentIdIsValid && studentIdTouch;
-
+  const studentIdInputIsValid = studentIdIsValid && studentIdTouch;
   // handle dynamic number of input field value
   const [submission, setSubmission] = useState({});
   useEffect(() => {
@@ -62,7 +61,7 @@ export default function StudentViewScreen() {
   };
   const handleSubmission = (event) => {
     event.preventDefault();
-    if (studentIdInputIsInValid) {
+    if (!studentIdInputIsValid) {
       return;
     }
     dispatch(
@@ -147,7 +146,7 @@ export default function StudentViewScreen() {
               onBlur={(e) => setStudentIdTouched(true)}
               onChange={(e) => setStudentId(e.target.value)}
             />
-            {studentIdInputIsInValid && (
+            {!studentIdIsValid && studentIdTouch && (
               <Form.Text className="text-danger">
                 Student Id is required and must be integer
               </Form.Text>
