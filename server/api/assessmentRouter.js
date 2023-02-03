@@ -5,6 +5,7 @@ const asyncHandler = require("express-async-handler");
 const {
   models: { Assessment, Question, Submission },
 } = require("../db");
+const Course = require("../db/models/courseModel");
 const protectedRoute = require("./middleware");
 
 //GET all assessments for a specific teacher
@@ -44,12 +45,17 @@ router.get(
   "/:assessmentId",
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
-      include: {
-        model: Question,
-        include: {
-          model: Submission,
+      include: [
+        {
+          model: Course,
         },
-      },
+        {
+          model: Question,
+          include: {
+            model: Submission,
+          },
+        },
+      ],
     });
     res.status(200).json({
       data: {

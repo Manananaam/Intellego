@@ -62,6 +62,8 @@ export const assessmentSlice = createSlice({
       state.assessment.assessmentTitle = action.payload.data.assessment.title;
       state.assessment.questions = action.payload.data.assessment.questions;
       state.assessment.isActive = action.payload.data.assessment.isActive;
+      state.assessment.associatedCourses =
+        action.payload.data.assessment.courses;
     });
     builder.addCase(deleteQuestion.fulfilled, (state, action) => {
       state.assessment.questions = state.assessment.questions.filter(
