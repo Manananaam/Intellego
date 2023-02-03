@@ -54,7 +54,16 @@ export default function StudentViewScreen() {
     if (questions) {
       const initialSubmission = submission;
       questions.forEach((question) => {
-        initialSubmission[question.id] = "";
+        if (
+          localStorage.getItem("answer") &&
+          JSON.parse(localStorage.getItem("answer"))[question.id]
+        ) {
+          initialSubmission[question.id] = JSON.parse(
+            localStorage.getItem("answer")
+          )[question.id];
+        } else {
+          initialSubmission[question.id] = "";
+        }
       });
       setSubmission(initialSubmission);
     }
@@ -63,7 +72,9 @@ export default function StudentViewScreen() {
   // update submission for the question
   const handleAnwserChange = (questionId, value) => {
     setSubmission((prev) => {
-      return { ...prev, [questionId]: value };
+      const newAnwer = { ...prev, [questionId]: value };
+      localStorage.setItem("answer", JSON.stringify(newAnwer));
+      return newAnwer;
     });
   };
 
@@ -102,20 +113,14 @@ export default function StudentViewScreen() {
     if (!studentIdInputIsValid || !studentIdFormHasSubmit || !verifyResult) {
       return;
     }
-    console.log({
-      courseId: Number(courseId),
-      assessmentId: Number(assessmentId),
-      studentId: Number(studentId),
-      submission,
-    });
-    // dispatch(
-    //   createSubmission({
-    //     courseId: Number(courseId),
-    //     assessmentId: Number(assessmentId),
-    //     studentId: Number(studentId),
-    //     submission,
-    //   })
-    // );
+    dispatch(
+      createSubmission({
+        courseId: Number(courseId),
+        assessmentId: Number(assessmentId),
+        studentId: Number(studentId),
+        submission,
+      })
+    );
   };
 
   if (isLoadingForFetchAssessmentAndQuestions || isLoadingForSubmission) {
@@ -148,7 +153,7 @@ export default function StudentViewScreen() {
       </Alert>
     );
   }
-
+  console.log("value", submission);
   const renderListOfQuestion =
     questions &&
     questions.length &&
@@ -160,7 +165,13 @@ export default function StudentViewScreen() {
               {idx + 1}. Question:
               <p>{question.questionText}</p>
             </Card.Title>
-
+            <p>{question.id}</p>
+            <p>
+              answer:
+              {submission[question.id]
+                ? `populate from localstorage:${submission[question.id]}`
+                : "no content"}
+            </p>
             <Form.Control
               as="textarea"
               value={submission[question.id]}
