@@ -8,6 +8,8 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
+import Toast from "react-bootstrap/Toast";
+import ToastContainer from "react-bootstrap/ToastContainer";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +40,9 @@ export default function StudentViewScreen() {
   }, []);
   console.log("verify result", verifyResult);
 
+  // state related to verify student ID
+  const [showToast, setShowToast] = useState(false);
+  const [studentIdFormHasSubmit, setStudentIdFormHasSubmit] = useState(false);
   //form validation: studentId should be required and it's should be a integer
   const [studentId, setStudentId] = useState("");
   const [studentIdTouch, setStudentIdTouched] = useState(false);
@@ -63,8 +68,16 @@ export default function StudentViewScreen() {
     });
   };
 
+  useEffect(() => {
+    if (studentIdFormHasSubmit) {
+      setShowToast(true);
+    }
+  }, [verifyResult, studentIdFormHasSubmit]);
+
   const handleStudentVerify = (event) => {
     event.preventDefault();
+    setStudentIdFormHasSubmit(true);
+    setShowToast(true);
     dispatch(
       verifyStudentId({
         courseId: Number(courseId),
@@ -154,6 +167,18 @@ export default function StudentViewScreen() {
 
   return (
     <div>
+      <ToastContainer position="top-center">
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>Verify Result</Toast.Header>
+          <Toast.Body>{verifyResult ? "Congrate" : "Opps"}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <h1>Assessment </h1>
       <hr />
 
