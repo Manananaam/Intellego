@@ -270,4 +270,23 @@ router.delete(
   })
 );
 
+/**
+ * @desc: delete student
+ * @author: Na Lin
+ * @route: GET /api/students/verify/:studentId/courses/:courseId
+ * @access: public
+ */
+router.get(
+  "/verify/:studentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const { studentId, courseId } = req.params;
+    const student = await Student.findByPk(studentId);
+    if (!student || !(await student.belongToCourse(courseId))) {
+      throw new AppError(`Invalid studentID.`, 400);
+    } else {
+      res.sendStatus(200);
+    }
+  })
+);
+
 module.exports = router;
