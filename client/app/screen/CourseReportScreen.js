@@ -51,15 +51,20 @@ export default function CourseReportScreen() {
   }, [courseId]);
 
   // update current course once selected
-  // useEffect(() => {
-  //   if (allCourses.id === courseId) {
-  //       setCurrentCourse(allCourses);
-  //     } if (courseId) {
-  //       dispatch(fetchCourseReport(courseId))
-  //     }
-  // }, [allCourses, courseId]);
-  // console.log(currentCourse)
+  useEffect(() => {
+    if (allCourses.id === courseId) {
+        setCurrentCourse(allCourses);
+      } if (courseId) {
+        dispatch(fetchCourseReport(courseId))
+      }
+  }, [allCourses, courseId]);
+  console.log(currentCourse)
 
+  // update current course when user click dropdown item
+  const handleCurrentCourse = (course) => {
+    searchParams.set("courseId", course.id);
+    setSearchParams(searchParams);
+  };
 
     // const data = {
     //   labels: allGrades.map((student) => student.studentName),
@@ -112,7 +117,7 @@ export default function CourseReportScreen() {
               return (
                 <Dropdown.Item
                   key={course.id}
-                  // onClick={() => handleCurrentCourse(course)}
+                  onClick={() => handleCurrentCourse(course)}
                 >
                   {course.name}
                 </Dropdown.Item>
