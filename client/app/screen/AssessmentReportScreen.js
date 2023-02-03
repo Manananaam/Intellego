@@ -9,7 +9,9 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 //redux
 import { getCourses } from "../store";
+import { fetchCourseAssessments } from "../store";
 import { useDispatch, useSelector } from "react-redux";
+//probably need something like fetchcourseassessments here from slice
 
 const AssessmentReportScreen = () => {
   const dispatch = useDispatch();
@@ -19,14 +21,27 @@ const AssessmentReportScreen = () => {
 
   const [courseId] = [
     Number(searchParams.get("courseId")),
+    //need to add here Number(searchParams.get("assessmentId"))
   ];
 
   // initial current course ans current student
   const [currentCourse, setCurrentCourse] = useState(null);
+  const [currentAssessment ,setCurrentAssessment] = useState(null);
 
   // redux state
   // fetch a list of courses managed by current user
   const { allcourses } = useSelector((state) => state.studentEnroll);
+  //need a course with list of assessments that belong to that course
+  const courses = useSelector((state) => state.courses)
+  console.log("courses is:", courses)
+
+
+//useEffect here to update the assessments fetch based on course id change
+useEffect(() => {
+  if (courseId) {
+    dispatch(fetchCourseAssessments(courseId))
+  }
+}, [courseId])
 
   // fetch a list of courses to display at course dropdown menu
   useEffect(() => {
@@ -38,6 +53,12 @@ const AssessmentReportScreen = () => {
     searchParams.set("courseId", course.id);
     setSearchParams(searchParams);
   };
+
+  // update current assessment when user clicks dropdown item
+  /*const hangleCurrentAssessment = (assessment) => {
+    searchParams.set("assessmentId", assessment.id);
+    setSearchParams(searchParams);
+  } */
 
   return (
     <>

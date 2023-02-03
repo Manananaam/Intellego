@@ -35,3 +35,4 @@ export default store;
 export { example } from "./slices/templateSlices";
 export { fetchStudentList, getCourses } from "./slices/studentEnrollSlice";
 export { fetchGradeForEachAssessment } from "./slices/studentReportSlice";
+export { fetchCourseAssessments } from "./slices/courseSlices";
