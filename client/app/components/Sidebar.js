@@ -19,7 +19,8 @@ const Sidebar = () => {
     <>
       <Nav
         className="col-md-3 d-none d-md-block bg-light sidebar flex-column justify-content-center"
-        defaultActiveKey="/home"
+        variant="pills"
+        defaultActiveKey="/dashboard"
       >
         <Figure>
           <Figure.Image
@@ -31,8 +32,8 @@ const Sidebar = () => {
         </Figure>
 
         <Figure.Caption>
-          <p>
-            ${"FirstName"} ${"LastName"}
+          <p className="dashboard_name">
+            {user.firstName} {user.lastName}
           </p>
         </Figure.Caption>
 
@@ -72,7 +73,7 @@ const Sidebar = () => {
         <Nav.Item>
           <Nav.Link
             eventKey="logout"
-            className="dash_logout"
+            href="/"
             onClick={(e) => dispatch(logout())}
           >
             Logout

@@ -46,7 +46,7 @@ const SignUpScreen = () => {
   });
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate("/dashboard");
     }
   }, [user]);
 
@@ -54,39 +54,39 @@ const SignUpScreen = () => {
     <>
       <p>hi, this will be the signup screen</p>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor='firstName'>First Name</label>
+        <label htmlFor="firstName">First Name</label>
         <input
-          id='firstName'
-          name='firstName'
-          type='text'
+          id="firstName"
+          name="firstName"
+          type="text"
           onChange={formik.handleChange}
           value={formik.values.firstName}
         />
-        <label htmlFor='lastName'>Last Name</label>
+        <label htmlFor="lastName">Last Name</label>
         <input
-          id='lastName'
-          name='lastName'
-          type='text'
+          id="lastName"
+          name="lastName"
+          type="text"
           onChange={formik.handleChange}
           value={formik.values.lastName}
         />
-        <label htmlFor='email'>Email Address</label>
+        <label htmlFor="email">Email Address</label>
         <input
-          id='email'
-          name='email'
-          type='email'
+          id="email"
+          name="email"
+          type="email"
           onChange={formik.handleChange}
           value={formik.values.email}
         />
-        <label htmlFor='password'>Password</label>
+        <label htmlFor="password">Password</label>
         <input
-          id='password'
-          name='password'
-          type='password'
+          id="password"
+          name="password"
+          type="password"
           value={formik.values.password}
           onChange={formik.handleChange}
         />
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </>
   );

@@ -36,8 +36,6 @@ export default function App() {
           path="/courses/:courseId/assessments"
           element={<CourseAssessmentsScreen />}
         />
-        <Route path="/login" element={<LogInScreen />} />
-        <Route path="/signup" element={<SignUpScreen />} />
         <Route path="/assessments" element={<AssessmentsScreen />} />
         <Route
           path="/assessments/create"
