@@ -78,6 +78,7 @@ const EditAssessmentScreen = () => {
                   placeholder={question.questionText}
                 ></Form.Control>
                 <Trash3 onClick={handleDeleteQuestion} />
+                {/* note - check for submissions and change to archive button to match natalie? */}
               </Form.Group>
             );
           })
