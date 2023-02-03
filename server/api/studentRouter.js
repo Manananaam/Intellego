@@ -282,8 +282,12 @@ router.get(
   asyncHandler(async (req, res, next) => {
     const { studentId, courseId } = req.params;
     const student = await Student.findByPk(studentId);
-    const verifyResult = student && (await student.belongToCourse(courseId));
-    res.status(200).send(verifyResult);
+    const verifyResult = !student
+      ? false
+      : await student.belongToCourse(courseId);
+    res.status(200).json({
+      result: verifyResult,
+    });
   })
 );
 
