@@ -16,7 +16,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Sidebar from "../components/Sidebar";
-import { fetchCourseReport, fetchCourseList, selectCourseReport, fetchCourse } from "../store/slices/courseReportSlice";
+import {
+  fetchOverallGrade,
+  fetchCourse,
+} from "../store/slices/courseReportSlice";
 import { fetchAllCourses } from "../store/slices/courseSlices";
 
 export default function CourseReportScreen() {
@@ -29,13 +32,10 @@ export default function CourseReportScreen() {
   const allCourses = useSelector((state) => state.courses);
 
   //fetch grade/assessments once selected
+  const allGrades = useSelector((state) => state.report.allGrades);
 
   //initial current course
-  const [currentCourse, setCurrentCourse] = useState();
-  // (state) => state.currentCourse
-
-  console.log(allCourses)
-  // console.log(currentCourse)
+  const [currentCourse, setCurrentCourse] = useState(null);
 
   //fetch all courses
   const dispatch = useDispatch();
@@ -52,82 +52,87 @@ export default function CourseReportScreen() {
 
   // update current course once selected
   useEffect(() => {
-    if (allCourses.id === courseId) {
-        setCurrentCourse(allCourses);
-      } if (courseId) {
-        dispatch(fetchCourseReport(courseId))
-      }
+    if (allCourses.length) {
+      const course = allCourses.filter((el) => el.id === courseId);
+      setCurrentCourse(course);
+    }
+    if (courseId) {
+      dispatch(fetchOverallGrade(courseId));
+    }
   }, [allCourses, courseId]);
-  console.log(currentCourse)
 
-  // update current course when user click dropdown item
+  // update current course when user clicks dropdown item
   const handleCurrentCourse = (course) => {
     searchParams.set("courseId", course.id);
     setSearchParams(searchParams);
   };
 
-    // const data = {
-    //   labels: allGrades.map((student) => student.studentName),
+  console.log(allGrades && allGrades.map((obj) => obj.overall_grade));
 
-    //   datasets: [
-    //     {
-    //       label: "Course Report",
-    //       data: allGrades.map((average) => average.gradeAverage),
+  const data = {
+    labels: allGrades && allGrades.map((obj) => obj.id),
 
-    //       backgroundColor: "aqua",
-    //       borderColor: "#000",
-    //       borderWidth: 1,
-    //     },
-    //   ],
-    // };
+    datasets: [
+      {
+        label: "Course Report",
+        data: allGrades && allGrades.map((obj) => obj.overall_grade),
 
-    let chart;
-    // if (currentCourse && allGrades.length) {
-    //   chart = (
-    //     <div>
-    //     <p className="">Course Report</p>
-    //     <div style={{ width: "50%" }}>
-    //       <Bar data={data} options={options}></Bar>
-    //     </div>
-    //   </div>)
-    // } else {
-    //   chart = <p>Please select an active course. </p>;
-    // }
+        backgroundColor: "aqua",
+        borderColor: "#000",
+        borderWidth: 1,
+      },
+    ],
+  };
 
-    const options = {
-      responsive: true
-    };
+  let chart;
+  if (currentCourse && allGrades && allGrades.length) {
+    chart = (
+      <div>
+        <p className="">Course Report</p>
+        <div style={{ width: "50%" }}>
+          <Bar data={data} options={options}></Bar>
+        </div>
+      </div>
+    );
+  } else {
+    chart = <p>Please select an active course. </p>;
+  }
+
+  const options = {
+    responsive: true,
+  };
 
   return (
- <div>
+    <div>
       <Container>
         <Row>
           <Col xs={3} id="sidebar-wrapper">
             <Sidebar />
           </Col>
           <Col xs={9} id="page-content-wrapper"></Col>
-      <Dropdown>
-        <Dropdown.Toggle>
-          {currentCourse ? currentCourse.id : "Course"}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {allCourses &&
-            allCourses.length &&
-            allCourses.map((course) => {
-              return (
-                <Dropdown.Item
-                  key={course.id}
-                  onClick={() => handleCurrentCourse(course)}
-                >
-                  {course.name}
-                </Dropdown.Item>
-              );
-            })}
-        </Dropdown.Menu>
-      </Dropdown>
-      {currentCourse ? chart : <p>Please select a course</p>}
-      </Row>
+          <h1>Course Report</h1>
+          <Dropdown>
+            <Dropdown.Toggle>
+              {currentCourse ? currentCourse.id : "Course"}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {allCourses &&
+                allCourses.length &&
+                allCourses.map((course) => {
+                  return (
+                    <Dropdown.Item
+                      key={course.id}
+                      onClick={() => handleCurrentCourse(course)}
+                    >
+                      {course.name}
+                    </Dropdown.Item>
+                  );
+                })}
+            </Dropdown.Menu>
+          </Dropdown>
+          {currentCourse ? chart : <p>Please select a course</p>}
+        </Row>
       </Container>
     </div>
-  )
-};
+  );
+}
