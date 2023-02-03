@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //Bootstrap
 import Table from "react-bootstrap/Table";
@@ -6,11 +6,19 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 //redux
 import { getCourses } from "../store";
+import { useDispatch, useSelector } from "react-redux";
 
 const AssessmentReportScreen = () => {
+  const dispatch = useDispatch();
   // redux state
   // fetch a list of courses managed by current user
   const { allcourses } = useSelector((state) => state.studentEnroll);
+  console.log("allcourses:", allcourses)
+
+  // fetch a list of courses to display at course dropdown menu
+  useEffect(() => {
+    dispatch(getCourses());
+  }, []);
 
   return (
     <>
