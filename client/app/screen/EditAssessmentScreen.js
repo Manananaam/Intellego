@@ -5,6 +5,7 @@ import {
   fetchAssessment,
   selectAssessment,
   editAssessmentTitle,
+  deleteQuestion,
 } from "../store/slices/singleAssessmentSlice";
 import { Container, Navbar, Form, Button } from "react-bootstrap";
 
@@ -63,16 +64,23 @@ const EditAssessmentScreen = () => {
         </Form.Group>
         <br />
         {assessment && assessment.assessment.questions.length ? (
-          assessment.assessment.questions.map((question) => (
-            <Form.Group key={question.id}>
-              <Form.Control
-                as='textarea'
-                rows={6}
-                placeholder={question.questionText}
-              ></Form.Control>
-              <Trash3 />
-            </Form.Group>
-          ))
+          assessment.assessment.questions.map((question) => {
+            function handleDeleteQuestion() {
+              dispatch(deleteQuestion(question.id));
+              console.log("deleting question babe");
+              console.log(question.id);
+            }
+            return (
+              <Form.Group key={question.id}>
+                <Form.Control
+                  as='textarea'
+                  rows={6}
+                  placeholder={question.questionText}
+                ></Form.Control>
+                <Trash3 onClick={handleDeleteQuestion} />
+              </Form.Group>
+            );
+          })
         ) : (
           <></>
         )}

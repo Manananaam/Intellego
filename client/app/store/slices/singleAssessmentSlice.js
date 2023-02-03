@@ -27,7 +27,6 @@ export const editAssessmentTitle = createAsyncThunk(
   "assessment/editTitle",
   async (updatedAssessment) => {
     try {
-      //note - updatedAssessment should come in as an object with id and title fields
       const id = updatedAssessment.assessmentId;
       const title = updatedAssessment.assessmentTitle;
       const { data } = await axios.put(
@@ -41,24 +40,18 @@ export const editAssessmentTitle = createAsyncThunk(
   }
 );
 
-//create a new assessment
-//mld - taking this out but leaving commented in for now just in case!
-//probably need to add some grabbing of teacher ID in here as well
-//also how do we set courseID?
-//does the course_assessmentModel associate them?
-//how does this work with questions? will they associate in their own slice?
-//{questions: [{...}, {...}]}
-// export const createAssessment = createAsyncThunk("/assessmentCreate", async({ title, questionText }) => {
-//   try {
-//     const { data } = await axios.post("/api/assessments", {
-//       title,
-//       questionText,
-//     });
-//     return data;
-//   } catch (err) {
-//     return err.message;
-//   }
-// })
+//delete question from assessment (on 'edit assessment' page)
+export const deleteQuestion = createAsyncThunk(
+  "assessment/deleteQuestion",
+  async (questionId) => {
+    try {
+      const { data } = await axios.delete(`/api/questions/${questionId}`);
+      return questionId;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
 
 export const assessmentSlice = createSlice({
   name: "assessment",
@@ -70,11 +63,11 @@ export const assessmentSlice = createSlice({
       state.assessment.questions = action.payload.data.assessment.questions;
       state.assessment.isActive = action.payload.data.assessment.isActive;
     });
-    // .addCase(createAssessment.fulfilled, (state, action) => {
-    //   console.log("state.assessment:", state.assessment);
-    //   console.log("action.payload:", action.payload);
-    //   state.assessment = action.payload.data.newAssessment;
-    // });
+    builder.addCase(deleteQuestion.fulfilled, (state, action) => {
+      state.assessment.questions = state.assessment.questions.filter(
+        (quest) => quest.id !== action.payload
+      );
+    });
   },
 });
 
