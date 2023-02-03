@@ -16,6 +16,7 @@ import CourseAssessmentsScreen from "./screen/CourseAssessmentsScreen";
 // Screen
 import StudentReportScreen from "./screen/StudentReportScreen";
 import MainDashboardScreen from "./screen/MainDashboardScreen";
+import AssessmentReportScreen from "./screen/AssessmentReportScreen";
 
 export default function App() {
   return (
@@ -49,6 +50,7 @@ export default function App() {
         />
 
         <Route path="/report/students" element={<StudentReportScreen />} />
+        <Route path="/report/assessments" element={<AssessmentReportScreen />} />
       </Routes>
     </div>
   );
