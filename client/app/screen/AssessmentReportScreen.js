@@ -11,7 +11,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { getCourses } from "../store";
 import { fetchCourseAssessments } from "../store";
 import { useDispatch, useSelector } from "react-redux";
-//probably need something like fetchcourseassessments here from slice
 
 const AssessmentReportScreen = () => {
   const dispatch = useDispatch();
@@ -19,29 +18,44 @@ const AssessmentReportScreen = () => {
   // use router hook to fetch current courseId
   let [searchParams, setSearchParams] = useSearchParams();
 
-  const [courseId] = [
+  const [courseId, assessmentId] = [
     Number(searchParams.get("courseId")),
-    //need to add here Number(searchParams.get("assessmentId"))
+    Number(searchParams.get("assessmentId"))
   ];
 
   // initial current course ans current student
   const [currentCourse, setCurrentCourse] = useState(null);
-  const [currentAssessment ,setCurrentAssessment] = useState(null);
+  const [currentAssessment, setCurrentAssessment] = useState(null);
 
   // redux state
   // fetch a list of courses managed by current user
   const { allcourses } = useSelector((state) => state.studentEnroll);
   //need a course with list of assessments that belong to that course
-  const courses = useSelector((state) => state.courses)
-  console.log("courses is:", courses)
+  const courses = useSelector((state) => state.courses);
+  console.log("courses is:", courses);
 
+  //useEffect here to update the assessments fetch based on course id change
+  useEffect(() => {
+    if (courseId) {
+      dispatch(fetchCourseAssessments(courseId));
+    }
+  }, [courseId]);
 
-//useEffect here to update the assessments fetch based on course id change
-useEffect(() => {
-  if (courseId) {
-    dispatch(fetchCourseAssessments(courseId))
-  }
-}, [courseId])
+  // update current course, current assessment
+  useEffect(() => {
+    if (
+      courses &&
+      Object.keys(courses).length &&
+      courses.id === courseId &&
+      courses.assessments
+    ) {
+      setCurrentCourse(courses);
+      console.log("currentCourse is:", currentCourse)
+      setCurrentAssessment(
+        courses.assessments.find((el) => el.id === assessmentId)
+      );
+    }
+  }, [courses, courseId, assessmentId]);
 
   // fetch a list of courses to display at course dropdown menu
   useEffect(() => {
@@ -55,37 +69,57 @@ useEffect(() => {
   };
 
   // update current assessment when user clicks dropdown item
-  /*const hangleCurrentAssessment = (assessment) => {
+  const handleCurrentAssessment = (assessment) => {
     searchParams.set("assessmentId", assessment.id);
     setSearchParams(searchParams);
-  } */
+  };
 
   return (
     <>
       <h1>Assessment Report Screen</h1>
       <Dropdown>
         <Dropdown.Toggle variant="primary" id="dropdown-basic">
-          Choose Course
+          {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {allcourses && allcourses.length && allcourses.map((course) => {
-            return (
-              <Dropdown.Item key={course.id} onClick={() => handleCurrentCourse(course)}>{course.name}</Dropdown.Item>
-            )
-          })}
+          {allcourses &&
+            allcourses.length &&
+            allcourses.map((course) => {
+              return (
+                <Dropdown.Item
+                  key={course.id}
+                  onClick={() => handleCurrentCourse(course)}
+                >
+                  {course.name}
+                </Dropdown.Item>
+              );
+            })}
         </Dropdown.Menu>
       </Dropdown>
       <br />
-      <Dropdown>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
-          Choose Assessment
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item>Sample Assessment</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      {currentCourse && (
+        <Dropdown>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
+            {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {courses &&
+              courses.id === courseId &&
+              courses.assessments.map((assessment) => {
+                return (
+                  <Dropdown.Item
+                    key={assessment.id}
+                    onClick={() => handleCurrentAssessment(assessment)}
+                  >
+                    {assessment.title}
+                  </Dropdown.Item>
+                );
+              })}
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
       <br />
-      <h2>Assessment Title</h2>
+      <h2>{currentAssessment ? currentAssessment.title : "No Assessment Selected"}</h2>
       <Table striped bordered hover>
         <thead>
           <tr>
