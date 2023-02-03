@@ -32,7 +32,6 @@ const AssessmentReportScreen = () => {
   const { allcourses } = useSelector((state) => state.studentEnroll);
   //need a course with list of assessments that belong to that course
   const courses = useSelector((state) => state.courses);
-  console.log("courses is:", courses);
 
   //useEffect here to update the assessments fetch based on course id change
   useEffect(() => {
@@ -50,7 +49,6 @@ const AssessmentReportScreen = () => {
       courses.assessments
     ) {
       setCurrentCourse(courses);
-      console.log("currentCourse is:", currentCourse)
       setCurrentAssessment(
         courses.assessments.find((el) => el.id === assessmentId)
       );
@@ -73,6 +71,10 @@ const AssessmentReportScreen = () => {
     searchParams.set("assessmentId", assessment.id);
     setSearchParams(searchParams);
   };
+
+  console.log("courses is:", courses);
+  console.log("currentCourse is:", currentCourse)
+  console.log("currentAssessment is:", currentAssessment)
 
   return (
     <>
