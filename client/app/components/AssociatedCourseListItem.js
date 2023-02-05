@@ -7,15 +7,19 @@ import { removeCourseFromAssessment } from "../store/slices/singleAssessmentSlic
 
 const AssociatedCourseListItem = (props) => {
   const dispatch = useDispatch();
-  const { course, courseId, assessmentId } = props;
-  console.log("keys of course obj", Object.keys(course));
+  const navigate = useNavigate();
+  const { courseName, courseId, assessmentId } = props;
+
   const handleDelete = () => {
-    dispatch(removeCourseFromAssessment(assessmentId, course.id));
+    dispatch(removeCourseFromAssessment({ assessmentId, courseId }));
+    navigate(0);
+    //hacky - need to figure out why useeffect isn't working
+    //right now when i add associated courses to the useeffect array it is causing constant refreshes
   };
 
   return (
     <>
-      <ListGroup.Item key={course.id}>{course.name}</ListGroup.Item>
+      <ListGroup.Item key={courseId}>{courseName}</ListGroup.Item>
       <DashCircle onClick={handleDelete}></DashCircle>
     </>
   );

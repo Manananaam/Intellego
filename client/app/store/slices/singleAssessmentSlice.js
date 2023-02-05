@@ -56,15 +56,8 @@ export const deleteQuestion = createAsyncThunk(
 //remove course association from assessment
 export const removeCourseFromAssessment = createAsyncThunk(
   "/assessment/removeCourseFromAssessment",
-  async (assessmentId, courseId) => {
+  async ({ assessmentId, courseId }) => {
     try {
-      console.log(
-        "hi from async thunk. assessmentId, courseId",
-        assessmentId,
-        typeof assessmentId,
-        courseId,
-        typeof courseId
-      );
       const { data } = await axios.delete(
         `/api/assessments/${assessmentId}/courses/${courseId}`
       );
@@ -93,11 +86,10 @@ export const assessmentSlice = createSlice({
       );
     });
     builder.addCase(removeCourseFromAssessment.fulfilled, (state, action) => {
-      console.log("action.payload", action.payload);
-      // state.assessment.associatedCourses =
-      //   state.assessment.associatedCourses.filter(
-      //     (course) => course.id !== action.payload.courseId
-      // );
+      state.assessment.associatedCourses =
+        state.assessment.associatedCourses.filter(
+          (course) => course.id !== action.payload.courseId
+        );
     });
   },
 });

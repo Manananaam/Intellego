@@ -28,15 +28,21 @@ const EditAssessmentScreen = () => {
   const navigate = useNavigate();
   const { assessmentId } = useParams();
   const [assessmentTitle, setAssessmentTitle] = useState("");
+  const [associatedCourses, setAssociatedCourses] = useState([]);
 
   // const [questionText, setQuestionText] = useState("");
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
     setAssessmentTitle(assessment.assessment.assessmentTitle);
-  }, [dispatch, assessment.assessment.assessmentTitle]);
+    // setAssociatedCourses(assessment.assessment.associatedCourses);
+  }, [
+    dispatch,
+    assessment.assessment.assessmentTitle,
+    // assessment.assessment.associatedCourses,
+  ]);
   function handleAddQuestion() {
-    console.log("adding question, babe");
+    console.log("clicky add question babe");
   }
 
   // const handleNewQuestion = (e) => {
@@ -83,16 +89,15 @@ const EditAssessmentScreen = () => {
           {assessment && assessment.assessment.associatedCourses.length ? (
             <ListGroup horizontal>
               {assessment.assessment.associatedCourses.map((course) => {
-                console.log(
-                  "mapping associated courses, here is current courseinfo",
-                  course
-                );
+                const courseId = course.id;
+                const courseName = course.name;
+
                 return (
                   <AssociatedCourseListItem
                     key={course.id}
                     assessmentId={assessmentId}
-                    courseId={course.id}
-                    course={course}
+                    courseId={courseId}
+                    courseName={courseName}
                   />
                 );
               })}
