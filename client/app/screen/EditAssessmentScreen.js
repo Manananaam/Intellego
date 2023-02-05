@@ -91,6 +91,7 @@ const EditAssessmentScreen = () => {
                   <AssociatedCourseListItem
                     key={course.id}
                     assessmentId={assessmentId}
+                    courseId={course.id}
                     course={course}
                   />
                 );

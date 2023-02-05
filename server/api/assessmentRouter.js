@@ -117,9 +117,11 @@ router.delete(
 router.delete(
   "/:assessmentId/courses/:courseId",
   asyncHandler(async (req, res, next) => {
+    const courseId = req.params.courseId;
     const course = await Course.findByPk(req.params.courseId);
     const assessment = await Assessment.findByPk(req.params.assessmentId);
-    res.status(204).json(await assessment.removeCourse(course));
+    const removeCourse = await assessment.removeCourse(course);
+    res.json({ courseId });
   })
 );
 

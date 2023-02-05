@@ -3,17 +3,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { Badge, Button, ListGroup } from "react-bootstrap";
 import { DashCircle } from "react-bootstrap-icons";
+import { removeCourseFromAssessment } from "../store/slices/singleAssessmentSlice";
 
 const AssociatedCourseListItem = (props) => {
-  const { course, assessmentId } = props;
+  const dispatch = useDispatch();
+  const { course, courseId, assessmentId } = props;
+  console.log("keys of course obj", Object.keys(course));
   const handleDelete = () => {
-    console.log("delete clicky", course.id);
+    dispatch(removeCourseFromAssessment(assessmentId, course.id));
   };
 
   return (
     <>
       <ListGroup.Item key={course.id}>{course.name}</ListGroup.Item>
-      <DashCircle></DashCircle>
+      <DashCircle onClick={handleDelete}></DashCircle>
     </>
   );
 };
