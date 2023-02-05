@@ -7,7 +7,16 @@ import {
   editAssessmentTitle,
   deleteQuestion,
 } from "../store/slices/singleAssessmentSlice";
-import { Container, Navbar, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Navbar,
+  Form,
+  Button,
+  Col,
+  Row,
+  ListGroup,
+} from "react-bootstrap";
+import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
 
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
 
@@ -45,6 +54,7 @@ const EditAssessmentScreen = () => {
     navigate("/assessments");
   }
   //NOTE - still not auto updating listview when you navigate back
+
   return (
     <>
       <Navbar bg='light'>
@@ -55,43 +65,73 @@ const EditAssessmentScreen = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Assessment Title</Form.Label>
+
           <Form.Control
             size='lg'
+            //how can i make this change size to fit text?
             type='text'
             value={assessmentTitle || ""}
             onChange={(e) => setAssessmentTitle(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <br />
-        {assessment && assessment.assessment.questions.length ? (
-          assessment.assessment.questions.map((question) => {
-            function handleDeleteQuestion() {
-              dispatch(deleteQuestion(question.id));
-              console.log("deleting question babe");
-              console.log(question.id);
-            }
-            return (
-              <Form.Group key={question.id}>
-                <Form.Control
-                  as='textarea'
-                  rows={6}
-                  placeholder={question.questionText}
-                ></Form.Control>
-                <Trash3 onClick={handleDeleteQuestion} />
-                {/* note - check for submissions and change to archive button to match natalie? */}
-              </Form.Group>
-            );
-          })
-        ) : (
-          <></>
-        )}
         <Form.Group>
+          <Form.Label>Associated Courses</Form.Label>
+          <br />
+          {/* note: i would love these to appear like chip tags, but don't want to spend too much time right now trying to get that working. in the future, could be worth playing with.
+          https://codepen.io/broneks/pen/objeqq */}
+          {assessment && assessment.assessment.associatedCourses.length ? (
+            <ListGroup horizontal>
+              {assessment.assessment.associatedCourses.map((course) => {
+                console.log(
+                  "mapping associated courses, here is current courseinfo",
+                  course
+                );
+                return (
+                  <AssociatedCourseListItem
+                    key={course.id}
+                    assessmentId={assessmentId}
+                    course={course}
+                  />
+                );
+              })}
+            </ListGroup>
+          ) : (
+            <></>
+          )}
+        </Form.Group>
+        <br />
+        <Form.Group>
+          <Form.Label>Questions</Form.Label>
+          <br />
+          {assessment && assessment.assessment.questions.length ? (
+            assessment.assessment.questions.map((question) => {
+              function handleDeleteQuestion() {
+                dispatch(deleteQuestion(question.id));
+              }
+              return (
+                <div key={question.id}>
+                  <Form.Control
+                    as='textarea'
+                    rows={6}
+                    placeholder={question.questionText}
+                  ></Form.Control>
+                  <Trash3 onClick={handleDeleteQuestion} />
+                  {/* note - check for submissions and change to archive button to match natalie? */}
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Form.Group>
+        {/* <Form.Group>
           <Form.Control
             as='textarea'
             rows={6}
             placeholder='Add a Question +'
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
         <Button type='submit' value='Submit'>
           Submit
         </Button>

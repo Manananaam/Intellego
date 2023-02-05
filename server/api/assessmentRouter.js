@@ -3,9 +3,9 @@ const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
 const {
-  models: { Assessment, Question, Submission },
+  models: { Assessment, Question, Submission, Course },
 } = require("../db");
-const Course = require("../db/models/courseModel");
+
 const protectedRoute = require("./middleware");
 
 //GET all assessments for a specific teacher
@@ -110,6 +110,16 @@ router.delete(
       },
     });
     res.sendStatus(204);
+  })
+);
+
+//@desc: remove specific course association from an assessment
+router.delete(
+  "/:assessmentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    res.status(204).json(await assessment.removeCourse(course));
   })
 );
 
