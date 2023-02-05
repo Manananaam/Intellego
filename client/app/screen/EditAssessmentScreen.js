@@ -18,7 +18,12 @@ import {
 } from "react-bootstrap";
 import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
 
-import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
+import {
+  ArchiveFill,
+  Archive,
+  Trash3,
+  PlusCircleFill,
+} from "react-bootstrap-icons";
 
 //right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
 
@@ -43,6 +48,9 @@ const EditAssessmentScreen = () => {
   ]);
   function handleAddQuestion() {
     console.log("clicky add question babe");
+  }
+  function handleAddCourse() {
+    console.log("clicky add course babe");
   }
 
   // const handleNewQuestion = (e) => {
@@ -105,6 +113,7 @@ const EditAssessmentScreen = () => {
           ) : (
             <></>
           )}
+          <Button onClick={handleAddCourse}>Add Course</Button>
         </Form.Group>
         <br />
         <Form.Group>
