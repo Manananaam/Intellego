@@ -49,7 +49,7 @@ export const removeStudent = createAsyncThunk(
 )
 
 const studentEnrollSlice = createSlice({
-  name: "template",
+  name: "studentEnroll",
   initialState: {
     allcourses: null,
 
