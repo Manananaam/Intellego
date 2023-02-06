@@ -128,8 +128,9 @@ router.post(
     await newQuestion.setAssessment(newAssessment);
     res.status(201).json({
       data: {
-        newAssessment,
-        newQuestion,
+        newAssessment: {
+          questions: { ...newQuestion, submissions: [] },
+        },
       },
     });
   })
