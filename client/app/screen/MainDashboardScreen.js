@@ -4,6 +4,18 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Sidebar from "../components/Sidebar";
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import CousreScreen from "./CourseScreen";
+import CourseStudentScreen from "./CourseStudentScreen";
+import CourseAssessmentsScreen from "./CourseAssessmentsScreen";
+import StudentReportScreen from "./StudentReportScreen";
+import HomeScreen from "./HomeScreen";
+import LogInScreen from "./LogInScreen";
+import SignUpScreen from "./SignUpScreen";
+import AssessmentsScreen from "./AssessmentsScreen";
+import EditAssessmentScreen from "./EditAssessmentScreen";
+import CreateAssessmentScreen from "./CreateAssessmentScreen";
+
 const MainDashboardScreen = () => {
   return (
     <Container>
@@ -12,7 +24,35 @@ const MainDashboardScreen = () => {
           <Sidebar />
         </Col>
         <Col xs={9} id="page-content-wrapper">
-          Welcome to the teachers dashboard!
+          <h1>Intellego</h1>
+          <Routes>
+            {/* <Route path="/" element={<MainDashboardScreen />} /> */}
+            <Route path="/courses" element={<CousreScreen />} />
+            <Route
+              path="/courses/:courseId/students"
+              element={<CourseStudentScreen />}
+            />
+            <Route
+              path="/courses/:courseId/assessments"
+              element={<CourseAssessmentsScreen />}
+            />
+
+            <Route path="/assessments" element={<AssessmentsScreen />}>
+              <Route
+                path="/assessments/create"
+                element={<CreateAssessmentScreen />}
+              ></Route>
+              <Route
+                path="/assessments/:assessmentId"
+                element={<EditAssessmentScreen />}
+              />
+            </Route>
+            <Route path="/report/students" element={<StudentReportScreen />} />
+
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/login" element={<LogInScreen />} />
+            <Route path="/signup" element={<SignUpScreen />} />
+          </Routes>
         </Col>
       </Row>
     </Container>

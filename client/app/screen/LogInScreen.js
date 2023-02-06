@@ -37,6 +37,7 @@ const LogInScreen = () => {
       dispatch(login(values));
     },
   });
+
   useEffect(() => {
     if (user) {
       navigate("/dashboard");
@@ -63,6 +64,7 @@ const LogInScreen = () => {
           onChange={formik.handleChange}
         />
         <button type="submit">Submit</button>
+        {/* <Link to="/dashboard">Submit</Link> */}
       </form>
     </>
   );

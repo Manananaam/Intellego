@@ -25,40 +25,33 @@ const CourseAssessmentsScreen = () => {
   }, [dispatch]);
 
   return (
-    <Container>
-      <Row>
-        <Col xs={3} id="sidebar-wrapper">
-          <Sidebar />
-        </Col>
-        <Col xs={9} id="page-content-wrapper">
-          <h1>Assessments in {course.name}</h1>
-          <Table>
-            <thead>
-              <tr>
-                <th>Assessment ID</th>
-                <th>Title</th>
-                <th>Report</th>
-              </tr>
-            </thead>
-            <tbody>
-              {course.assessments && course.assessments.length
-                ? course.assessments.map((assessment) => {
-                    return (
-                      <tr key={assessment.id}>
-                        <td>{assessment.id}</td>
-                        <td>{assessment.title}</td>
-                        <td>
-                          <Link to={"//Query URL"}>View report</Link>
-                        </td>
-                      </tr>
-                    );
-                  })
-                : null}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      <h1>Assessments in {course.name}</h1>
+      <Table>
+        <thead>
+          <tr>
+            <th>Assessment ID</th>
+            <th>Title</th>
+            <th>Report</th>
+          </tr>
+        </thead>
+        <tbody>
+          {course.assessments && course.assessments.length
+            ? course.assessments.map((assessment) => {
+                return (
+                  <tr key={assessment.id}>
+                    <td>{assessment.id}</td>
+                    <td>{assessment.title}</td>
+                    <td>
+                      <Link to={"//Query URL"}>View report</Link>
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
+        </tbody>
+      </Table>
+    </>
   );
 };
 

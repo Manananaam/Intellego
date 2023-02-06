@@ -46,7 +46,7 @@ const SignUpScreen = () => {
   });
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [user]);
 
