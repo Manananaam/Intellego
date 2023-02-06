@@ -77,7 +77,6 @@ export const addQuestion = createAsyncThunk(
         `/api/assessments/${assessmentId}/questions`,
         { questionText: questionText }
       );
-      console.log("hi from thunk, here is data", data);
       return data;
     } catch (err) {
       console.error(err);
