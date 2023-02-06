@@ -26,7 +26,7 @@ export const getCourses = createAsyncThunk(
 );
 
 const studentEnrollSlice = createSlice({
-  name: "template",
+  name: "studentEnroll",
   initialState: {
     allcourses: null,
 
