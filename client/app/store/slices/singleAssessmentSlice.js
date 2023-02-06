@@ -70,8 +70,12 @@ export const removeCourseFromAssessment = createAsyncThunk(
 
 export const addAssociatedCourse = createAsyncThunk(
   "assessment/addAssociatedCourse",
-  async (courseId) => {
+  async ({ courseId, assessmentId }) => {
     try {
+      const { data } = axios.post(
+        `/api/assessments/${assessmentId}/courses/${courseId}`
+      );
+      return data;
     } catch (err) {
       console.error(err);
     }
@@ -100,6 +104,9 @@ export const assessmentSlice = createSlice({
         state.assessment.associatedCourses.filter(
           (course) => course.id !== action.payload.courseId
         );
+    });
+    builder.addCase(addAssociatedCourse.fulfilled, (state, action) => {
+      state.assessment.associatedCourses.push(action.payload.course);
     });
   },
 });

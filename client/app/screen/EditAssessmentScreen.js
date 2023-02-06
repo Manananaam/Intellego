@@ -6,6 +6,7 @@ import {
   selectAssessment,
   editAssessmentTitle,
   deleteQuestion,
+  addAssociatedCourse,
 } from "../store/slices/singleAssessmentSlice";
 import { getCourses } from "../store";
 import {
@@ -58,9 +59,7 @@ const EditAssessmentScreen = () => {
   function handleAddQuestion() {
     console.log("clicky add question babe");
   }
-  function handleAddCourse() {
-    console.log("clicky add course babe");
-  }
+
   function handleOpenCourseModal() {
     setAddCourseModalVisible(true);
   }
@@ -141,6 +140,16 @@ const EditAssessmentScreen = () => {
               <ListGroup>
                 {allcourses && allcourses.length
                   ? allcourses.map((course) => {
+                      function handleAddCourse() {
+                        dispatch(
+                          addAssociatedCourse({
+                            courseId: course.id,
+                            assessmentId,
+                          })
+                        );
+                        navigate(0);
+                      }
+                      //not updating state properly without hacky refresh
                       let currentCourseId = course.id;
                       let alreadyAssociated =
                         assessment.assessment.associatedCourses.filter(

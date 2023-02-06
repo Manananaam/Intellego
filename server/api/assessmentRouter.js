@@ -132,7 +132,7 @@ router.post(
     const course = await Course.findByPk(req.params.courseId);
     const assessment = await Assessment.findByPk(req.params.assessmentId);
     const addCourse = await assessment.addCourse(course);
-    res.json(addCourse);
+    res.json({ addCourse, course });
   })
 );
 
