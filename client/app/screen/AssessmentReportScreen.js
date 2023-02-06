@@ -8,7 +8,12 @@ import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 
 //redux
-import { getCourses, fetchStudentList, fetchAssessment } from "../store";
+import {
+  getCourses,
+  fetchStudentList,
+  fetchAssessment,
+  fetchGradeForEachAssessment,
+} from "../store";
 import { fetchCourseAssessments } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,7 +28,7 @@ const AssessmentReportScreen = () => {
     Number(searchParams.get("assessmentId")),
   ];
 
-  // initial current course ans current student
+  // initial current course and current student
   const [currentCourse, setCurrentCourse] = useState(null);
   const [currentAssessment, setCurrentAssessment] = useState(null);
 
@@ -142,28 +147,41 @@ const AssessmentReportScreen = () => {
         <thead>
           <tr>
             <th>Students</th>
-            {assessment && assessment.assessment.questions.length && assessment.assessment.questions.map((question) => {
-              return (
-                <th key={question.id}>{question.questionText}</th>
-              )
-            })}
+            {assessment &&
+              assessment.assessment.questions.length &&
+              assessment.assessment.questions.map((question) => {
+                return <th key={question.id}>{question.questionText}</th>;
+              })}
             <th>Average</th>
           </tr>
         </thead>
         <tbody>
           {students && students.students.length ? (
             students.students.map((student) => {
+              let allGrades = 0;
+              let numGrades = 0;
+              console.log("student in the map:", student);
               return (
-                <tr
-                  key={student.id}
-                ><td>{`${student.firstName} ${student.lastName}`}</td>{assessment && assessment.assessment.questions.length && assessment.assessment.questions.map((question) => {
-                  if (question.submissions.length) {
-                    let submission = question.submissions.find((el) => el.studentId === student.id);
-                    return (
-                      <td key={submission.id}>{submission.response} {submission.grade}</td>
-                    )
-                  }
-                })}</tr>
+                <tr key={student.id}>
+                  <td>{`${student.firstName} ${student.lastName}`}</td>
+                  {assessment &&
+                    assessment.assessment.questions.length &&
+                    assessment.assessment.questions.map((question) => {
+                      if (question.submissions.length) {
+                        let submission = question.submissions.find(
+                          (el) => el.studentId === student.id
+                        );
+                        allGrades += submission.grade;
+                        numGrades++;
+                        return (
+                          <td key={submission.id}>
+                            {submission.response} {submission.grade}
+                          </td>
+                        );
+                      }
+                    })}
+                  <td>{Math.round(allGrades / numGrades)}</td>
+                </tr>
               );
             })
           ) : (
@@ -177,7 +195,3 @@ const AssessmentReportScreen = () => {
 };
 
 export default AssessmentReportScreen;
-
-//studentRouter fetch overall assessment grade per student
-//line 39 OR 58???
-//58 will help us to calculate overall average
