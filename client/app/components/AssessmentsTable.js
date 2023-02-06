@@ -10,8 +10,6 @@ import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
 
-//maybe make a baby component here that renders either a trash or an archive depending on if there are submissions or not?
-
 const AssessmentsTable = () => {
   const [isActive, setIsActive] = useState(false);
   const allAssessments = useSelector(selectAllAssessments).assessments;
