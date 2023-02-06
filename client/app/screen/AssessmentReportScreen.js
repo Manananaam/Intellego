@@ -156,7 +156,14 @@ const AssessmentReportScreen = () => {
               return (
                 <tr
                   key={student.id}
-                >{`${student.firstName} ${student.lastName}`}</tr>
+                ><td>{`${student.firstName} ${student.lastName}`}</td>{assessment && assessment.assessment.questions.length && assessment.assessment.questions.map((question) => {
+                  if (question.submissions.length) {
+                    let submission = question.submissions.find((el) => el.studentId === student.id);
+                    return (
+                      <td key={submission.id}>{submission.response} {submission.grade}</td>
+                    )
+                  }
+                })}</tr>
               );
             })
           ) : (
@@ -170,3 +177,7 @@ const AssessmentReportScreen = () => {
 };
 
 export default AssessmentReportScreen;
+
+//studentRouter fetch overall assessment grade per student
+//line 39 OR 58???
+//58 will help us to calculate overall average
