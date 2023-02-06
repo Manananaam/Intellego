@@ -13,6 +13,7 @@ import LogInScreen from "./screen/LogInScreen";
 import SignUpScreen from "./screen/SignUpScreen";
 import AssessmentsScreen from "./screen/AssessmentsScreen";
 import EditAssessmentScreen from "./screen/EditAssessmentScreen";
+import StudentViewScreen from "./screen/StudentViewScreen";
 import CreateAssessmentScreen from "./screen/CreateAssessmentScreen";
 import CourseReportScreen from "./screen/CourseReportScreen";
 
@@ -39,23 +40,16 @@ export default function App() {
           path="/courses/:courseId/assessments"
           element={<CourseAssessmentsScreen />}
         />
-
-        <Route path="/assessments" element={<AssessmentsScreen />}>
-          <Route
-            path="/assessments/create"
-            element={<CreateAssessmentScreen />}
-          ></Route>
-          <Route path="/report/courses/" element={<CourseReportScreen />} />
-          <Route
-            path="/assessments/:assessmentId"
-            element={<EditAssessmentScreen />}
-          />
-        </Route>
-        <Route path="/report/students" element={<StudentReportScreen />} />
-
-        <Route path="/" element={<HomeScreen />} />
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />
+        <Route path="/report/courses/" element={<CourseReportScreen />} />
+        <Route path="/assessments" element={<AssessmentsScreen />} />
+        <Route
+          path="/report/assessments"
+          element={<AssessmentReportScreen />}
+        />
+
+        <Route path="/report/students" element={<StudentReportScreen />} />
         <Route
           path="/report/assessments"
           element={<AssessmentReportScreen />}

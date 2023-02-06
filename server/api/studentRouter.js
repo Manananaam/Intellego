@@ -270,4 +270,25 @@ router.delete(
   })
 );
 
+/**
+ * @desc: delete student
+ * @author: Na Lin
+ * @route: GET /api/students/verify/:studentId/courses/:courseId
+ * @returns: responce with true/false
+ * @access: public
+ */
+router.get(
+  "/verify/:studentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const { studentId, courseId } = req.params;
+    const student = await Student.findByPk(studentId);
+    const verifyResult = !student
+      ? false
+      : await student.belongToCourse(courseId);
+    res.status(200).json({
+      result: verifyResult,
+    });
+  })
+);
+
 module.exports = router;
