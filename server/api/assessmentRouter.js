@@ -136,4 +136,14 @@ router.post(
   })
 );
 
+//@desc: add new question to specific assessment
+router.post(
+  "/:assessmentId/questions",
+  asyncHandler(async (req, res, next) => {
+    const assessmentId = req.params.assessmentId;
+    const { questionText } = req.body;
+    res.json(await Question.create({ questionText, assessmentId }));
+  })
+);
+
 module.exports = router;
