@@ -68,6 +68,22 @@ export const removeCourseFromAssessment = createAsyncThunk(
   }
 );
 
+//add new question to assessment
+export const addQuestion = createAsyncThunk(
+  "/assessment/addQuestion",
+  async ({ assessmentId, questionText }) => {
+    try {
+      const { data } = await axios.post(
+        `/api/assessments/${assessmentId}/questions}`,
+        { assessmentId, questionText }
+      );
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+
 export const addAssociatedCourse = createAsyncThunk(
   "assessment/addAssociatedCourse",
   async ({ courseId, assessmentId }) => {
@@ -107,6 +123,9 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(addAssociatedCourse.fulfilled, (state, action) => {
       state.assessment.associatedCourses.push(action.payload.course);
+    });
+    builder.addCase(addQuestion.fulfilled, (state, action) => {
+      state.assessment.questions.push(action.payload);
     });
   },
 });
