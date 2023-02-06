@@ -1,4 +1,5 @@
 const express = require("express");
+const Sequelize = require("sequelize");
 const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
@@ -6,6 +7,9 @@ const AppError = require("../utils/appError");
 
 const Submission = require("../db/models/submissionModel");
 const Question = require("../db/models/questionModel");
+const Course = require("../db/models/courseModel");
+const Assessment = require("../db/models/assessmentModel");
+const Student = require("../db/models/studentModel");
 
 //Once a question is complete, it becomes a submission.
 
@@ -61,16 +65,94 @@ router.get(
   })
 );
 
-//To create a new submission:
-
+// @desc: create a bunch of submission
+// @route: /api/submissions/courses/:coureseId/assessments/:assessmentId/students/:studentId
+// @access: public
 router.post(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId",
+  "/courses/:courseId/assessments/:assessmentId/students/:studentId",
   asyncHandler(async (req, res, next) => {
-    const newSubmission = await Submission.create(req.body);
-    res.status(200).json({
-      data: {
-        newSubmission,
+    const { courseId, assessmentId, studentId } = req.params;
+    // guard condition before student submit their answer
+    // 1. if the course with the id is exist or active
+    const course = await Course.findByPk(courseId, {
+      where: {
+        isActive: true,
       },
+    });
+    if (!course) {
+      throw new AppError(
+        `The course with id: ${courseId} is not exist or active`,
+        400
+      );
+    }
+    // 2. if the assessment with the id is exist or active
+    const assessment = await Assessment.findByPk(assessmentId, {
+      where: {
+        isActive: true,
+      },
+    });
+    if (!assessment) {
+      throw new AppError(
+        `The assessment with id: ${assessmentId} is not exist or active`,
+        400
+      );
+    }
+
+    // 3. if the assessment belong to the course?
+    if (!(await course.hasAssessment(assessment))) {
+      throw new AppError(
+        `The assessment (${assessment.title}) haven't been assigned to course(${course.name}) .`,
+        400
+      );
+    }
+
+    // 4. if the student exist
+    const student = await Student.findByPk(studentId);
+    if (!student) {
+      throw new AppError(
+        `The student with id: ${studentId} is not exist.`,
+        400
+      );
+    }
+    // 5.if the student have been enrolled to the course?
+    if (!(await course.hasStudent(student))) {
+      throw new AppError(
+        `The student (${student.firstName} ${student.lastName}) haven't been enrolled to the course(${course.name}) .`,
+        400
+      );
+    }
+
+    // 6. check if the student had submitted before?
+    const qusetionIds = Object.keys(req.body).map((el) => Number(el));
+    const existedSubmissions = await Submission.findAll({
+      where: {
+        studentId,
+        questionId: {
+          [Sequelize.Op.in]: qusetionIds,
+        },
+      },
+    });
+    if (existedSubmissions.length > 0) {
+      throw new AppError(
+        `The student (${student.firstName} ${student.lastName}) had submitted the answer to the assessment(${assessment.title}) before. You can't submit anymore!`,
+        400
+      );
+    }
+    // if everything is ok, store the submission in database
+    const submissions = [];
+    for (const questionId of Object.keys(req.body)) {
+      const submission = await Submission.create({
+        response: req.body[questionId],
+        questionId,
+        courseId: courseId,
+        assessmentId: assessmentId,
+        studentId: studentId,
+      });
+      submissions.push(submission);
+    }
+
+    res.status(201).json({
+      submissions,
     });
   })
 );
