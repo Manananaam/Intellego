@@ -8,7 +8,7 @@ import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 
 //redux
-import { getCourses } from "../store";
+import { getCourses, fetchStudentList } from "../store";
 import { fetchCourseAssessments } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,7 +20,7 @@ const AssessmentReportScreen = () => {
 
   const [courseId, assessmentId] = [
     Number(searchParams.get("courseId")),
-    Number(searchParams.get("assessmentId"))
+    Number(searchParams.get("assessmentId")),
   ];
 
   // initial current course ans current student
@@ -32,11 +32,14 @@ const AssessmentReportScreen = () => {
   const { allcourses } = useSelector((state) => state.studentEnroll);
   //need a course with list of assessments that belong to that course
   const courses = useSelector((state) => state.courses);
+  //grabbing all students for a course
+  const students = useSelector((state) => state.studentEnroll);
 
   //useEffect here to update the assessments fetch based on course id change
   useEffect(() => {
     if (courseId) {
       dispatch(fetchCourseAssessments(courseId));
+      dispatch(fetchStudentList({ courseId }));
     }
   }, [courseId]);
 
@@ -73,8 +76,9 @@ const AssessmentReportScreen = () => {
   };
 
   console.log("courses is:", courses);
-  console.log("currentCourse is:", currentCourse)
-  console.log("currentAssessment is:", currentAssessment)
+  console.log("currentCourse is:", currentCourse);
+  console.log("currentAssessment is:", currentAssessment);
+  console.log("students is:", students);
 
   return (
     <>
@@ -121,7 +125,9 @@ const AssessmentReportScreen = () => {
         </Dropdown>
       )}
       <br />
-      <h2>{currentAssessment ? currentAssessment.title : "No Assessment Selected"}</h2>
+      <h2>
+        {currentAssessment ? currentAssessment.title : "No Assessment Selected"}
+      </h2>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -131,7 +137,19 @@ const AssessmentReportScreen = () => {
             <th>Average</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {students && students.students.length ? (
+            students.students.map((student) => {
+              return (
+                <tr
+                  key={student.id}
+                >{`${student.firstName} ${student.lastName}`}</tr>
+              );
+            })
+          ) : (
+            <tr>No students in this class!</tr>
+          )}
+        </tbody>
       </Table>
       <h3>Overall Class Average: 89%</h3>
     </>
