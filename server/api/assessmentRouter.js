@@ -34,6 +34,7 @@ router.get(
     const assessments = await Assessment.findAll({
       include: {
         model: Question,
+        include: { model: Submission },
       },
     });
     res.status(200).json({ assessments });
