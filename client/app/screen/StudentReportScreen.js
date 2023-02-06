@@ -46,6 +46,7 @@ export default function StudentReportScreen() {
   // redux state
   // course with list of students belong to that course
   const courses = useSelector((state) => state.courses);
+
   // fetch a list of courses managed by current user
   const { allcourses } = useSelector((state) => state.studentEnroll);
   // fetch grades of each assessment belong to the student
