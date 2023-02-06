@@ -28,29 +28,20 @@ import {
   PlusCircleFill,
 } from "react-bootstrap-icons";
 
-//right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
-
 const EditAssessmentScreen = () => {
   const assessment = useSelector(selectAssessment);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { assessmentId } = useParams();
   const [assessmentTitle, setAssessmentTitle] = useState("");
-  // const [associatedCourses, setAssociatedCourses] = useState([]);
   const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
+  const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
   const { allcourses } = useSelector((state) => state.studentEnroll);
-
-  // const [questionText, setQuestionText] = useState("");
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
     setAssessmentTitle(assessment.assessment.assessmentTitle);
-    // setAssociatedCourses(assessment.assessment.associatedCourses);
-  }, [
-    dispatch,
-    assessment.assessment.assessmentTitle,
-    // assessment.assessment.associatedCourses,
-  ]);
+  }, [dispatch, assessment.assessment.assessmentTitle]);
 
   useEffect(() => {
     dispatch(getCourses());
@@ -58,6 +49,7 @@ const EditAssessmentScreen = () => {
 
   function handleAddQuestion() {
     console.log("clicky add question babe");
+    handleCloseAddQuestionModal();
   }
 
   function handleOpenCourseModal() {
@@ -67,15 +59,10 @@ const EditAssessmentScreen = () => {
     setAddCourseModalVisible(false);
   }
 
-  // const handleNewQuestion = (e) => {
-  //   e.preventDefault();
-  //   dispatch(createQuestion({ questionText }));
-  //   setQuestionText("");
-  // }
+  function handleCloseAddQuestionModal() {
+    setAddQuestionModalVisible(false);
+  }
 
-  //attach this to when someone types in the question field... or clicks out of it? Not sure...
-
-  //new handler, as soon as someone types anything into new question field, need to render another new question form item
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
@@ -195,19 +182,33 @@ const EditAssessmentScreen = () => {
           ) : (
             <></>
           )}
+          <Button type='button' onClick={setAddQuestionModalVisible}>
+            Add Question
+          </Button>
+          <Modal
+            size='lg'
+            aria-labelledby='contained-modal-title-vcenter'
+            centered
+            show={addQuestionModalVisible}
+            onHide={handleCloseAddQuestionModal}
+          >
+            <Modal.Title>Add Question</Modal.Title>
+            <Modal.Body>
+              <Form.Group>
+                <Form.Control
+                  as='textarea'
+                  rows={6}
+                  placeholder='Add a Question'
+                ></Form.Control>
+              </Form.Group>
+              <Button onClick={handleAddQuestion}>Submit</Button>
+            </Modal.Body>
+          </Modal>
         </Form.Group>
-        {/* <Form.Group>
-          <Form.Control
-            as='textarea'
-            rows={6}
-            placeholder='Add a Question +'
-          ></Form.Control>
-        </Form.Group> */}
+        <br />
+
         <Button type='submit' value='Submit'>
           Submit
-        </Button>
-        <Button type='button' onClick={handleAddQuestion}>
-          Add Question
         </Button>
       </Form>
     </>
