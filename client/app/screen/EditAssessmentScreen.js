@@ -37,6 +37,8 @@ const EditAssessmentScreen = () => {
   const [assessmentTitle, setAssessmentTitle] = useState("");
   const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
   const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
+  const [editQuestionModalVisible, setEditQuestionModalVisible] =
+    useState(false);
   const { allcourses } = useSelector((state) => state.studentEnroll);
   const [newQuestion, setNewQuestion] = useState("");
 
@@ -55,15 +57,16 @@ const EditAssessmentScreen = () => {
     setNewQuestion("");
   }
 
-  function handleOpenCourseModal() {
-    setAddCourseModalVisible(true);
-  }
   function handleCloseCourseModal() {
     setAddCourseModalVisible(false);
   }
 
   function handleCloseAddQuestionModal() {
     setAddQuestionModalVisible(false);
+  }
+
+  function handleCloseEditQuestionModal() {
+    setEditQuestionModalVisible(false);
   }
 
   function handleSubmit(e) {
@@ -75,11 +78,6 @@ const EditAssessmentScreen = () => {
 
   return (
     <>
-      <Navbar bg='light'>
-        <Container>
-          <Navbar.Brand>Edit Assessment</Navbar.Brand>
-        </Container>
-      </Navbar>
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>Assessment Title</Form.Label>
