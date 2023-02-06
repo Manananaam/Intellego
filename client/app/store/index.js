@@ -10,12 +10,15 @@ import { studentReportReducer } from "./slices/studentReportSlice";
 
 //na: From student enroll slice
 import { studentEnrollReducer } from "./slices/studentEnrollSlice";
-import { courseReportReducer } from "./slices/courseReportSlice"
+
+//na: From student view slice
+import { studentViewReducer } from "./slices/studentViewSlice";
+import { courseReportReducer } from "./slices/courseReportSlice";
 //authentication slice
 import { authReducer } from "./slices/authSlice";
 import allAssessmentsReducer from "./slices/assessmentsTableSlice";
 import assessmentReducer from "./slices/singleAssessmentSlice";
-import questionReducer from "./slices/questionSlice"
+import questionReducer from "./slices/questionSlice";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +31,7 @@ const store = configureStore({
     question: questionReducer,
     studentReport: studentReportReducer,
     studentEnroll: studentEnrollReducer,
+    studentView: studentViewReducer,
   },
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
