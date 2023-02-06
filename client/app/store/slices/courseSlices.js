@@ -12,7 +12,7 @@ export const fetchAllCourses = createAsyncThunk("/courses", async () => {
 });
 
 //fetching individual courses with assessments
-export const fetchCourseAssesments = createAsyncThunk(
+export const fetchCourseAssessments = createAsyncThunk(
   "/coursesAssessments",
   async (courseId) => {
     try {
@@ -95,7 +95,7 @@ export const courseSlice = createSlice({
     builder.addCase(fetchAllCourses.fulfilled, (state, action) => {
       return action.payload;
     });
-    builder.addCase(fetchCourseAssesments.fulfilled, (state, action) => {
+    builder.addCase(fetchCourseAssessments.fulfilled, (state, action) => {
       return action.payload;
     });
     builder.addCase(fetchCourseStudents.fulfilled, (state, action) => {
