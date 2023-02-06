@@ -54,18 +54,17 @@ export default function StudentViewScreen() {
     if (questions) {
       const initialSubmission = submission;
       questions.forEach((question) => {
-        if (
-          localStorage.getItem("answer") &&
-          JSON.parse(localStorage.getItem("answer"))[question.id]
-        ) {
-          initialSubmission[question.id] = JSON.parse(
-            localStorage.getItem("answer")
-          )[question.id];
-        } else {
-          initialSubmission[question.id] = "";
-        }
+        initialSubmission[question.id] = "";
       });
       setSubmission(initialSubmission);
+      // use this format to load localStorage value.
+      setSubmission((prev) => {
+        const values = JSON.parse(localStorage.getItem("answer"));
+        return {
+          ...prev,
+          ...values,
+        };
+      });
     }
   }, [questions]);
 
@@ -165,13 +164,6 @@ export default function StudentViewScreen() {
               {idx + 1}. Question:
               <p>{question.questionText}</p>
             </Card.Title>
-            <p>{question.id}</p>
-            <p>
-              answer:
-              {submission[question.id]
-                ? `populate from localstorage:${submission[question.id]}`
-                : "no content"}
-            </p>
             <Form.Control
               as="textarea"
               value={submission[question.id]}
