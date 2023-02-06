@@ -7,6 +7,7 @@ import {
   editAssessmentTitle,
   deleteQuestion,
 } from "../store/slices/singleAssessmentSlice";
+import { getCourses } from "../store";
 import {
   Container,
   Navbar,
@@ -15,6 +16,7 @@ import {
   Col,
   Row,
   ListGroup,
+  Modal,
 } from "react-bootstrap";
 import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
 
@@ -33,7 +35,9 @@ const EditAssessmentScreen = () => {
   const navigate = useNavigate();
   const { assessmentId } = useParams();
   const [assessmentTitle, setAssessmentTitle] = useState("");
-  const [associatedCourses, setAssociatedCourses] = useState([]);
+  // const [associatedCourses, setAssociatedCourses] = useState([]);
+  const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
+  const { allcourses } = useSelector((state) => state.studentEnroll);
 
   // const [questionText, setQuestionText] = useState("");
 
@@ -46,11 +50,22 @@ const EditAssessmentScreen = () => {
     assessment.assessment.assessmentTitle,
     // assessment.assessment.associatedCourses,
   ]);
+
+  useEffect(() => {
+    dispatch(getCourses());
+  }, [dispatch]);
+
   function handleAddQuestion() {
     console.log("clicky add question babe");
   }
   function handleAddCourse() {
     console.log("clicky add course babe");
+  }
+  function handleOpenCourseModal() {
+    setAddCourseModalVisible(true);
+  }
+  function handleCloseCourseModal() {
+    setAddCourseModalVisible(false);
   }
 
   // const handleNewQuestion = (e) => {
@@ -113,7 +128,39 @@ const EditAssessmentScreen = () => {
           ) : (
             <></>
           )}
-          <Button onClick={handleAddCourse}>Add Course</Button>
+          <Button onClick={setAddCourseModalVisible}>Add Course</Button>
+          <Modal
+            size='lg'
+            aria-labelledby='contained-modal-title-vcenter'
+            centered
+            show={addCourseModalVisible}
+            onHide={handleCloseCourseModal}
+          >
+            <Modal.Title>Add Course</Modal.Title>
+            <Modal.Body>
+              <ListGroup>
+                {allcourses && allcourses.length
+                  ? allcourses.map((course) => {
+                      let currentCourseId = course.id;
+                      let alreadyAssociated =
+                        assessment.assessment.associatedCourses.filter(
+                          (el) => el.id === currentCourseId
+                        );
+                      return alreadyAssociated.length ? (
+                        <ListGroup.Item disabled key={course.id}>
+                          {course.name}
+                        </ListGroup.Item>
+                      ) : (
+                        <ListGroup.Item key={course.id}>
+                          {course.name}{" "}
+                          <PlusCircleFill onClick={handleAddCourse} />
+                        </ListGroup.Item>
+                      );
+                    })
+                  : "You have no courses on record."}
+              </ListGroup>
+            </Modal.Body>
+          </Modal>
         </Form.Group>
         <br />
         <Form.Group>
