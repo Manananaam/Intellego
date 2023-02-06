@@ -68,6 +68,16 @@ export const removeCourseFromAssessment = createAsyncThunk(
   }
 );
 
+export const addAssociatedCourse = createAsyncThunk(
+  "assessment/addAssociatedCourse",
+  async (courseId) => {
+    try {
+    } catch (err) {
+      console.error(err);
+    }
+  }
+);
+
 export const assessmentSlice = createSlice({
   name: "assessment",
   initialState,

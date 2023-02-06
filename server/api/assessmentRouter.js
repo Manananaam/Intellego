@@ -125,4 +125,15 @@ router.delete(
   })
 );
 
+//@desc: add specific course association to an assessment
+router.post(
+  "/:assessmentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    const addCourse = await assessment.addCourse(course);
+    res.json(addCourse);
+  })
+);
+
 module.exports = router;
