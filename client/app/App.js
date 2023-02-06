@@ -16,6 +16,10 @@ import EditAssessmentScreen from "./screen/EditAssessmentScreen";
 import CreateAssessmentScreen from "./screen/CreateAssessmentScreen";
 import CourseReportScreen from "./screen/CourseReportScreen";
 
+// Screen
+
+import AssessmentReportScreen from "./screen/AssessmentReportScreen";
+
 export default function App() {
   return (
     <>
@@ -52,6 +56,10 @@ export default function App() {
         <Route path="/" element={<HomeScreen />} />
         <Route path="/login" element={<LogInScreen />} />
         <Route path="/signup" element={<SignUpScreen />} />
+        <Route
+          path="/report/assessments"
+          element={<AssessmentReportScreen />}
+        />
       </Routes>
     </>
   );
