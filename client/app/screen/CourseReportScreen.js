@@ -23,7 +23,7 @@ import {
 import { fetchAllCourses } from "../store/slices/courseSlices";
 
 export default function CourseReportScreen() {
-  // use router hook to fetch current courseId and studentId
+  // use router hook to fetch current courseId
   let [searchParams, setSearchParams] = useSearchParams();
 
   const courseId = Number(searchParams.get("courseId"));
@@ -31,12 +31,11 @@ export default function CourseReportScreen() {
   //fetch all courses to populate dropdown menu
   const allCourses = useSelector((state) => state.courses);
 
-  //fetch grade/assessments once selected
-  const allGrades = useSelector((state) => state.report.allGrades);
-
-  //initial current course
+  //initial current course null, then select
   const [currentCourse, setCurrentCourse] = useState(null);
 
+  //fetch grade/assessments once selected
+  const allGrades = useSelector((state) => state.report.allGrades);
   //fetch all courses
   const dispatch = useDispatch();
   useEffect(() => {
@@ -53,7 +52,7 @@ export default function CourseReportScreen() {
   // update current course once selected
   useEffect(() => {
     if (allCourses.length) {
-      const course = allCourses.filter((el) => el.id === courseId);
+      const course = allCourses.find((el) => el.id === courseId);
       setCurrentCourse(course);
     }
     if (courseId) {
@@ -67,10 +66,11 @@ export default function CourseReportScreen() {
     setSearchParams(searchParams);
   };
 
-  console.log(allGrades && allGrades.map((obj) => obj.overall_grade));
-
+  //chart data
   const data = {
-    labels: allGrades && allGrades.map((obj) => obj.id),
+    labels: allGrades && allGrades.map((obj) => {
+     return `${obj.firstName} ${obj.lastName}`
+     }),
 
     datasets: [
       {
@@ -83,7 +83,7 @@ export default function CourseReportScreen() {
       },
     ],
   };
-
+  //render chart
   let chart;
   if (currentCourse && allGrades && allGrades.length) {
     chart = (
@@ -94,12 +94,17 @@ export default function CourseReportScreen() {
         </div>
       </div>
     );
-  } else {
+  }
+    else
+    {
     chart = <p>Please select an active course. </p>;
   }
 
   const options = {
     responsive: true,
+    animation: {
+      duration: 0,
+    },
   };
 
   return (
@@ -107,13 +112,13 @@ export default function CourseReportScreen() {
       <Container>
         <Row>
           <Col xs={3} id="sidebar-wrapper">
-            <Sidebar />
+            {/* <Sidebar /> */}
           </Col>
           <Col xs={9} id="page-content-wrapper"></Col>
           <h1>Course Report</h1>
           <Dropdown>
             <Dropdown.Toggle>
-              {currentCourse ? currentCourse.id : "Course"}
+              {currentCourse ? currentCourse.name : "Course"}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {allCourses &&
@@ -123,8 +128,7 @@ export default function CourseReportScreen() {
                     <Dropdown.Item
                       key={course.id}
                       onClick={() => handleCurrentCourse(course)}
-                    >
-                      {course.name}
+                    >{course.name}
                     </Dropdown.Item>
                   );
                 })}
