@@ -93,12 +93,6 @@ const AssessmentReportScreen = () => {
     setSearchParams(searchParams);
   };
 
-  console.log("courses is:", courses);
-  console.log("currentCourse is:", currentCourse);
-  console.log("currentAssessment is:", currentAssessment);
-  console.log("students is:", students);
-  console.log("assessment is:", assessment);
-
   return (
     <>
       <h1>Assessment Report Screen</h1>
