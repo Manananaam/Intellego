@@ -42,6 +42,10 @@ const AssessmentReportScreen = () => {
   //grabbing the questions and submissions for the given assessment
   const assessment = useSelector((state) => state.assessment.assessment.data);
 
+  // finding a place to house these grades
+  let assessmentGrades = [];
+
+
   //useEffect here to update the assessments fetch based on course id change
   useEffect(() => {
     if (courseId) {
@@ -160,7 +164,6 @@ const AssessmentReportScreen = () => {
             students.students.map((student) => {
               let allGrades = 0;
               let numGrades = 0;
-              console.log("student in the map:", student);
               return (
                 <tr key={student.id}>
                   <td>{`${student.firstName} ${student.lastName}`}</td>
@@ -173,13 +176,15 @@ const AssessmentReportScreen = () => {
                         );
                         allGrades += submission.grade;
                         numGrades++;
+                        assessmentGrades.push(Math.round(allGrades / numGrades))
                         return (
                           <td key={submission.id}>
                             {submission.response} {submission.grade}
                           </td>
                         );
                       }
-                    })}
+                    })
+                  }
                   <td>{Math.round(allGrades / numGrades)}</td>
                 </tr>
               );
@@ -189,9 +194,11 @@ const AssessmentReportScreen = () => {
           )}
         </tbody>
       </Table>
-      <h3>Overall Class Average: 89%</h3>
+      <h3>Overall Class Average: {Math.round(assessmentGrades.reduce((total, item) => total + item, 0) / assessmentGrades.length)}%</h3>
     </>
   );
 };
 
 export default AssessmentReportScreen;
+
+
