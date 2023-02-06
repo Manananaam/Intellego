@@ -85,7 +85,7 @@ const CousreScreen = () => {
                               >
                                 Assessments
                               </Dropdown.Item>
-                              <Dropdown.Item>Report</Dropdown.Item>
+                              <Dropdown.Item href={`/report/courses?courseId=${courseId}`}>Report</Dropdown.Item>
                               <Dropdown.Divider />
                               <Dropdown.Item onClick={handleShowEdit}>
                                 Edit

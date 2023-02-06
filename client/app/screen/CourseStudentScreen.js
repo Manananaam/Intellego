@@ -14,6 +14,7 @@ import {
   fetchCourseStudents,
   selectCourses,
 } from "../store/slices/courseSlices";
+import { StudentEdit } from "../style/StudentEdit";
 
 const CourseStudentScreen = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const CourseStudentScreen = () => {
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Report</th>
+                <th>Edit Student</th>
               </tr>
             </thead>
             <tbody>
@@ -47,9 +49,10 @@ const CourseStudentScreen = () => {
                 ? course.students.map((student) => {
                     return (
                       <tr key={student.id} href="">
+                        <td>{student.id}</td>
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
-                        <td>{student.id}</td>
+                        <td>{StudentEdit}</td>
                         <td>
                           <Link
                             to={`/report/students?courseId=${courseId}&studentId=${student.id}`}

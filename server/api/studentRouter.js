@@ -235,6 +235,12 @@ router.post(
   })
 );
 
+router.put("/:studentId", asyncHandler(async (req, res, next) => {
+  const student = await Student.findByPk(req.params.studentId);
+  await student.update(req.body);
+  res.status(200).json({student})
+}))
+
 // @desc: unenroll individual student
 // @route: DELETE /api/students/:studentId/courses/:courseId
 // @access: public

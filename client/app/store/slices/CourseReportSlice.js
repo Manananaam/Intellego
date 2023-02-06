@@ -68,7 +68,6 @@ export const CourseReportSlice = createSlice({
       state.currentCourse = action.payload;
     });
     builder.addCase(fetchOverallGrade.fulfilled, (state, action) => {
-      console.log(action.payload.overallGradeForEachStudent);
       state.allGrades = action.payload.overallGradeForEachStudent;
     });
   },

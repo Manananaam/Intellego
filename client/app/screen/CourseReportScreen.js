@@ -68,9 +68,11 @@ export default function CourseReportScreen() {
 
   //chart data
   const data = {
-    labels: allGrades && allGrades.map((obj) => {
-     return `${obj.firstName} ${obj.lastName}`
-     }),
+    labels:
+      allGrades &&
+      allGrades.map((obj) => {
+        return `${obj.firstName} ${obj.lastName}`;
+      }),
 
     datasets: [
       {
@@ -94,9 +96,7 @@ export default function CourseReportScreen() {
         </div>
       </div>
     );
-  }
-    else
-    {
+  } else {
     chart = <p>Please select an active course. </p>;
   }
 
@@ -128,7 +128,8 @@ export default function CourseReportScreen() {
                     <Dropdown.Item
                       key={course.id}
                       onClick={() => handleCurrentCourse(course)}
-                    >{course.name}
+                    >
+                      {course.name}
                     </Dropdown.Item>
                   );
                 })}

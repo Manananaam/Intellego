@@ -25,6 +25,29 @@ export const getCourses = createAsyncThunk(
   }
 );
 
+
+export const editStudent = createAsyncThunk(
+  "student/editStudent", async (studentId, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.put(`/api/student/${studentId}`);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+export const removeStudent = createAsyncThunk(
+  "student/removeStudent", async (studentId, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.delete(`/api/student/${studentId}/courses/${courseId}`);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+)
+
 const studentEnrollSlice = createSlice({
   name: "template",
   initialState: {
@@ -39,7 +62,9 @@ const studentEnrollSlice = createSlice({
       state.numOfStudents = action.payload.numOfStudents;
       state.students = action.payload.students;
     });
-
+    builder.addCase(editStudent.fulfilled, (state, action) => {
+      state.students = action.payload.students;
+    });
     builder.addCase(getCourses.fulfilled, (state, action) => {
       state.allcourses = action.payload;
     });
