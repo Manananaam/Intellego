@@ -14,7 +14,7 @@ import {
   fetchCourseStudents,
   selectCourses,
 } from "../store/slices/courseSlices";
-import { StudentEdit } from "../style/StudentEdit";
+import { StudentEdit } from "../components/StudentEdit";
 
 const CourseStudentScreen = () => {
   const dispatch = useDispatch();
