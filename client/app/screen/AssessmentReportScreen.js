@@ -8,7 +8,7 @@ import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
 
 //redux
-import { getCourses, fetchStudentList } from "../store";
+import { getCourses, fetchStudentList, fetchAssessment } from "../store";
 import { fetchCourseAssessments } from "../store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -34,6 +34,8 @@ const AssessmentReportScreen = () => {
   const courses = useSelector((state) => state.courses);
   //grabbing all students for a course
   const students = useSelector((state) => state.studentEnroll);
+  //grabbing the questions and submissions for the given assessment
+  const assessment = useSelector((state) => state.assessment.assessment.data);
 
   //useEffect here to update the assessments fetch based on course id change
   useEffect(() => {
@@ -42,6 +44,13 @@ const AssessmentReportScreen = () => {
       dispatch(fetchStudentList({ courseId }));
     }
   }, [courseId]);
+
+  //useEffect here to update the single assessment fetch based on assessmentId change
+  useEffect(() => {
+    if (assessmentId) {
+      dispatch(fetchAssessment(assessmentId));
+    }
+  }, [assessmentId]);
 
   // update current course, current assessment
   useEffect(() => {
@@ -79,6 +88,7 @@ const AssessmentReportScreen = () => {
   console.log("currentCourse is:", currentCourse);
   console.log("currentAssessment is:", currentAssessment);
   console.log("students is:", students);
+  console.log("assessment is:", assessment);
 
   return (
     <>
@@ -132,8 +142,11 @@ const AssessmentReportScreen = () => {
         <thead>
           <tr>
             <th>Students</th>
-            <th>Sample Question 1</th>
-            <th>Sample Question 2</th>
+            {assessment && assessment.assessment.questions.length && assessment.assessment.questions.map((question) => {
+              return (
+                <th key={question.id}>{question.questionText}</th>
+              )
+            })}
             <th>Average</th>
           </tr>
         </thead>
