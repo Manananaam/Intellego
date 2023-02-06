@@ -10,6 +10,7 @@ import { studentReportReducer } from "./slices/studentReportSlice";
 
 //na: From student enroll slice
 import { studentEnrollReducer } from "./slices/studentEnrollSlice";
+import { courseReportReducer } from "./slices/courseReportSlice"
 //authentication slice
 import { authReducer } from "./slices/authSlice";
 import allAssessmentsReducer from "./slices/assessmentsTableSlice";
@@ -19,6 +20,7 @@ import questionReducer from "./slices/questionSlice"
 const store = configureStore({
   reducer: {
     template: templateReducer,
+    report: courseReportReducer,
     courses: courseSlice,
     auth: authReducer,
     assessments: allAssessmentsReducer,
