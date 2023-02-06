@@ -27,6 +27,7 @@ import {
   Archive,
   Trash3,
   PlusCircleFill,
+  Pencil,
 } from "react-bootstrap-icons";
 
 const EditAssessmentScreen = () => {
@@ -176,6 +177,26 @@ const EditAssessmentScreen = () => {
                     placeholder={question.questionText}
                   ></Form.Control>
                   <Trash3 onClick={handleDeleteQuestion} />
+                  <Pencil onClick={setEditQuestionModalVisible} />
+                  <Modal
+                    size='lg'
+                    aria-labelledby='contained-modal-title-vcenter'
+                    centered
+                    show={editQuestionModalVisible}
+                    onHide={handleCloseEditQuestionModal}
+                  >
+                    <Modal.Title>Edit Question</Modal.Title>
+                    <Modal.Body>
+                      <Form.Group>
+                        <Form.Control
+                          as='textarea'
+                          rows={6}
+                          placeholder={question.questionText}
+                          // onChange={(e) => setNewQuestion(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Modal.Body>
+                  </Modal>
                   {/* note - check for submissions and change to archive button to match natalie? */}
                 </div>
               );
