@@ -7,6 +7,7 @@ import {
   editAssessmentTitle,
   deleteQuestion,
   addAssociatedCourse,
+  addQuestion,
 } from "../store/slices/singleAssessmentSlice";
 import { getCourses } from "../store";
 import {
@@ -37,6 +38,7 @@ const EditAssessmentScreen = () => {
   const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
   const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
   const { allcourses } = useSelector((state) => state.studentEnroll);
+  const [newQuestion, setNewQuestion] = useState("");
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
@@ -48,8 +50,9 @@ const EditAssessmentScreen = () => {
   }, [dispatch]);
 
   function handleAddQuestion() {
-    console.log("clicky add question babe");
+    dispatch(addQuestion({ assessmentId, questionText: newQuestion }));
     handleCloseAddQuestionModal();
+    setNewQuestion("");
   }
 
   function handleOpenCourseModal() {
@@ -198,7 +201,8 @@ const EditAssessmentScreen = () => {
                 <Form.Control
                   as='textarea'
                   rows={6}
-                  placeholder='Add a Question'
+                  value={newQuestion || ""}
+                  onChange={(e) => setNewQuestion(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Button onClick={handleAddQuestion}>Submit</Button>

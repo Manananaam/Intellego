@@ -74,9 +74,10 @@ export const addQuestion = createAsyncThunk(
   async ({ assessmentId, questionText }) => {
     try {
       const { data } = await axios.post(
-        `/api/assessments/${assessmentId}/questions}`,
-        { assessmentId, questionText }
+        `/api/assessments/${assessmentId}/questions`,
+        { questionText: questionText }
       );
+      console.log("hi from thunk, here is data", data);
       return data;
     } catch (err) {
       console.error(err);
