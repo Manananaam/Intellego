@@ -9,7 +9,14 @@ export const fetchSingleQuestion = createAsyncThunk(
   "question/fetchSingleQuestion",
   async (id) => {
     try {
-      const { data } = await axios.get(`/api/questions/${id}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+      const { data } = await axios.get(`/api/questions/${id}`, config);
       return data.data.question;
     } catch (err) {
       console.error(err);
@@ -46,10 +53,16 @@ export const editQuestionText = createAsyncThunk(
   "question/editQuestionText",
   async ({ id, questionText }) => {
     try {
-      console.log("hi from thunk", id, questionText);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = await axios.put(`/api/questions/${id}`, {
         questionText,
-      });
+      }, config);
     } catch (err) {
       console.error(err);
     }

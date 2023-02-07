@@ -34,11 +34,18 @@ export const editAssessmentTitle = createAsyncThunk(
   "assessment/editTitle",
   async (updatedAssessment) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const id = updatedAssessment.assessmentId;
       const title = updatedAssessment.assessmentTitle;
       const { data } = await axios.put(
         `/api/assessments/${updatedAssessment.assessmentId}`,
-        { id, title }
+        { id, title }, config
       );
       return data;
     } catch (err) {
@@ -71,7 +78,14 @@ export const deleteQuestion = createAsyncThunk(
   "assessment/deleteQuestion",
   async (questionId) => {
     try {
-      const { data } = await axios.delete(`/api/questions/${questionId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+      const { data } = await axios.delete(`/api/questions/${questionId}`, config);
       return questionId;
     } catch (err) {
       console.error(err);
@@ -84,8 +98,15 @@ export const removeCourseFromAssessment = createAsyncThunk(
   "/assessment/removeCourseFromAssessment",
   async ({ assessmentId, courseId }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = await axios.delete(
-        `/api/assessments/${assessmentId}/courses/${courseId}`
+        `/api/assessments/${assessmentId}/courses/${courseId}`, config
       );
       return data;
     } catch (err) {
@@ -99,9 +120,16 @@ export const addQuestion = createAsyncThunk(
   "/assessment/addQuestion",
   async ({ assessmentId, questionText }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = await axios.post(
         `/api/assessments/${assessmentId}/questions`,
-        { questionText: questionText }
+        { questionText: questionText }, config
       );
       return data;
     } catch (err) {
@@ -115,8 +143,15 @@ export const addAssociatedCourse = createAsyncThunk(
   "assessment/addAssociatedCourse",
   async ({ courseId, assessmentId }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = axios.post(
-        `/api/assessments/${assessmentId}/courses/${courseId}`
+        `/api/assessments/${assessmentId}/courses/${courseId}`, config
       );
       return data;
     } catch (err) {
