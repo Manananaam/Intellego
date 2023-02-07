@@ -40,22 +40,20 @@ const MainDashboardScreen = () => {
               element={<CourseAssessmentsScreen />}
             />
 
-            <Route path="/assessments" element={<AssessmentsScreen />}>
-              <Route
-                path="/assessments/create"
-                element={<CreateAssessmentScreen />}
-              ></Route>
-              <Route
-                path="/assessments/:assessmentId"
-                element={<EditAssessmentScreen />}
-              />
-            </Route>
+            <Route path="/assessments" element={<AssessmentsScreen />} />
+            <Route
+              path="/assessments/create"
+              element={<CreateAssessmentScreen />}
+            />
+            <Route
+              path="/assessments/:assessmentId"
+              element={<EditAssessmentScreen />}
+            />
             <Route path="/report/students" element={<StudentReportScreen />} />
             <Route
               path="/report/assessments"
               element={<AssessmentReportScreen />}
             />
-
             <Route path="/report/courses/" element={<CourseReportScreen />} />
             <Route
               path="/student/courses/:courseId/assessments/:assessmentId"
