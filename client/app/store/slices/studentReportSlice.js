@@ -4,7 +4,7 @@ import axios from "axios";
 //fetch individual student's grade for each assessment
 export const fetchGradeForEachAssessment = createAsyncThunk(
   "report/student/fetchGradeForEachAssessment",
-  async ({ studentId, courseId }, { rejectWithValue }) => {
+  async ({ studentId, courseId }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -19,7 +19,8 @@ export const fetchGradeForEachAssessment = createAsyncThunk(
       );
       return data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      const errMsg = err.response.data.message;
+      throw new Error(errMsg);
     }
   }
 );
