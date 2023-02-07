@@ -45,7 +45,6 @@ const AssessmentReportScreen = () => {
   // finding a place to house these grades
   let assessmentGrades = [];
 
-
   //useEffect here to update the assessments fetch based on course id change
   useEffect(() => {
     if (courseId) {
@@ -170,29 +169,37 @@ const AssessmentReportScreen = () => {
                         );
                         allGrades += submission.grade;
                         numGrades++;
-                        assessmentGrades.push(Math.round(allGrades / numGrades))
+                        assessmentGrades.push(
+                          Math.round(allGrades / numGrades)
+                        );
                         return (
                           <td key={submission.id}>
                             {submission.response} {submission.grade}
                           </td>
                         );
                       }
-                    })
-                  }
+                    })}
                   <td>{Math.round(allGrades / numGrades)}</td>
                 </tr>
               );
             })
           ) : (
-            <tr>No students in this class!</tr>
+            <tr>
+              <td>No students in this class!</td>
+            </tr>
           )}
         </tbody>
       </Table>
-      <h3>Overall Class Average: {Math.round(assessmentGrades.reduce((total, item) => total + item, 0) / assessmentGrades.length)}%</h3>
+      <h3>
+        Overall Class Average:{" "}
+        {Math.round(
+          assessmentGrades.reduce((total, item) => total + item, 0) /
+            assessmentGrades.length
+        )}
+        %
+      </h3>
     </>
   );
 };
 
 export default AssessmentReportScreen;
-
-
