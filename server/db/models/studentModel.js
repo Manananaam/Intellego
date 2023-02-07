@@ -66,4 +66,16 @@ Student.prototype.calculateOverallGradeAtCourse = async function (course) {
   return overall_grade;
 };
 
+Student.prototype.belongToCourse = async function (courseId) {
+  /**
+   * @desc: check if the student belong to the course
+   * @param: courseId(integer)
+   * @returns: Boolean
+   */
+
+  const course = await Course.findByPk(courseId);
+  const isBelongTo = await course.hasStudent(this);
+  return isBelongTo;
+};
+
 module.exports = Student;
