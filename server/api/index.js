@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const protectedRoute = require("./middleware");
 
 const protectedRoute = require("./middleware");
 // Test middleware

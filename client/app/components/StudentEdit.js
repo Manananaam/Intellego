@@ -1,7 +1,7 @@
 //react stuff
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { editStudent, removeStudent } from "../store/slices/studentEnrollSlice";
+import { editStudent, removeStudent } from "../store/slices/studentViewSlice";
 
 //bootstrap stuff
 import Button from "react-bootstrap/Button";
@@ -18,10 +18,17 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
     e.preventDefault();
     dispatch(editStudent({ id, firstName, lastName }));
     setShowEdit(false);
-    console.log(showEdit, setShowEdit, id);
+    console.log(id)
+    console.log(firstName, lastName)
   };
 
   const handleEditClose = () => setShowEdit(false);
+
+  const handleRemoveStudent = (e) => {
+    e.preventDefault();
+    dispatch(removeStudent(id))
+    handleEditClose();
+  };
 
   return (
     <>
@@ -50,12 +57,8 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
             </Form.Group>
 
             <Form.Group controlId="">
-              <Form.Label>Remove Student</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Remove"
-                onChange={(e) => removeStudent(e.target.value)}
-              />
+              <Button onClick={handleRemoveStudent}>Remove Student
+              </Button>
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -71,4 +74,3 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
     </>
   );
 };
-

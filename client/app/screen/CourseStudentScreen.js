@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
@@ -11,17 +11,24 @@ import {
   selectCourses,
 } from "../store/slices/courseSlices";
 import { StudentEdit } from "../components/StudentEdit";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
+import { Dropbox } from "react-bootstrap-icons";
 
 const CourseStudentScreen = () => {
+  const [show, setShow] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
   const dispatch = useDispatch();
   const { courseId } = useParams();
-
   const course = useSelector(selectCourses);
+
+    //Eventhandlers
+    const handleShow = () => setShow(true);
+    const handleShowEdit = () => setShowEdit(true);
 
   useEffect(() => {
     dispatch(fetchCourseStudents(courseId));
-  }, [dispatch]);
+  }, [showEdit, show]);
 
   return (
     <>
@@ -32,8 +39,7 @@ const CourseStudentScreen = () => {
                 <th>Student ID</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Report</th>
-                <th>Edit Student</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -45,14 +51,22 @@ const CourseStudentScreen = () => {
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
                         <td>
-                          <Link
-                            to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
-                          >
-                            View report
-                          </Link>
-                        </td>
+                          <Dropdown>
+                            <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
+                            <Dropdown.Menu>
+                            <Dropdown.Item href={`/report/students?courseId=${courseId}&studentId=${student.id}`}>View Report</Dropdown.Item>
+                            <Dropdown.Item onClick={handleShowEdit}>Edit/Remove Student</Dropdown.Item>
+
+                        </Dropdown.Menu>
+                        <StudentEdit
+                        showEdit={showEdit}
+                        setShowEdit={setShowEdit}
+                        id={student.id}
+                        >
+                        </StudentEdit>
+                          </Dropdown>
+                          </td>
                         <td>
-                          <Button variant="primary" onClick={StudentEdit}>Edit Student</Button>
                         </td>
                       </tr>
                     );
