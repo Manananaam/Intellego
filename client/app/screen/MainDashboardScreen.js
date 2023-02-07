@@ -1,10 +1,14 @@
+//react
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+//bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Sidebar from "../components/Sidebar";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+//screens
+import Sidebar from "../components/Sidebar";
 import CousreScreen from "./CourseScreen";
 import CourseStudentScreen from "./CourseStudentScreen";
 import CourseAssessmentsScreen from "./CourseAssessmentsScreen";
@@ -20,10 +24,10 @@ const MainDashboardScreen = () => {
   return (
     <Container>
       <Row>
-        <Col xs={3} id="sidebar-wrapper">
+        <Col xs={3} md={4} id="sidebar-wrapper">
           <Sidebar />
         </Col>
-        <Col xs={9} id="page-content-wrapper">
+        <Col xs={9} md={8} id="page-content-wrapper">
           <h1>Intellego</h1>
           <Routes>
             <Route path="/courses" element={<CousreScreen />} />

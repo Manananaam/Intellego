@@ -18,7 +18,7 @@ const Sidebar = () => {
   return (
     <>
       <Nav
-        className="col-md-3 d-none d-md-block bg-light sidebar flex-column justify-content-center"
+        className="col-md-3 d-none d-md-block bg-light sidebar justify-content-center"
         variant="pills"
       >
         <Figure>
