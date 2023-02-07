@@ -89,6 +89,16 @@ export const assessmentsSlice = createSlice({
       .addCase(isActiveAssessment.fulfilled, (state, action) => {
         return state.assessments.filter((assessment) => assessment.isActive);
       });
+    builder
+      .addCase(fetchAllAssessments.fulfilled, (state, action) => {
+        state.assessments = action.payload.assessments;
+      })
+      .addCase(createAssessment.fulfilled, (state, action) => {
+        state.assessments.push(action.payload.data.newAssessment);
+      })
+      .addCase(isActiveAssessment.fulfilled, (state, action) => {
+        return state.assessments.filter((assessment) => assessment.isActive);
+      });
   },
 });
 
