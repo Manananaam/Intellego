@@ -18,7 +18,9 @@ export default function App() {
     <>
       {user ? (
         <>
-          <MainDashboardScreen />
+          <Routes>
+            <Route path="*" element={<MainDashboardScreen />} />
+          </Routes>
         </>
       ) : (
         <>
