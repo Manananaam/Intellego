@@ -3,11 +3,11 @@ const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
 const {
-  models: { Assessment, Question, Submission },
+  models: { Assessment, Question, Submission, Course },
 } = require("../db");
+
 const protectedRoute = require("./middleware");
 const AppError = require("../utils/appError");
-const Course = require("../db/models/courseModel");
 
 // GET all assessments for a specific teacher (authorized)
 router.get(
@@ -118,12 +118,17 @@ router.get(
         userId: req.user.id,
         id: req.params.assessmentId,
       },
-      include: {
-        model: Question,
-        include: {
-          model: Submission,
+      include: [
+        {
+          model: Course,
         },
-      },
+        {
+          model: Question,
+          include: {
+            model: Submission,
+          },
+        },
+      ],
   });
     if (!assessment) {
       throw new AppError(
@@ -162,7 +167,7 @@ router.post(
   })
 );
 
-//PUT: assign assessment to more than one class
+//PUT: assign assessment to more than one class, edit title
 router.put(
   "/:assessmentId",
   protectedRoute,
@@ -189,6 +194,39 @@ router.delete(
       },
     });
     res.sendStatus(204);
+  })
+);
+
+//@desc: remove specific course association from an assessment
+router.delete(
+  "/:assessmentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const courseId = req.params.courseId;
+    const course = await Course.findByPk(req.params.courseId);
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    const removeCourse = await assessment.removeCourse(course);
+    res.json({ courseId });
+  })
+);
+
+//@desc: add specific course association to an assessment
+router.post(
+  "/:assessmentId/courses/:courseId",
+  asyncHandler(async (req, res, next) => {
+    const course = await Course.findByPk(req.params.courseId);
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    const addCourse = await assessment.addCourse(course);
+    res.json({ addCourse, course });
+  })
+);
+
+//@desc: add new question to specific assessment
+router.post(
+  "/:assessmentId/questions",
+  asyncHandler(async (req, res, next) => {
+    const assessmentId = req.params.assessmentId;
+    const { questionText } = req.body;
+    res.json(await Question.create({ questionText, assessmentId }));
   })
 );
 

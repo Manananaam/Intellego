@@ -26,7 +26,7 @@ const CreateAssessmentScreen = () => {
 
   return (
     <>
-      <Navbar bg="light">
+       <Navbar bg="light">
         <Container>
           <Navbar.Brand>New Assessment</Navbar.Brand>
         </Container>

@@ -4,17 +4,29 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const asyncHandler = require("express-async-handler");
 const AppError = require("../utils/appError");
+const protectedRoute = require("./middleware");
 const {
   models: { Student, Course },
 } = require("../db");
 
 // @desc: fetch a list of overall grade of student in the course
 // @route: /api/students/courses/:courseId/overallGrade
-// @access: -
+// @access: private (mark with authentication)
 router.get(
   "/courses/:courseId/overallGrade",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
+
     const students = await course.getStudents();
     const overallGradeForEachStudent = await Promise.all(
       students.map(async (student) => {
@@ -35,9 +47,10 @@ router.get(
 
 // @desc: fetch the student's grade in this assessment
 // @route: /api/students/:studentId/assessment/:assessmentId
-// @access: -
+// @access: private (mark with authentication)
 router.get(
   "/:studentId/assessment/:assessmentId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const student = await Student.findByPk(req.params.studentId);
     const total_grade = await student.calculateGradeAtAssessment(
@@ -53,13 +66,23 @@ router.get(
 // ! what if the student didn't submit any submission yet? that case the grade belongs to that student won't exist.
 // ? I only can get a list of student's grade for those who had submit their answer
 // TODO: At front-end, for those student who haven't made any submission, show "missing" as grade
-// @route: /api/students/assessment/:assessmentId
-// @access: -
+// @route: /api/students/courses/:courseId/assessment/:assessmentId
+// @access: private (mark with authentication)
 router.get(
   "/courses/:courseId/assessment/:assessmentId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     // 1. fetch a list of student, who had been assigned to this assessment in the course
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const students = await course.getStudents();
 
     // 2. calculate the grade belongs to each student in the assessment
@@ -85,11 +108,21 @@ router.get(
 
 // @desc: fetch individual student's overall grade in this class
 // @route: GET /api/students/:studentId/courses/:courseId
-// @access: public
+// @access: private (mark with authentication)
 router.get(
   "/:studentId/courses/:courseId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const student = await Student.findByPk(req.params.studentId);
     const overall_grade = await student.calculateOverallGradeAtCourse(course);
 
@@ -99,12 +132,24 @@ router.get(
 
 // @desc: fetch individual student's grade for each assessment
 // @route: GET /api/students/:studentId/courses/:courseId/assessments
-// @access: public
+// @access: private (mark with authentication)
 router.get(
   "/:studentId/courses/:courseId/assessments",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId);
-    const assessments = await course.getAssessments();
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
+    const assessments = await course.getAssessments({
+      where: { userId: req.user.id },
+    });
     const student = await Student.findByPk(req.params.studentId, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
@@ -127,9 +172,10 @@ router.get(
 
 // @desc: get individual student's information
 // @route: GET /api/students/:studentId
-// @access: public
+// @access: private
 router.get(
   "/:studentId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const students = await Student.findByPk(req.params.studentId);
     res.status(200).json(students);
@@ -138,11 +184,21 @@ router.get(
 
 // @desc: get student's list that belong to this course
 // @route: GET /api/students/courses/:courseId
-// @access: public
+// @access: private
 router.get(
   "/courses/:courseId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const students = await course.getStudents({
       order: ["id"],
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -159,9 +215,10 @@ router.get(
 
 // @desc: get individual student's enrollments
 // @route: GET /api/students/:studentId/enrollments
-// @access: public
+// @access: private
 router.get(
   "/:studentId/enrollments",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const students = await Student.findByPk(req.params.studentId);
     const enrollments = await students.getCourses({
@@ -186,13 +243,23 @@ router.get(
 // ? or at course page, enroll student by enter student name
 // @desc: enroll existed student to course
 // @route: POST /api/students/:studentId/courses/:courseId
-// @access: public
+// @access: private
 router.post(
   "/:studentId/courses/:courseId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     //!500 sequelize error: student had enrolled to this course
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const student = await Student.findByPk(req.params.studentId);
-    const course = await Course.findByPk(req.params.courseId);
     await student.addCourse(course);
     res.status(201).json({
       student,
@@ -203,13 +270,23 @@ router.post(
 
 // @desc: create and enroll student to course, also handle if the student already exist
 // @route: POST /api/students/courses/:courseId
-// @access: public
+// @access: private
 router.post(
   "/courses/:courseId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     // 1. check if the student has been created
     //? assume the the fullname of student is unique, there is not case that 2 students have exactly same name.
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const existedStudent = await Student.findOne({
       where: {
         firstName: req.body.firstName,
@@ -237,12 +314,22 @@ router.post(
 
 // @desc: unenroll individual student
 // @route: DELETE /api/students/:studentId/courses/:courseId
-// @access: public
+// @access: private
 router.delete(
   "/:studentId/courses/:courseId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     // unenrolle -> remove relationship between student and this course
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: { id: req.params.courseId, userId: req.user.id },
+    });
+
+    if (!course) {
+      throw new AppError(
+        `The course with id(${req.params.courseId}) don't belong to current logged in user.`,
+        400
+      );
+    }
     const student = await Student.findByPk(req.params.studentId);
     const enrollement = await student.removeCourse(course);
 
@@ -254,11 +341,12 @@ router.delete(
 
 // @desc: delete student
 // @route: DELETE /api/students/:studentId
-// @access: public
+// @access: private
 // ? what would happen to course_student table
 // ? delete the student, and also delete the enroll history / enroll record?
 router.delete(
   "/:studentId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     // 1. unenroll this student
     const student = await Student.findByPk(req.params.studentId);
@@ -271,7 +359,7 @@ router.delete(
 );
 
 /**
- * @desc: delete student
+ * @desc: verify student ID
  * @author: Na Lin
  * @route: GET /api/students/verify/:studentId/courses/:courseId
  * @returns: responce with true/false

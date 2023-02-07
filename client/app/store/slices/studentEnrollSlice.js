@@ -5,7 +5,17 @@ export const fetchStudentList = createAsyncThunk(
   "student/enroll",
   async ({ courseId }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`/api/students/courses/${courseId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `/api/students/courses/${courseId}`,
+        config
+      );
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -17,7 +27,14 @@ export const getCourses = createAsyncThunk(
   "courses/getAll",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get("/api/courses");
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get("/api/courses", config);
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
