@@ -244,13 +244,7 @@ const EditAssessmentScreen = () => {
               }
               return (
                 <div key={question.id}>
-                  <Form.Control
-                    as='textarea'
-                    rows={6}
-                    value={question.questionText}
-
-                    //note - warning here until i change this to list instead of form
-                  ></Form.Control>
+                  <Container rows={6}>{question.questionText}</Container>
                   <Trash3 onClick={handleDeleteQuestion} />
                   <Pencil onClick={handleOpenEditQuestion} />
                   <Modal
