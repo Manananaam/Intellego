@@ -10,6 +10,7 @@ const Question = require("../db/models/questionModel");
 const Course = require("../db/models/courseModel");
 const Assessment = require("../db/models/assessmentModel");
 const Student = require("../db/models/studentModel");
+const protectedRoute = require("./middleware");
 
 //Once a question is complete, it becomes a submission.
 
@@ -17,13 +18,18 @@ const Student = require("../db/models/studentModel");
 
 router.get(
   "/courses/:courseId/assessments/:assessmentId/submissions",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    if (assessment.userId !== req.user.id) {
+      res.send("not yours");
+    }
     const submissions = await Question.findAll({
       where: {
         assessmentId: req.params.assessmentId,
-        include: {
-          model: Submission,
-        },
+      },
+      include: {
+        model: Submission,
       },
     });
     res.status(200).json({
