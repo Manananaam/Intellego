@@ -35,14 +35,9 @@ const LogInScreen = () => {
         values
       );
       dispatch(login(values));
+      navigate("/");
     },
   });
-
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user]);
 
   return (
     <>

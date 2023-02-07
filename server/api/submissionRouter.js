@@ -17,12 +17,8 @@ const protectedRoute = require("./middleware");
 //Find all submissions:
 
 router.get(
-  "/courses/:courseId/assessments/:assessmentId/submissions", protectedRoute,
+  "/courses/:courseId/assessments/:assessmentId/submissions",
   asyncHandler(async (req, res, next) => {
-    const assessment = await Assessment.findOne(req.params.assessmentId);
-    if (assessment.userId !== req.user.id) {
-      res.send("not yours")
-    }
     const submissions = await Question.findAll({
       where: {
         assessmentId: req.params.assessmentId,

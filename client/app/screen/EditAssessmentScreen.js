@@ -1,78 +1,317 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchAssessment,
   selectAssessment,
-  createQuestion,
+  editAssessmentTitle,
+  deleteQuestion,
+  addAssociatedCourse,
+  addQuestion,
 } from "../store/slices/singleAssessmentSlice";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 
-//right now the question default info shows, but someone has to retype the whole thing out (can't make tiny edits)
+import {
+  selectQuestion,
+  editQuestionText,
+  fetchSingleQuestion,
+} from "../store/slices/questionSlice";
+import { getCourses } from "../store";
+import {
+  Container,
+  Navbar,
+  Form,
+  Button,
+  Col,
+  Row,
+  ListGroup,
+  Modal,
+} from "react-bootstrap";
+import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
+
+import {
+  ArchiveFill,
+  Archive,
+  Trash3,
+  PlusCircleFill,
+  Pencil,
+} from "react-bootstrap-icons";
 
 const EditAssessmentScreen = () => {
-  const assessment = useSelector(selectAssessment).assessment.data;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { assessmentId } = useParams();
-  const [questionText, setQuestionText] = useState("");
+  const assessment = useSelector(selectAssessment);
+  const { allcourses } = useSelector((state) => state.studentEnroll);
+  const currentQuestion = useSelector(selectQuestion);
+
+  const [assessmentTitle, setAssessmentTitle] = useState("");
+  const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
+  const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
+  const [editQuestionModalVisible, setEditQuestionModalVisible] =
+    useState(false);
+  const [editNameModalVisible, setEditNameModalVisible] = useState(false);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [editQuestion, setEditQuestion] = useState("");
+  const [questionId, setQuestionId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
+    setAssessmentTitle(assessment.assessment.assessmentTitle);
+  }, [dispatch, assessment.assessment.assessmentTitle]);
+
+  useEffect(() => {
+    dispatch(getCourses());
   }, [dispatch]);
 
-  // const handleNewQuestion = (e) => {
-  //   e.preventDefault();
-  //   dispatch(createQuestion({ questionText }));
-  //   setQuestionText("");
-  // };
-  //attach this to when someone types in the question field... or clicks out of it? Not sure...
+  function handleAddQuestion() {
+    dispatch(addQuestion({ assessmentId, questionText: newQuestion }));
+    handleCloseAddQuestionModal();
+    setNewQuestion("");
+  }
 
-  //new handler, as soon as someone types anything into new question field, need to render another new question form item
+  function handleCloseCourseModal() {
+    setAddCourseModalVisible(false);
+  }
+
+  function handleCloseAddQuestionModal() {
+    setAddQuestionModalVisible(false);
+  }
+
+  function handleCloseEditQuestionModal() {
+    setEditQuestionModalVisible(false);
+  }
+
+  function handleCloseEditNameModal() {
+    setEditNameModalVisible(false);
+  }
+
+  function handleNameChange() {
+    dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
+    handleCloseEditNameModal();
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
+    navigate("/assessments");
+    navigate(0);
+  }
+  //NOTE - still not auto updating listview when you navigate back
 
   return (
     <>
-      <Navbar bg="light">
-        <Container>
-          <Navbar.Brand>Edit Assessment</Navbar.Brand>
-        </Container>
-      </Navbar>
-      <Form>
-        <Form.Group>
-          <Form.Label>Assessment Title</Form.Label>
-          <Form.Control
-            size="lg"
-            type="text"
-            placeholder={
-              assessment ? assessment.assessment.title : "Your Title Here"
-            }
-          ></Form.Control>
-        </Form.Group>
-        <br />
-        {assessment && assessment.assessment.questions.length ? (
-          assessment.assessment.questions.map((question) => (
-            <Form.Group key={question.id}>
+      <Form onSubmit={handleSubmit}>
+        <h2>
+          {assessmentTitle || ""} <Pencil onClick={setEditNameModalVisible} />
+        </h2>
+        <Modal
+          size='lg'
+          aria-labelledby='contained-modal-title-vcenter'
+          centered
+          show={editNameModalVisible}
+          onHide={handleCloseEditNameModal}
+        >
+          <Modal.Title>Edit Assessment Name</Modal.Title>
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label>Assessment Title</Form.Label>
+
               <Form.Control
-                as="textarea"
-                rows={6}
-                placeholder={question.questionText}
+                size='lg'
+                //how can i make this change size to fit text?
+                type='text'
+                value={assessmentTitle || ""}
+                onChange={(e) => setAssessmentTitle(e.target.value)}
               ></Form.Control>
             </Form.Group>
-          ))
-        ) : (
-          <></>
-        )}
-        <Form.Group>
+            <Button onClick={handleNameChange}>Submit</Button>
+          </Modal.Body>
+        </Modal>
+
+        {/* <Form.Group>
+          <Form.Label>Assessment Title</Form.Label>
+
           <Form.Control
-            as="textarea"
-            rows={6}
-            placeholder="Add a Question +"
+            size='lg'
+            //how can i make this change size to fit text?
+            type='text'
+            value={assessmentTitle || ""}
+            onChange={(e) => setAssessmentTitle(e.target.value)}
           ></Form.Control>
+        </Form.Group> */}
+        <br />
+        <Form.Group>
+          <Form.Label>Associated Courses</Form.Label>
+          <br />
+          {/* note: i would love these to appear like chip tags, but don't want to spend too much time right now trying to get that working. in the future, could be worth playing with.
+          https://codepen.io/broneks/pen/objeqq */}
+          {assessment.assessment.associatedCourses &&
+          assessment.assessment.associatedCourses.length ? (
+            <ListGroup horizontal>
+              {assessment.assessment.associatedCourses.map((course) => {
+                const courseId = course.id;
+                const courseName = course.name;
+
+                return (
+                  <AssociatedCourseListItem
+                    key={course.id}
+                    assessmentId={assessmentId}
+                    courseId={courseId}
+                    courseName={courseName}
+                  />
+                );
+              })}
+            </ListGroup>
+          ) : (
+            <></>
+          )}
+          <Button onClick={setAddCourseModalVisible}>Add Course</Button>
+          <Modal
+            size='lg'
+            aria-labelledby='contained-modal-title-vcenter'
+            centered
+            show={addCourseModalVisible}
+            onHide={handleCloseCourseModal}
+          >
+            <Modal.Title>Add Course</Modal.Title>
+            <Modal.Body>
+              <ListGroup>
+                {allcourses && allcourses.length
+                  ? allcourses.map((course) => {
+                      function handleAddCourse() {
+                        dispatch(
+                          addAssociatedCourse({
+                            courseId: course.id,
+                            assessmentId,
+                          })
+                        );
+                        navigate(0);
+                      }
+                      //not updating state properly without hacky refresh
+                      let currentCourseId = course.id;
+
+                      let alreadyAssociated =
+                        assessment.assessment.associatedCourses &&
+                        assessment.assessment.associatedCourses.length
+                          ? assessment.assessment.associatedCourses.filter(
+                              (el) => el.id === currentCourseId
+                            )
+                          : [];
+                      console.log(
+                        "201",
+                        assessment.assessment.associatedCourses,
+                        currentCourseId
+                      );
+                      return alreadyAssociated.length ? (
+                        <ListGroup.Item disabled key={course.id}>
+                          {course.name}
+                        </ListGroup.Item>
+                      ) : (
+                        <ListGroup.Item key={course.id}>
+                          {course.name}{" "}
+                          <PlusCircleFill onClick={handleAddCourse} />
+                        </ListGroup.Item>
+                      );
+                    })
+                  : "You have no courses on record."}
+              </ListGroup>
+            </Modal.Body>
+          </Modal>
         </Form.Group>
+        <br />
+        <Form.Group>
+          <Form.Label>Questions</Form.Label>
+          <br />
+          {assessment && assessment.assessment.questions.length ? (
+            assessment.assessment.questions.map((question) => {
+              function handleDeleteQuestion() {
+                dispatch(deleteQuestion(question.id));
+              }
+
+              function handleOpenEditQuestion() {
+                dispatch(fetchSingleQuestion(question.id));
+                setEditQuestion(question.questionText);
+                setQuestionId(question.id);
+                setEditQuestionModalVisible(true);
+              }
+              function handleEditQuestion() {
+                console.log(
+                  "questionId, editQuestion",
+                  questionId,
+                  editQuestion
+                );
+                dispatch(
+                  editQuestionText({
+                    id: questionId,
+                    questionText: editQuestion,
+                  })
+                );
+                handleCloseEditQuestionModal();
+                setEditQuestion("");
+                navigate(0);
+                //not automatically updating without hacky nav0
+              }
+              return (
+                <div key={question.id}>
+                  <Container rows={6}>{question.questionText}</Container>
+                  <Trash3 onClick={handleDeleteQuestion} />
+                  <Pencil onClick={handleOpenEditQuestion} />
+                  <Modal
+                    size='lg'
+                    aria-labelledby='contained-modal-title-vcenter'
+                    centered
+                    show={editQuestionModalVisible}
+                    onHide={handleCloseEditQuestionModal}
+                  >
+                    <Modal.Title>Edit Question</Modal.Title>
+                    <Modal.Body>
+                      <Form.Group>
+                        <Form.Control
+                          as='textarea'
+                          rows={6}
+                          value={editQuestion}
+                          onChange={(e) => setEditQuestion(e.target.value)}
+                        ></Form.Control>
+                      </Form.Group>
+                      <Button onClick={handleEditQuestion}>Submit</Button>
+                    </Modal.Body>
+                  </Modal>
+                  {/* note - check for submissions and change to archive button to match natalie? */}
+                </div>
+              );
+            })
+          ) : (
+            <></>
+          )}
+          <br />
+          <Button type='button' onClick={setAddQuestionModalVisible}>
+            Add Question
+          </Button>
+          <Modal
+            size='lg'
+            aria-labelledby='contained-modal-title-vcenter'
+            centered
+            show={addQuestionModalVisible}
+            onHide={handleCloseAddQuestionModal}
+          >
+            <Modal.Title>Add Question</Modal.Title>
+            <Modal.Body>
+              <Form.Group>
+                <Form.Control
+                  as='textarea'
+                  rows={6}
+                  value={newQuestion || ""}
+                  onChange={(e) => setNewQuestion(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <br />
+              <Button onClick={handleAddQuestion}>Submit</Button>
+            </Modal.Body>
+          </Modal>
+        </Form.Group>
+        <br />
       </Form>
-      <Button as="input" type="submit" value="Submit"></Button>
     </>
   );
 };

@@ -42,13 +42,9 @@ const SignUpScreen = () => {
         values
       );
       dispatch(signup(values));
+      navigate("/");
     },
   });
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-  }, [user]);
 
   return (
     <>

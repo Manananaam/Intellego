@@ -24,10 +24,10 @@ const MainDashboardScreen = () => {
   return (
     <Container>
       <Row>
-        <Col xs={3} md={4} id="sidebar-wrapper">
+        <Col xs={3} id="sidebar-wrapper">
           <Sidebar />
         </Col>
-        <Col xs={9} md={8} id="page-content-wrapper">
+        <Col xs={9} id="page-content-wrapper">
           <Routes>
             <Route path="/courses" element={<CousreScreen />} />
             <Route
@@ -57,6 +57,14 @@ const MainDashboardScreen = () => {
             <Route
               path="/student/courses/:courseId/assessments/:assessmentId"
               element={<StudentViewScreen />}
+            />
+            <Route
+              path={"/*"}
+              element={
+                <h1 className="text-center text-warning mt-4">
+                  404: Not Found
+                </h1>
+              }
             />
           </Routes>
         </Col>

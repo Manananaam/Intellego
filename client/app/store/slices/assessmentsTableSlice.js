@@ -10,7 +10,14 @@ export const fetchAllAssessments = createAsyncThunk(
   "allAssessments",
   async () => {
     try {
-      const response = await axios.get("/api/assessments");
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get("/api/assessments", config);
       const assessments = response.data;
       return assessments;
     } catch (err) {
@@ -27,10 +34,17 @@ export const createAssessment = createAsyncThunk(
   "/assessmentCreate",
   async ({ title, questionText }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const { data } = await axios.post("/api/assessments", {
         title,
         questionText,
-      });
+      }, config);
       return data;
     } catch (err) {
       return err.message;
@@ -43,9 +57,16 @@ export const isActiveAssessment = createAsyncThunk(
   "/assessmentActive",
   async ({ assessmentId, isActive }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const { data } = await axios.put(`api/assessments/${assessmentId}`, {
         isActive,
-      });
+      }, config);
       return data;
     } catch (err) {
       return err.message;
@@ -60,7 +81,7 @@ export const assessmentsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllAssessments.fulfilled, (state, action) => {
-        state.assessments = action.payload.assessments;
+        state.assessments = action.payload.data.assessments;
       })
       .addCase(createAssessment.fulfilled, (state, action) => {
         state.assessments.push(action.payload.data.newAssessment);
@@ -68,6 +89,7 @@ export const assessmentsSlice = createSlice({
       .addCase(isActiveAssessment.fulfilled, (state, action) => {
         return state.assessments.filter((assessment) => assessment.isActive);
       });
+    builder
   },
 });
 
