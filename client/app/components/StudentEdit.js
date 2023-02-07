@@ -1,7 +1,8 @@
 //react stuff
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import { useDispatch } from "react-redux";
-import { editStudent, removeStudent } from "../store/slices/studentViewSlice";
+import { editStudent } from "../store/slices/studentViewSlice";
+import { removeStudent } from "../store/slices/courseSlices"
 
 //bootstrap stuff
 import Button from "react-bootstrap/Button";

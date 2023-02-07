@@ -59,16 +59,6 @@ export const editStudent = createAsyncThunk(
   }
 );
 
-export const removeStudent = createAsyncThunk(
-  "student/removeStudent", async (studentId, { rejectWithValue }) => {
-    try {
-      const { data } = await axios.delete(`/api/students/${studentId}`);
-      return data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-)
 const studentViewSlice = createSlice({
   name: "studentView",
   initialState: {
@@ -142,11 +132,6 @@ const studentViewSlice = createSlice({
     //edit Student
     builder.addCase(editStudent.fulfilled, (state, action) => {
       state.students = action.payload.students;
-    });
-    //remove Student
-    builder.addCase(removeStudent.fulfilled, (state, action) => {
-      // return state.students.filter((student) =>
-      // student.studentId !== action.payload.students );
     });
   },
 });

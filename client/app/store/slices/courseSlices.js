@@ -147,6 +147,20 @@ export const isActiveCourse = createAsyncThunk(
   }
 );
 
+export const removeStudent = createAsyncThunk(
+  "student/removeStudent",
+  async (studentId) => {
+    try {
+      const { data } = await axios.delete(`/api/students/${studentId}`);
+      console.log(data)
+      return studentId;
+    } catch (err) {
+      // return rejectWithValue(err.message);
+      console.log(err)
+    }
+  }
+);
+
 //Slices
 export const courseSlice = createSlice({
   name: "courses",
@@ -171,6 +185,11 @@ export const courseSlice = createSlice({
     builder.addCase(isActiveCourse.fulfilled, (state, action) => {
       return state.filter((course) => course.isActive);
     });
+    //remove Student
+    builder.addCase(removeStudent.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.students = state.students.filter((student) => student.id !== action.payload)
+   });
   },
 });
 
