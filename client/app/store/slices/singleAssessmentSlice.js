@@ -7,25 +7,41 @@ const initialState = {
 };
 
 //fetch a single assessment by id
-export const fetchAssessment = createAsyncThunk("assessment",
-async (id) => {
-  try{
-    const response = await axios.get(`/api/assessments/${id}`);
+export const fetchAssessment = createAsyncThunk("assessment", async (id) => {
+  try {
+    const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.get(`/api/assessments/${id}`, config);
     const assessment = response.data;
     return assessment;
   } catch (err) {
     console.log("ERR with ASSESSMENTSLICE", err);
   }
-})
+});
 
 //DELETING an assessment (that has no submissions)
-export const deleteAssessment = createAsyncThunk("/deleteAssessment", async ({ assessmentId }) => {
-  try {
-    await axios.delete(`api/assessments/${assessmentId}`);
-  } catch (err) {
-    return err.message;
+export const deleteAssessment = createAsyncThunk(
+  "/deleteAssessment",
+  async ({ assessmentId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.delete(`api/assessments/${assessmentId}`, config);
+    } catch (err) {
+      return err.message;
+    }
   }
-})
+);
 
 //create a new assessment
 //probably need to add some grabbing of teacher ID in here as well
@@ -33,17 +49,27 @@ export const deleteAssessment = createAsyncThunk("/deleteAssessment", async ({ a
 //does the course_assessmentModel associate them?
 //how does this work with questions? will they associate in their own slice?
 //{questions: [{...}, {...}]}
-export const createAssessment = createAsyncThunk("/assessmentCreate", async({ title, questionText }) => {
-  try {
-    const { data } = await axios.post("/api/assessments", {
-      title,
-      questionText,
-    });
-    return data;
-  } catch (err) {
-    return err.message;
+export const createAssessment = createAsyncThunk(
+  "/assessmentCreate",
+  async ({ title, questionText }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post("/api/assessments", {
+        title,
+        questionText,
+      }, config);
+      return data;
+    } catch (err) {
+      return err.message;
+    }
   }
-})
+);
 
 export const assessmentSlice = createSlice({
   name: "assessment",
@@ -51,22 +77,22 @@ export const assessmentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(fetchAssessment.fulfilled, (state, action) => {
-      state.assessment = action.payload;
-    })
-    .addCase(createAssessment.fulfilled, (state, action) => {
-      console.log("state.assessment:", state.assessment);
-      console.log("action.payload:", action.payload);
-      state.assessment = action.payload.data.newAssessment;
-    })
-    .addCase(deleteAssessment.fulfilled, (state, action) => {
-      state.assessment = {};
-    })
-  }
-})
+      .addCase(fetchAssessment.fulfilled, (state, action) => {
+        state.assessment = action.payload;
+      })
+      .addCase(createAssessment.fulfilled, (state, action) => {
+        console.log("state.assessment:", state.assessment);
+        console.log("action.payload:", action.payload);
+        state.assessment = action.payload.data.newAssessment;
+      })
+      .addCase(deleteAssessment.fulfilled, (state, action) => {
+        state.assessment = {};
+      });
+  },
+});
 
 export const selectAssessment = (state) => {
   return state.assessment;
-}
+};
 
 export default assessmentSlice.reducer;

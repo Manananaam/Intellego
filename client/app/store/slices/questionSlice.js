@@ -11,9 +11,16 @@ const initialState = {
 //how does this work with questions? will they associate in their own slice?
 export const createQuestion = createAsyncThunk("/questionCreate", async({ questionText }) => {
   try {
+    const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
     const { data } = await axios.post("/api/questions", {
       questionText,
-    });
+    }, config);
     return data;
   } catch (err) {
     return err.message;

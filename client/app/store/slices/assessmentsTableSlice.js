@@ -10,7 +10,14 @@ export const fetchAllAssessments = createAsyncThunk(
   "allAssessments",
   async () => {
     try {
-      const response = await axios.get("/api/assessments");
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get("/api/assessments", config);
       const assessments = response.data;
       return assessments;
     } catch (err) {
@@ -23,47 +30,67 @@ export const fetchAllAssessments = createAsyncThunk(
 //probably need to add some grabbing of teacher ID in here as well
 //also how do we set courseID?
 //does the course_assessmentModel associate them?
-export const createAssessment = createAsyncThunk("/assessmentCreate", async({ title, questionText }) => {
-  try {
-    const { data } = await axios.post("/api/assessments", {
-      title,
-      questionText,
-    });
-    return data;
-  } catch (err) {
-    return err.message;
+export const createAssessment = createAsyncThunk(
+  "/assessmentCreate",
+  async ({ title, questionText }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post("/api/assessments", {
+        title,
+        questionText,
+      }, config);
+      return data;
+    } catch (err) {
+      return err.message;
+    }
   }
-})
+);
 
 //archiving an assessment - PUT request to change active status
-export const isActiveAssessment = createAsyncThunk("/assessmentActive", async ({ assessmentId, isActive }) => {
-  try {
-    const { data } = await axios.put(`api/assessments/${assessmentId}`, {
-      isActive,
-    });
-    return data;
-  } catch (err) {
-    return err.message;
+export const isActiveAssessment = createAsyncThunk(
+  "/assessmentActive",
+  async ({ assessmentId, isActive }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(`api/assessments/${assessmentId}`, {
+        isActive,
+      }, config);
+      return data;
+    } catch (err) {
+      return err.message;
+    }
   }
-})
+);
 
 export const assessmentsSlice = createSlice({
   name: "assessments",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAllAssessments.fulfilled, (state, action) => {
-      state.assessments = action.payload.assessments;
-    })
-    .addCase(createAssessment.fulfilled, (state, action) => {
-      state.assessments.push(action.payload.data.newAssessment);
-    })
-    .addCase(isActiveAssessment.fulfilled, (state, action) => {
-      return state.assessments.filter((assessment) => assessment.isActive)
-    })
+    builder
+      .addCase(fetchAllAssessments.fulfilled, (state, action) => {
+        state.assessments = action.payload.assessments;
+      })
+      .addCase(createAssessment.fulfilled, (state, action) => {
+        state.assessments.push(action.payload.data.newAssessment);
+      })
+      .addCase(isActiveAssessment.fulfilled, (state, action) => {
+        return state.assessments.filter((assessment) => assessment.isActive);
+      });
   },
 });
-
 
 //unsure about structuring below in comparison to the template?
 export const selectAllAssessments = (state) => {
