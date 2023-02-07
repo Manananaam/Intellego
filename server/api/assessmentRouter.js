@@ -8,7 +8,6 @@ const {
 
 const protectedRoute = require("./middleware");
 const AppError = require("../utils/appError");
-const Course = require("../db/models/courseModel");
 
 //GET all assessments for a specific teacher
 //(teacher id will be handled in a different way...)
@@ -101,12 +100,17 @@ router.get(
   "/:assessmentId",
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findByPk(req.params.assessmentId, {
-      include: {
-        model: Question,
-        include: {
-          model: Submission,
+      include: [
+        {
+          model: Course,
         },
-      },
+        {
+          model: Question,
+          include: {
+            model: Submission,
+          },
+        },
+      ],
     });
     res.status(200).json({
       data: {

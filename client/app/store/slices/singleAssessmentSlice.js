@@ -40,6 +40,18 @@ export const editAssessmentTitle = createAsyncThunk(
   }
 );
 
+//DELETING an assessment (that has no submissions)
+export const deleteAssessment = createAsyncThunk(
+  "/deleteAssessment",
+  async ({ assessmentId }) => {
+    try {
+      await axios.delete(`api/assessments/${assessmentId}`);
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
 //delete question from assessment (on 'edit assessment' page)
 export const deleteQuestion = createAsyncThunk(
   "assessment/deleteQuestion",

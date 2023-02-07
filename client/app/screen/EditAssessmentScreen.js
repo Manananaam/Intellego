@@ -146,7 +146,8 @@ const EditAssessmentScreen = () => {
           <br />
           {/* note: i would love these to appear like chip tags, but don't want to spend too much time right now trying to get that working. in the future, could be worth playing with.
           https://codepen.io/broneks/pen/objeqq */}
-          {assessment && assessment.assessment.associatedCourses.length ? (
+          {assessment.assessment.associatedCourses &&
+          assessment.assessment.associatedCourses.length ? (
             <ListGroup horizontal>
               {assessment.assessment.associatedCourses.map((course) => {
                 const courseId = course.id;
@@ -189,10 +190,19 @@ const EditAssessmentScreen = () => {
                       }
                       //not updating state properly without hacky refresh
                       let currentCourseId = course.id;
+
                       let alreadyAssociated =
-                        assessment.assessment.associatedCourses.filter(
-                          (el) => el.id === currentCourseId
-                        );
+                        assessment.assessment.associatedCourses &&
+                        assessment.assessment.associatedCourses.length
+                          ? assessment.assessment.associatedCourses.filter(
+                              (el) => el.id === currentCourseId
+                            )
+                          : [];
+                      console.log(
+                        "201",
+                        assessment.assessment.associatedCourses,
+                        currentCourseId
+                      );
                       return alreadyAssociated.length ? (
                         <ListGroup.Item disabled key={course.id}>
                           {course.name}
@@ -274,6 +284,7 @@ const EditAssessmentScreen = () => {
           ) : (
             <></>
           )}
+          <br />
           <Button type='button' onClick={setAddQuestionModalVisible}>
             Add Question
           </Button>
@@ -294,15 +305,12 @@ const EditAssessmentScreen = () => {
                   onChange={(e) => setNewQuestion(e.target.value)}
                 ></Form.Control>
               </Form.Group>
+              <br />
               <Button onClick={handleAddQuestion}>Submit</Button>
             </Modal.Body>
           </Modal>
         </Form.Group>
         <br />
-
-        <Button type='submit' value='Submit'>
-          Submit
-        </Button>
       </Form>
     </>
   );

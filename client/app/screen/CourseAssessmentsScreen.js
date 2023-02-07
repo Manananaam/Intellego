@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import {
-  fetchCourseAssesments,
+  fetchCourseAssessments,
   selectCourses,
 } from "../store/slices/courseSlices";
 //Bootstrap imports
@@ -21,16 +21,16 @@ const CourseAssessmentsScreen = () => {
   const course = useSelector(selectCourses);
 
   useEffect(() => {
-    dispatch(fetchCourseAssesments(courseId));
+    dispatch(fetchCourseAssessments(courseId));
   }, [dispatch]);
 
   return (
     <Container>
       <Row>
-        <Col xs={3} id="sidebar-wrapper">
+        <Col xs={3} id='sidebar-wrapper'>
           <Sidebar />
         </Col>
-        <Col xs={9} id="page-content-wrapper">
+        <Col xs={9} id='page-content-wrapper'>
           <h1>Assessments in {course.name}</h1>
           <Table>
             <thead>
