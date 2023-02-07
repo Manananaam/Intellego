@@ -40,7 +40,7 @@ const AssessmentReportScreen = () => {
   //grabbing all students for a course
   const students = useSelector((state) => state.studentEnroll);
   //grabbing the questions and submissions for the given assessment
-  const assessment = useSelector((state) => state.assessment.assessment.data);
+  const assessment = useSelector((state) => state.assessment.assessment);
 
   // finding a place to house these grades
   let assessmentGrades = [];
@@ -96,7 +96,7 @@ const AssessmentReportScreen = () => {
     <>
       <h1>Assessment Report Screen</h1>
       <Dropdown>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+        <Dropdown.Toggle variant='primary' id='dropdown-basic'>
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -117,7 +117,7 @@ const AssessmentReportScreen = () => {
       <br />
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle variant="primary" id="dropdown-basic">
+          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
             {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -145,8 +145,8 @@ const AssessmentReportScreen = () => {
           <tr>
             <th>Students</th>
             {assessment &&
-              assessment.assessment.questions.length &&
-              assessment.assessment.questions.map((question) => {
+              assessment.questions.length &&
+              assessment.questions.map((question) => {
                 return <th key={question.id}>{question.questionText}</th>;
               })}
             <th>Average</th>
@@ -161,8 +161,8 @@ const AssessmentReportScreen = () => {
                 <tr key={student.id}>
                   <td>{`${student.firstName} ${student.lastName}`}</td>
                   {assessment &&
-                    assessment.assessment.questions.length &&
-                    assessment.assessment.questions.map((question) => {
+                    assessment.questions.length &&
+                    assessment.questions.map((question) => {
                       if (question.submissions.length) {
                         let submission = question.submissions.find(
                           (el) => el.studentId === student.id

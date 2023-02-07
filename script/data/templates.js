@@ -248,6 +248,7 @@ const courseAssessmentsSeed = [
   { courseId: 114, assessmentId: 108 },
   { courseId: 120, assessmentId: 108 },
   { courseId: 120, assessmentId: 110 },
+  { courseId: 121, assessmentId: 111 },
 ];
 const courseRosterSeed = [
   { studentId: 100, courseId: 114 },
