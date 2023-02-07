@@ -1,5 +1,5 @@
 //import react
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, logout } from "../store/slices/authSlice";
 
@@ -12,15 +12,14 @@ import Figure from "react-bootstrap/Figure";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
 const Sidebar = () => {
-  // const dispatch = useDispatch();
-  // const { user } = useSelector(selectAuthState);
+  const dispatch = useDispatch();
+  const { user } = useSelector(selectAuthState);
 
   return (
     <>
       <Nav
         className="col-md-3 d-none d-md-block bg-light sidebar flex-column justify-content-center"
         variant="pills"
-        // defaultActiveKey="/dashboard"
       >
         <Figure>
           <Figure.Image
@@ -33,7 +32,7 @@ const Sidebar = () => {
 
         <Figure.Caption>
           <p className="dashboard_name">
-            {/* {user.firstName} {user.lastName} */}
+            {user.firstName} {user.lastName}
           </p>
         </Figure.Caption>
 
@@ -74,7 +73,7 @@ const Sidebar = () => {
           <Nav.Link
             eventKey="logout"
             href="/"
-            // onClick={(e) => dispatch(logout())}
+            onClick={(e) => dispatch(logout())}
           >
             Logout
           </Nav.Link>

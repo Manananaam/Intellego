@@ -8,16 +8,11 @@ import {
 } from "../store/slices/courseSlices";
 import CourseCreate from "../components/CourseCreate";
 import CourseEdit from "../components/CourseEdit";
-import Sidebar from "../components/Sidebar";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //Bootstrap imports
-import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import "../components/style/Sidebar.css";
 
 //CourseScreen
@@ -73,7 +68,9 @@ const CousreScreen = () => {
                         >
                           Assessments
                         </Dropdown.Item>
-                        <Dropdown.Item>Report</Dropdown.Item>
+                        <Dropdown.Item href={"/report/courses"}>
+                          Report
+                        </Dropdown.Item>
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={handleShowEdit}>
                           Edit

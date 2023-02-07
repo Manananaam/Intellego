@@ -2,10 +2,8 @@ import React from "react";
 
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import { Link, NavLink } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 import AssessmentsTable from "../components/AssessmentsTable";
-import Sidebar from "../components/Sidebar";
 import Navbar from "react-bootstrap/Navbar";
 
 const AssessmentsScreen = () => {

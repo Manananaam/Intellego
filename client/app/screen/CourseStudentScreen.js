@@ -2,14 +2,10 @@ import React, { useEffect } from "react";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 //React related imports
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import {
   fetchCourseStudents,
   selectCourses,

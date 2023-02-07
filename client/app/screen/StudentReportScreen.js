@@ -5,10 +5,6 @@ import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Sidebar from "../components/Sidebar";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";

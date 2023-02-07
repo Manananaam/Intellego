@@ -3,15 +3,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import {
-  fetchCourseAssesments,
+  fetchCourseAssessments,
   selectCourses,
 } from "../store/slices/courseSlices";
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Sidebar from "../components/Sidebar";
 
 //CourseAssessmentsScreen Render
 const CourseAssessmentsScreen = () => {
@@ -21,7 +17,7 @@ const CourseAssessmentsScreen = () => {
   const course = useSelector(selectCourses);
 
   useEffect(() => {
-    dispatch(fetchCourseAssesments(courseId));
+    dispatch(fetchCourseAssessments(courseId));
   }, [dispatch]);
 
   return (
@@ -43,7 +39,11 @@ const CourseAssessmentsScreen = () => {
                     <td>{assessment.id}</td>
                     <td>{assessment.title}</td>
                     <td>
-                      <Link to={"//Query URL"}>View report</Link>
+                      <Link
+                        to={`/report/assessments?courseId=${courseId}&assessmentId=${assessment.id}`}
+                      >
+                        View report
+                      </Link>
                     </td>
                   </tr>
                 );

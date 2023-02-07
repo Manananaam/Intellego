@@ -9,12 +9,12 @@ import CousreScreen from "./CourseScreen";
 import CourseStudentScreen from "./CourseStudentScreen";
 import CourseAssessmentsScreen from "./CourseAssessmentsScreen";
 import StudentReportScreen from "./StudentReportScreen";
-import HomeScreen from "./HomeScreen";
-import LogInScreen from "./LogInScreen";
-import SignUpScreen from "./SignUpScreen";
 import AssessmentsScreen from "./AssessmentsScreen";
 import EditAssessmentScreen from "./EditAssessmentScreen";
 import CreateAssessmentScreen from "./CreateAssessmentScreen";
+import AssessmentReportScreen from "./AssessmentReportScreen";
+import CourseReportScreen from "./CourseReportScreen";
+import StudentViewScreen from "./StudentViewScreen";
 
 const MainDashboardScreen = () => {
   return (
@@ -26,7 +26,6 @@ const MainDashboardScreen = () => {
         <Col xs={9} id="page-content-wrapper">
           <h1>Intellego</h1>
           <Routes>
-            {/* <Route path="/" element={<MainDashboardScreen />} /> */}
             <Route path="/courses" element={<CousreScreen />} />
             <Route
               path="/courses/:courseId/students"
@@ -48,10 +47,16 @@ const MainDashboardScreen = () => {
               />
             </Route>
             <Route path="/report/students" element={<StudentReportScreen />} />
+            <Route
+              path="/report/assessments"
+              element={<AssessmentReportScreen />}
+            />
 
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/login" element={<LogInScreen />} />
-            <Route path="/signup" element={<SignUpScreen />} />
+            <Route path="/report/courses/" element={<CourseReportScreen />} />
+            <Route
+              path="/student/courses/:courseId/assessments/:assessmentId"
+              element={<StudentViewScreen />}
+            />
           </Routes>
         </Col>
       </Row>
