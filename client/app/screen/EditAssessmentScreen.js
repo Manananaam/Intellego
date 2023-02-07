@@ -9,6 +9,12 @@ import {
   addAssociatedCourse,
   addQuestion,
 } from "../store/slices/singleAssessmentSlice";
+
+import {
+  selectQuestion,
+  editQuestionText,
+  fetchSingleQuestion,
+} from "../store/slices/questionSlice";
 import { getCourses } from "../store";
 import {
   Container,
@@ -31,17 +37,22 @@ import {
 } from "react-bootstrap-icons";
 
 const EditAssessmentScreen = () => {
-  const assessment = useSelector(selectAssessment);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { assessmentId } = useParams();
+  const assessment = useSelector(selectAssessment);
+  const { allcourses } = useSelector((state) => state.studentEnroll);
+  const currentQuestion = useSelector(selectQuestion);
+
   const [assessmentTitle, setAssessmentTitle] = useState("");
   const [addCourseModalVisible, setAddCourseModalVisible] = useState(false);
   const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
   const [editQuestionModalVisible, setEditQuestionModalVisible] =
     useState(false);
-  const { allcourses } = useSelector((state) => state.studentEnroll);
   const [newQuestion, setNewQuestion] = useState("");
+  const [editQuestion, setEditQuestion] = useState("");
+  const [questionId, setQuestionId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
@@ -169,15 +180,41 @@ const EditAssessmentScreen = () => {
               function handleDeleteQuestion() {
                 dispatch(deleteQuestion(question.id));
               }
+
+              function handleOpenEditQuestion() {
+                dispatch(fetchSingleQuestion(question.id));
+                setEditQuestion(question.questionText);
+                setQuestionId(question.id);
+                setEditQuestionModalVisible(true);
+              }
+              function handleEditQuestion() {
+                console.log(
+                  "questionId, editQuestion",
+                  questionId,
+                  editQuestion
+                );
+                dispatch(
+                  editQuestionText({
+                    id: questionId,
+                    questionText: editQuestion,
+                  })
+                );
+                handleCloseEditQuestionModal();
+                setEditQuestion("");
+                navigate(0);
+                //not automatically updating without hacky nav0
+              }
               return (
                 <div key={question.id}>
                   <Form.Control
                     as='textarea'
                     rows={6}
-                    placeholder={question.questionText}
+                    value={question.questionText}
+
+                    //note - warning here until i change this to list instead of form
                   ></Form.Control>
                   <Trash3 onClick={handleDeleteQuestion} />
-                  <Pencil onClick={setEditQuestionModalVisible} />
+                  <Pencil onClick={handleOpenEditQuestion} />
                   <Modal
                     size='lg'
                     aria-labelledby='contained-modal-title-vcenter'
@@ -191,10 +228,11 @@ const EditAssessmentScreen = () => {
                         <Form.Control
                           as='textarea'
                           rows={6}
-                          placeholder={question.questionText}
-                          // onChange={(e) => setNewQuestion(e.target.value)}
+                          value={editQuestion}
+                          onChange={(e) => setEditQuestion(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
+                      <Button onClick={handleEditQuestion}>Submit</Button>
                     </Modal.Body>
                   </Modal>
                   {/* note - check for submissions and change to archive button to match natalie? */}
