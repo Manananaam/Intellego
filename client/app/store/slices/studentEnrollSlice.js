@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const fetchStudentList = createAsyncThunk(
   "student/enroll",
-  async ({ courseId }, { rejectWithValue }) => {
+  async ({ courseId }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -18,29 +18,28 @@ export const fetchStudentList = createAsyncThunk(
       );
       return data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      const errMsg = err.response.data.message;
+      throw new Error(errMsg);
     }
   }
 );
 
-export const getCourses = createAsyncThunk(
-  "courses/getAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = JSON.parse(localStorage.getItem("jwt"));
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const { data } = await axios.get("/api/courses", config);
-      return data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
+export const getCourses = createAsyncThunk("courses/getAll", async () => {
+  try {
+    const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const { data } = await axios.get("/api/courses", config);
+    return data;
+  } catch (err) {
+    const errMsg = err.response.data.message;
+    throw new Error(errMsg);
   }
-);
+});
 
 const studentEnrollSlice = createSlice({
   name: "studentEnroll",
