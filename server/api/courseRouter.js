@@ -4,6 +4,7 @@ const {
 } = require("../db");
 const asyncHandler = require("express-async-handler");
 const Submission = require("../db/models/submissionModel");
+const protectedRoute = require("./middleware");
 
 // GET all course list
 
@@ -14,6 +15,7 @@ router.get(
       await Course.findAll({
         where: {
           isActive: true,
+          userId: req.user.id,
         },
       })
     );
@@ -25,7 +27,11 @@ router.get(
   "/:courseid/assessments",
   asyncHandler(async (req, res, next) => {
     res.status(200).json(
-      await Course.findByPk(req.params.courseid, {
+      await Course.findOne({
+        where: {
+          id: req.params.courseid,
+          userId: req.user.id,
+        },
         include: Assessment,
       })
     );
@@ -36,7 +42,14 @@ router.get(
 router.get(
   "/:courseid",
   asyncHandler(async (req, res, next) => {
-    res.status(200).json(await Course.findByPk(req.params.courseid));
+    res.status(200).json(
+      await Course.findOne({
+        where: {
+          id: req.params.courseid,
+          userId: req.user.id,
+        },
+      })
+    );
   })
 );
 
@@ -45,7 +58,11 @@ router.get(
   "/:courseid/students",
   asyncHandler(async (req, res, next) => {
     res.status(200).json(
-      await Course.findByPk(req.params.courseid, {
+      await Course.findOne({
+        where: {
+          id: req.params.courseid,
+          userId: req.user.id,
+        },
         include: Student,
       })
     );
@@ -64,7 +81,12 @@ router.post(
 router.put(
   "/:courseId",
   asyncHandler(async (req, res, next) => {
-    const course = await Course.findByPk(req.params.courseId);
+    const course = await Course.findOne({
+      where: {
+        id: req.params.courseId,
+        userId: req.user.id,
+      },
+    });
     res.status(200).send(await course.update(req.body));
   })
 );
@@ -73,7 +95,12 @@ router.put(
 router.put(
   "/:courseId",
   asyncHandler(async (req, res, next) => {
-    const courseActive = await Course.findByPk(req.params.courseId);
+    const courseActive = await Course.findOne({
+      where: {
+        id: req.params.courseId,
+        userId: req.user.id,
+      },
+    });
     res.status(200).send(await courseActive.update(req.body.isActive));
   })
 );

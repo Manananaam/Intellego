@@ -176,7 +176,11 @@ const AssessmentReportScreen = () => {
                           <td key={submission.id}>
                             {submission.response} {submission.grade}
                           </td>
-                        );
+                      )
+                      } else {
+                        return (
+                          <td>no submission yet</td>
+                        )
                       }
                     })}
                   <td>{Math.round(allGrades / numGrades)}</td>

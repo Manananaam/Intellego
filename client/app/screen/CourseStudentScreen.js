@@ -22,36 +22,39 @@ const CourseStudentScreen = () => {
   }, [dispatch]);
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>Student ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Report</th>
-        </tr>
-      </thead>
-      <tbody>
-        {course.students && course.students.length
-          ? course.students.map((student) => {
-              return (
-                <tr key={student.id} href="">
-                  <td>{student.firstName}</td>
-                  <td>{student.lastName}</td>
-                  <td>{student.id}</td>
-                  <td>
-                    <Link
-                      to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
-                    >
-                      View report
-                    </Link>
-                  </td>
-                </tr>
-              );
-            })
-          : null}
-      </tbody>
-    </Table>
+    <>
+      <h1>Students in {course.name}</h1>
+      <Table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Report</th>
+          </tr>
+        </thead>
+        <tbody>
+          {course.students && course.students.length
+            ? course.students.map((student) => {
+                return (
+                  <tr key={student.id} href="">
+                    <td>{student.firstName}</td>
+                    <td>{student.lastName}</td>
+                    <td>{student.id}</td>
+                    <td>
+                      <Link
+                        to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
+                      >
+                        View report
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
+            : null}
+        </tbody>
+      </Table>
+    </>
   );
 };
 
