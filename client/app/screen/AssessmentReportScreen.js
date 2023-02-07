@@ -184,7 +184,9 @@ const AssessmentReportScreen = () => {
               );
             })
           ) : (
-            <tr>No students in this class!</tr>
+            <tr>
+              <td>No students in this class!</td>
+            </tr>
           )}
         </tbody>
       </Table>

@@ -1,10 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, logout } from "../store/slices/authSlice";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const { isLoading, user } = useSelector(selectAuthState);
   const handleLogout = () => {
     dispatch(logout());
@@ -23,11 +25,12 @@ const HomeScreen = () => {
     <>
       <p>hello! welcome to intellego!</p>
       <p>
-        <Link to={"/login"}>log in here</Link>
+        <Link to={"login"}>log in here</Link>
       </p>
       <p>
-        <Link to={"/signup"}>sign up here</Link>
+        <Link to={"signup"}>sign up here</Link>
       </p>
+      <Outlet />
     </>
   );
 };
