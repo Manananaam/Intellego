@@ -14,7 +14,14 @@ const initialState = {
 //fetch a single assessment by id
 export const fetchAssessment = createAsyncThunk("assessment", async (id) => {
   try {
-    const response = await axios.get(`/api/assessments/${id}`);
+    const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.get(`/api/assessments/${id}`, config);
     const assessment = response.data;
     return assessment;
   } catch (err) {
@@ -27,11 +34,18 @@ export const editAssessmentTitle = createAsyncThunk(
   "assessment/editTitle",
   async (updatedAssessment) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const id = updatedAssessment.assessmentId;
       const title = updatedAssessment.assessmentTitle;
       const { data } = await axios.put(
         `/api/assessments/${updatedAssessment.assessmentId}`,
-        { id, title }
+        { id, title }, config
       );
       return data;
     } catch (err) {
@@ -45,7 +59,14 @@ export const deleteAssessment = createAsyncThunk(
   "/deleteAssessment",
   async ({ assessmentId }) => {
     try {
-      await axios.delete(`api/assessments/${assessmentId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.delete(`api/assessments/${assessmentId}`, config);
     } catch (err) {
       return err.message;
     }
@@ -57,7 +78,14 @@ export const deleteQuestion = createAsyncThunk(
   "assessment/deleteQuestion",
   async (questionId) => {
     try {
-      const { data } = await axios.delete(`/api/questions/${questionId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+      const { data } = await axios.delete(`/api/questions/${questionId}`, config);
       return questionId;
     } catch (err) {
       console.error(err);
@@ -70,8 +98,15 @@ export const removeCourseFromAssessment = createAsyncThunk(
   "/assessment/removeCourseFromAssessment",
   async ({ assessmentId, courseId }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = await axios.delete(
-        `/api/assessments/${assessmentId}/courses/${courseId}`
+        `/api/assessments/${assessmentId}/courses/${courseId}`, config
       );
       return data;
     } catch (err) {
@@ -85,9 +120,16 @@ export const addQuestion = createAsyncThunk(
   "/assessment/addQuestion",
   async ({ assessmentId, questionText }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = await axios.post(
         `/api/assessments/${assessmentId}/questions`,
-        { questionText: questionText }
+        { questionText: questionText }, config
       );
       return data;
     } catch (err) {
@@ -95,13 +137,21 @@ export const addQuestion = createAsyncThunk(
     }
   }
 );
+
 
 export const addAssociatedCourse = createAsyncThunk(
   "assessment/addAssociatedCourse",
   async ({ courseId, assessmentId }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
       const { data } = axios.post(
-        `/api/assessments/${assessmentId}/courses/${courseId}`
+        `/api/assessments/${assessmentId}/courses/${courseId}`, config
       );
       return data;
     } catch (err) {
@@ -109,7 +159,33 @@ export const addAssociatedCourse = createAsyncThunk(
     }
   }
 );
-
+//create a new assessment
+//probably need to add some grabbing of teacher ID in here as well
+//also how do we set courseID?
+//does the course_assessmentModel associate them?
+//how does this work with questions? will they associate in their own slice?
+//{questions: [{...}, {...}]}
+export const createAssessment = createAsyncThunk(
+  "/assessmentCreate",
+  async ({ title, questionText }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post("/api/assessments", {
+        title,
+        questionText,
+      }, config);
+      return data;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
 export const assessmentSlice = createSlice({
   name: "assessment",
   initialState,
@@ -138,6 +214,12 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(addQuestion.fulfilled, (state, action) => {
       state.assessment.questions.push(action.payload);
+    });
+    builder.addCase(createAssessment.fulfilled, (state, action) => {
+      state.assessment = action.payload.data.newAssessment;
+    })
+    builder.addCase(deleteAssessment.fulfilled, (state, action) => {
+      state.assessment = {};
     });
   },
 });
