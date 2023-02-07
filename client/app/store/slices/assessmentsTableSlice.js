@@ -81,7 +81,7 @@ export const assessmentsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllAssessments.fulfilled, (state, action) => {
-        state.assessments = action.payload.assessments;
+        state.assessments = action.payload.data.assessments;
       })
       .addCase(createAssessment.fulfilled, (state, action) => {
         state.assessments.push(action.payload.data.newAssessment);
@@ -90,15 +90,6 @@ export const assessmentsSlice = createSlice({
         return state.assessments.filter((assessment) => assessment.isActive);
       });
     builder
-      .addCase(fetchAllAssessments.fulfilled, (state, action) => {
-        state.assessments = action.payload.assessments;
-      })
-      .addCase(createAssessment.fulfilled, (state, action) => {
-        state.assessments.push(action.payload.data.newAssessment);
-      })
-      .addCase(isActiveAssessment.fulfilled, (state, action) => {
-        return state.assessments.filter((assessment) => assessment.isActive);
-      });
   },
 });
 

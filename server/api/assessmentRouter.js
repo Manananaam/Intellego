@@ -145,6 +145,7 @@ router.post(
   protectedRoute,
   asyncHandler(async (req, res, next) => {
     const newAssessment = await Assessment.create({
+      userId: req.user.id,
       title: req.body.title,
     });
     const newQuestion = await Question.create({

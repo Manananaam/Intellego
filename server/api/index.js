@@ -7,8 +7,6 @@ router.use((req, res, next) => {
   next();
 });
 
-const protectedRoute = require("./middleware");
-
 
 // Sub-router, start with /api
 router.use("/template", require("./templateRouter"));
