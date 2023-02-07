@@ -17,6 +17,7 @@ export const fetchCourseAssessments = createAsyncThunk(
   async (courseId) => {
     try {
       const { data } = await axios.get(`/api/courses/${courseId}/assessments`);
+
       return data;
     } catch (error) {
       return error.message;

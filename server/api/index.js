@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const protectedRoute = require("./middleware");
 
+const protectedRoute = require("./middleware");
 // Test middleware
 router.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

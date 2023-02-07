@@ -2,14 +2,10 @@ import React, { useEffect } from "react";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 //React related imports
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
 import {
   fetchCourseStudents,
   selectCourses,
@@ -28,12 +24,7 @@ const CourseStudentScreen = () => {
   }, [dispatch]);
 
   return (
-    <Container>
-      <Row>
-        <Col xs={3} id="sidebar-wrapper">
-          <Sidebar />
-        </Col>
-        <Col xs={9} id="page-content-wrapper">
+    <>
           <h1>Students in {course.name}</h1>
           <Table>
             <thead>
@@ -69,9 +60,7 @@ const CourseStudentScreen = () => {
                 : null}
             </tbody>
           </Table>
-        </Col>
-      </Row>
-    </Container>
+          </>
   );
 };
 

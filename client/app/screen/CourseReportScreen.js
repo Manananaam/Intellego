@@ -10,17 +10,16 @@ import {
   BarElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 import Dropdown from "react-bootstrap/Dropdown";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Sidebar from "../components/Sidebar";
 import {
   fetchOverallGrade,
   fetchCourse,
 } from "../store/slices/courseReportSlice";
 import { fetchAllCourses } from "../store/slices/courseSlices";
+ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 export default function CourseReportScreen() {
   // use router hook to fetch current courseId
