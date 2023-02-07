@@ -1,3 +1,36 @@
+// react/redux stuff
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+
+//slice methods
+import {
+  selectAssessment,
+  fetchAssessment,
+} from "../store/slices/singleAssessmentSlice";
+
+const GradingScreen = () => {
+  // react/redux stuff
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  //state variables
+  const { assessmentId } = useParams();
+  const { assessment } = useSelector(selectAssessment);
+
+  useEffect(() => {
+    dispatch(fetchAssessment(assessmentId));
+  }, [dispatch]);
+  console.log("checking on variables", assessmentId, assessment);
+  return (
+    <>
+      <h1>howdy, it is time to grade, pardner</h1>
+    </>
+  );
+};
+
+export default GradingScreen;
+
 /*
 what is the purpose of this page?
 when looking at all assessments, you click the grade link to review and/or submit new grades for a particular assessment

@@ -19,43 +19,48 @@ import CreateAssessmentScreen from "./CreateAssessmentScreen";
 import AssessmentReportScreen from "./AssessmentReportScreen";
 import CourseReportScreen from "./CourseReportScreen";
 import StudentViewScreen from "./StudentViewScreen";
+import GradingScreen from "./GradingScreen";
 
 const MainDashboardScreen = () => {
   return (
     <Container>
       <Row>
-        <Col xs={3} md={4} id="sidebar-wrapper">
+        <Col xs={3} md={4} id='sidebar-wrapper'>
           <Sidebar />
         </Col>
-        <Col xs={9} md={8} id="page-content-wrapper">
+        <Col xs={9} md={8} id='page-content-wrapper'>
           <Routes>
-            <Route path="/courses" element={<CousreScreen />} />
+            <Route path='/courses' element={<CousreScreen />} />
             <Route
-              path="/courses/:courseId/students"
+              path='/courses/:courseId/students'
               element={<CourseStudentScreen />}
             />
             <Route
-              path="/courses/:courseId/assessments"
+              path='/courses/:courseId/assessments'
               element={<CourseAssessmentsScreen />}
             />
 
-            <Route path="/assessments" element={<AssessmentsScreen />} />
+            <Route path='/assessments' element={<AssessmentsScreen />} />
             <Route
-              path="/assessments/create"
+              path='/assessments/create'
               element={<CreateAssessmentScreen />}
             />
             <Route
-              path="/assessments/:assessmentId"
+              path='/assessments/:assessmentId'
               element={<EditAssessmentScreen />}
             />
-            <Route path="/report/students" element={<StudentReportScreen />} />
             <Route
-              path="/report/assessments"
+              path='/assessments/:assessmentId/grades'
+              element={<GradingScreen />}
+            />
+            <Route path='/report/students' element={<StudentReportScreen />} />
+            <Route
+              path='/report/assessments'
               element={<AssessmentReportScreen />}
             />
-            <Route path="/report/courses/" element={<CourseReportScreen />} />
+            <Route path='/report/courses/' element={<CourseReportScreen />} />
             <Route
-              path="/student/courses/:courseId/assessments/:assessmentId"
+              path='/student/courses/:courseId/assessments/:assessmentId'
               element={<StudentViewScreen />}
             />
           </Routes>
