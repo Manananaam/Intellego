@@ -5,8 +5,6 @@ const {
 const asyncHandler = require("express-async-handler");
 const Submission = require("../db/models/submissionModel");
 
-
-
 // GET all course list
 
 router.get(
@@ -38,9 +36,7 @@ router.get(
 router.get(
   "/:courseid",
   asyncHandler(async (req, res, next) => {
-    res.status(200).json(
-      await Course.findByPk(req.params.courseid)
-    );
+    res.status(200).json(await Course.findByPk(req.params.courseid));
   })
 );
 

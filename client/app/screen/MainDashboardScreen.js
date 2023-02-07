@@ -28,7 +28,6 @@ const MainDashboardScreen = () => {
           <Sidebar />
         </Col>
         <Col xs={9} md={8} id="page-content-wrapper">
-          <h1>Intellego</h1>
           <Routes>
             <Route path="/courses" element={<CousreScreen />} />
             <Route
