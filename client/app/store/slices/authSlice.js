@@ -50,7 +50,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     isLoading: false,
-    user: null,
+    user: localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null,
     //if the user info is saved in local storage, then that is the user saved in the auth state - otherwise, user is null
     //error: null,
     //isLogged: false
@@ -59,6 +61,7 @@ const authSlice = createSlice({
     logout(state, action) {
       state.user = null;
       localStorage.removeItem("jwt");
+      localStorage.removeItem("user");
     },
   },
   extraReducers(builder) {
@@ -77,6 +80,7 @@ const authSlice = createSlice({
 
       state.user = action.payload.user;
       localStorage.setItem("jwt", JSON.stringify(action.payload.token));
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
       /*
       note - not sure it is best practice to store jwt in localstorage-- have read different things -- as a stretch goal, it might be good to try and use cookies:
       https://stackoverflow.com/questions/44133536/is-it-safe-to-store-a-jwt-in-localstorage-with-reactjs
@@ -94,6 +98,7 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.user = action.payload.user;
       localStorage.setItem("jwt", JSON.stringify(action.payload.token));
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
       //see above note - may try to use cookies instead of adding jwt to localstorage
       //add in signup.rejected case later on
     });
