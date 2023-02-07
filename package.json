@@ -35,7 +35,6 @@
     "react-bootstrap": "^2.7.0",
     "react-bootstrap-icons": "^1.10.2",
     "react-chartjs-2": "^5.2.0",
-    "react-switch": "^7.0.0",
     "sequelize": "^6.25.3",
     "yup": "^0.32.11"
   },
