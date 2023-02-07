@@ -10,14 +10,19 @@ const Question = require("../db/models/questionModel");
 const Course = require("../db/models/courseModel");
 const Assessment = require("../db/models/assessmentModel");
 const Student = require("../db/models/studentModel");
+const protectedRoute = require("./middleware");
 
 //Once a question is complete, it becomes a submission.
 
 //Find all submissions:
 
 router.get(
-  "/courses/:courseId/assessments/:assessmentId/submissions",
+  "/courses/:courseId/assessments/:assessmentId/submissions", protectedRoute,
   asyncHandler(async (req, res, next) => {
+    const assessment = await Assessment.findOne(req.params.assessmentId);
+    if (assessment.userId !== req.user.id) {
+      res.send("not yours")
+    }
     const submissions = await Question.findAll({
       where: {
         assessmentId: req.params.assessmentId,
@@ -36,8 +41,12 @@ router.get(
 //get all submissions for one question
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions",
+  "/assessments/:assessmentId/questions/:questionId/submissions", protectedRoute,
   asyncHandler(async (req, res, next) => {
+    const assessment = await Assessment.findOne(req.params.assessmentId);
+    if (assessment.userId !== req.user.id) {
+      res.send("not yours")
+    }
     const submissions = await Question.findByPk(req.params.questionId, {
       include: {
         model: Submission,
@@ -54,12 +63,16 @@ router.get(
 //To get a specific submission:
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId",
+  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId", protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const assessment = await Submission.findByPk(req.params.submissionId);
+    const assessment = await Assessment.findByPk(req.params.assessmentId);
+    if (assessment.userId !== req.user.id) {
+      res.send("not yours")
+    }
+    const singleAssessment = await Submission.findByPk(req.params.submissionId);
     res.status(200).json({
       data: {
-        assessment,
+        singleAssessment,
       },
     });
   })
@@ -175,8 +188,12 @@ router.put(
 //To delete a submission:
 
 router.delete(
-  "/assessments/:assessmentId/submissions/:submissionId",
+  "/assessments/:assessmentId/submissions/:submissionId", protectedRoute,
   asyncHandler(async (req, res, next) => {
+    const assessment = await Assessment.fineOne(req.params.assessmentId);
+    if (assessment.userId !== req.user.id) {
+      res.send("not yours")
+    }
     const deletedSubmission = await Submission.findByPk(
       req.params.submissionId
     );

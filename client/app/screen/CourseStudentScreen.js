@@ -15,6 +15,7 @@ import {
   selectCourses,
 } from "../store/slices/courseSlices";
 import { StudentEdit } from "../components/StudentEdit";
+import { Button } from "react-bootstrap";
 
 const CourseStudentScreen = () => {
   const dispatch = useDispatch();
@@ -52,13 +53,15 @@ const CourseStudentScreen = () => {
                         <td>{student.id}</td>
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
-                        <td>{StudentEdit}</td>
                         <td>
                           <Link
                             to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
                           >
                             View report
                           </Link>
+                        </td>
+                        <td>
+                          <Button variant="primary" onClick={StudentEdit}>Edit Student</Button>
                         </td>
                       </tr>
                     );

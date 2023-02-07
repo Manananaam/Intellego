@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const protectedRoute = require("./middleware");
 
 // Test middleware
 router.use((req, res, next) => {
@@ -12,7 +13,7 @@ router.use("/assessments", require("./assessmentRouter"));
 router.use("/questions", require("./questionRouter"));
 router.use("/students", require("./studentRouter"));
 router.use("/courses", require("./courseRouter"));
-router.use("/submissions", require("./submissionRouter"));
+router.use("/submissions", protectedRoute, require("./submissionRouter"));
 router.use("/authentication", require("./authenticationRoutes"));
 
 module.exports = router;
