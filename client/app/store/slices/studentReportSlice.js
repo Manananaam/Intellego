@@ -6,8 +6,16 @@ export const fetchGradeForEachAssessment = createAsyncThunk(
   "report/student/fetchGradeForEachAssessment",
   async ({ studentId, courseId }, { rejectWithValue }) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const { data } = await axios.get(
-        `/api/students/${studentId}/courses/${courseId}/assessments`
+        `/api/students/${studentId}/courses/${courseId}/assessments`,
+        config
       );
       return data;
     } catch (err) {
