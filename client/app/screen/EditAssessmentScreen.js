@@ -50,6 +50,7 @@ const EditAssessmentScreen = () => {
   const [addQuestionModalVisible, setAddQuestionModalVisible] = useState(false);
   const [editQuestionModalVisible, setEditQuestionModalVisible] =
     useState(false);
+  const [editNameModalVisible, setEditNameModalVisible] = useState(false);
   const [newQuestion, setNewQuestion] = useState("");
   const [editQuestion, setEditQuestion] = useState("");
   const [questionId, setQuestionId] = useState(null);
@@ -81,17 +82,54 @@ const EditAssessmentScreen = () => {
     setEditQuestionModalVisible(false);
   }
 
+  function handleCloseEditNameModal() {
+    setEditNameModalVisible(false);
+  }
+
+  function handleNameChange() {
+    dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
+    handleCloseEditNameModal();
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
     navigate("/assessments");
+    navigate(0);
   }
   //NOTE - still not auto updating listview when you navigate back
 
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <Form.Group>
+        <h2>
+          {assessmentTitle || ""} <Pencil onClick={setEditNameModalVisible} />
+        </h2>
+        <Modal
+          size='lg'
+          aria-labelledby='contained-modal-title-vcenter'
+          centered
+          show={editNameModalVisible}
+          onHide={handleCloseEditNameModal}
+        >
+          <Modal.Title>Edit Assessment Name</Modal.Title>
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label>Assessment Title</Form.Label>
+
+              <Form.Control
+                size='lg'
+                //how can i make this change size to fit text?
+                type='text'
+                value={assessmentTitle || ""}
+                onChange={(e) => setAssessmentTitle(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Button onClick={handleNameChange}>Submit</Button>
+          </Modal.Body>
+        </Modal>
+
+        {/* <Form.Group>
           <Form.Label>Assessment Title</Form.Label>
 
           <Form.Control
@@ -101,7 +139,7 @@ const EditAssessmentScreen = () => {
             value={assessmentTitle || ""}
             onChange={(e) => setAssessmentTitle(e.target.value)}
           ></Form.Control>
-        </Form.Group>
+        </Form.Group> */}
         <br />
         <Form.Group>
           <Form.Label>Associated Courses</Form.Label>
