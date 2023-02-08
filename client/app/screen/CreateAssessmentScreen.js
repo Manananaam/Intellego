@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createAssessment } from "../store/slices/assessmentsTableSlice";
+import { getCourses } from "../store";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -23,18 +24,23 @@ const CreateAssessmentScreen = () => {
   const [title, setTitle] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [associatedCourse, setAssociatedCourse] = useState(null);
+  const { allcourses } = useSelector((state) => state.studentEnroll);
+
+  // fetch a list of course belongs to the logged in user to let user assign assessment to course.
+  useEffect(() => {
+    dispatch(getCourses());
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ title, questionText, courseId: Number(associatedCourse) });
-    // dispatch(
-    //   createAssessment({
-    //     title,
-    //     questionText,
-    //     courseId: Number(associatedCourse),
-    //   })
-    // );
-    // navigate("/assessments");
+    dispatch(
+      createAssessment({
+        title,
+        questionText,
+        courseId: associatedCourse ? Number(associatedCourse) : null,
+      })
+    );
+    navigate("/assessments");
   };
 
   return (
@@ -67,20 +73,27 @@ const CreateAssessmentScreen = () => {
         <Form.Select
           aria-label="associated-course"
           value={associatedCourse || ""}
+          disabled={allcourses?.length === 0}
           onChange={(e) => {
             setAssociatedCourse(e.target.value);
           }}
         >
-          <option key="blackChoice" hidden value>
-            Assign this assessment to course
-          </option>
-          {courses.map((course, idx) => {
-            return (
-              <option key={idx} value={course.id}>
-                {course.name}
+          {allcourses && allcourses.length ? (
+            <>
+              <option key="blackChoice" hidden value>
+                Assign this assessment to course
               </option>
-            );
-          })}
+              {allcourses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
+            </>
+          ) : (
+            <option key="empty-course-prompt" hidden>
+              Please create course before assign
+            </option>
+          )}
         </Form.Select>
         <Button
           as="input"
