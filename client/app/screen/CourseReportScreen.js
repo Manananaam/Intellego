@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -9,19 +9,63 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+// customize canvas color of chart, so export chart have white background
+const canvasColor = {
+  id: "customCanvasBackgroundColor",
+  beforeDraw: (chart, args, options) => {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
+const spacing = {
+  id: "increase-legend-spacing",
+  beforeInit(chart) {
+    // Get reference to the original fit function
+    const originalFit = chart.legend.fit;
+
+    // Override the fit function
+    chart.legend.fit = function fit() {
+      // Call original function and bind scope in order to use `this` correctly inside it
+      originalFit.bind(chart.legend)();
+      // Change the height as suggested in another answers
+      this.height += 10;
+    };
+  },
+};
 import { Bar } from "react-chartjs-2";
 import Dropdown from "react-bootstrap/Dropdown";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+
 import {
   fetchOverallGrade,
   fetchCourse,
 } from "../store/slices/courseReportSlice";
 import { fetchAllCourses } from "../store/slices/courseSlices";
-ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  BarElement,
+  canvasColor,
+  spacing
+);
 
 export default function CourseReportScreen() {
+  // export report chart
+  let chartRef = useRef(null);
+  const handleExport = () => {
+    const link = document.createElement("a");
+    link.download = `courseReport-${currentCourse.name}.png`;
+    link.href = chartRef.current.toBase64Image();
+    link.click();
+  };
+
   // use router hook to fetch current courseId
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -75,7 +119,7 @@ export default function CourseReportScreen() {
 
     datasets: [
       {
-        label: "Course Report",
+        label: "Student's overall grade",
         data: allGrades && allGrades.map((obj) => obj.overall_grade),
         backgroundColor: "aqua",
         borderColor: "#000",
@@ -87,6 +131,63 @@ export default function CourseReportScreen() {
     animation: {
       duration: 0,
     },
+    plugins: {
+      canvasColor,
+      spacing,
+      title: {
+        display: true,
+        text: `Student's overall grade in course: ${currentCourse?.name} `,
+        font: {
+          size: 32,
+        },
+        color: "#111",
+      },
+      datalabels: {
+        display: true,
+        color: "#111",
+        font: {
+          weight: "bold",
+          size: 16,
+        },
+        anchor: "end",
+        offset: -20,
+        align: "start",
+      },
+      legend: {
+        labels: {
+          color: "#111",
+          font: {
+            weight: "bold",
+            size: 16,
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 5,
+          color: "#111",
+        },
+        title: {
+          display: true,
+          text: "Overall grade",
+          color: "#111",
+        },
+      },
+      x: {
+        ticks: {
+          color: "#111",
+        },
+        title: {
+          display: true,
+          color: "#111",
+          text: "name of student",
+        },
+      },
+    },
   };
 
   //render chart
@@ -95,45 +196,50 @@ export default function CourseReportScreen() {
     chart = (
       <div>
         <p className="">Course Report</p>
-        <div style={{ width: "50%" }}>
-          <Bar data={data} options={options}></Bar>
+        <div
+          style={{
+            height: "690px",
+            width: "690px",
+            margin: "auto",
+          }}
+        >
+          <Bar data={data} options={options} ref={chartRef}></Bar>
         </div>
       </div>
     );
   } else {
     chart = <p>Please select an active course. </p>;
-  };
+  }
 
   return (
     <div>
       <Container>
-        <Row>
-          <Col xs={3} id="sidebar-wrapper">
-            {/* <Sidebar /> */}
-          </Col>
-          <Col xs={9} id="page-content-wrapper"></Col>
-          <h1>Course Report</h1>
-          <Dropdown>
-            <Dropdown.Toggle>
-              {currentCourse ? currentCourse.name : "Course"}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {allCourses &&
-                allCourses.length &&
-                allCourses.map((course) => {
-                  return (
-                    <Dropdown.Item
-                      key={course.id}
-                      onClick={() => handleCurrentCourse(course)}
-                    >
-                      {course.name}
-                    </Dropdown.Item>
-                  );
-                })}
-            </Dropdown.Menu>
-          </Dropdown>
-          {currentCourse ? chart : <p>Please select a course</p>}
-        </Row>
+        {currentCourse && (
+          <Button variant="primary" onClick={handleExport}>
+            Export
+          </Button>
+        )}
+        <h1>Course Report</h1>
+        <Dropdown>
+          <Dropdown.Toggle>
+            {currentCourse ? currentCourse.name : "Course"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {allCourses &&
+              allCourses.length &&
+              allCourses.map((course) => {
+                return (
+                  <Dropdown.Item
+                    key={course.id}
+                    onClick={() => handleCurrentCourse(course)}
+                  >
+                    {course.name}
+                  </Dropdown.Item>
+                );
+              })}
+          </Dropdown.Menu>
+        </Dropdown>
+        {currentCourse ? chart : <p>Please select a course</p>}
       </Container>
     </div>
   );
