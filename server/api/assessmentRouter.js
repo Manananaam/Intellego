@@ -120,9 +120,6 @@ router.get(
       },
       include: [
         {
-          model: Course,
-        },
-        {
           model: Question,
           include: {
             model: Submission,
@@ -136,9 +133,14 @@ router.get(
         400
       );
     }
+
+    // find associated course related to this assessment
+    const courses = await assessment.getCourses();
+
     res.status(200).json({
       data: {
         assessment,
+        associatedCourse: courses,
       },
     });
   })
