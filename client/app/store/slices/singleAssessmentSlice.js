@@ -254,11 +254,13 @@ export const submitGrade = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
+      console.log("hello1 from thunk", subId, grade);
       const { data } = await axios.put(
-        `/api/submissions${subId}`,
-        grade,
+        `/api/submissions/${subId}`,
+        { grade: grade },
         config
       );
+      console.log("hello2 from thunk", data);
       return data;
     } catch (err) {
       const errorMessage = err.reponse.data.message;

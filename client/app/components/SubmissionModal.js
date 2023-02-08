@@ -8,7 +8,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Modal, Container, Row, Form, Button } from "react-bootstrap";
 
 //slice methods
-import { selectAssessment } from "../store/slices/singleAssessmentSlice";
+import {
+  selectAssessment,
+  submitGrade,
+} from "../store/slices/singleAssessmentSlice";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 
@@ -18,6 +21,7 @@ we either need two modal components OR we can pass down the onsubmit function in
 */
 
 const SubmissionModal = (props) => {
+  const dispatch = useDispatch();
   const { visible, handleCloseModal } = props;
   const { currentSubmission } = useSelector(selectAssessment);
   const [subGrade, setSubGrade] = useState(null);
@@ -27,6 +31,7 @@ const SubmissionModal = (props) => {
       currentSubmission.id,
       subGrade
     );
+    dispatch(submitGrade({ subId: currentSubmission.id, grade: subGrade }));
     e.preventDefault();
     handleCloseModal();
   };
