@@ -142,66 +142,77 @@ const AssessmentReportScreen = () => {
           ? currentAssessment.title
           : "Please select an assessment"}
       </h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Students</th>
-            {assessment &&
-              assessment.questions.length &&
-              assessment.questions.map((question) => {
-                return <th key={question.id}>{question.questionText}</th>;
-              })}
-            <th>Average</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students && students.students.length ? (
-            students.students.map((student) => {
-              let allGrades = 0;
-              let numGrades = 0;
-              return (
-                <tr key={student.id}>
-                  <td>{`${student.firstName} ${student.lastName}`}</td>
-                  {assessment &&
-                    assessment.questions.length &&
-                    assessment.questions.map((question) => {
-                      if (question.submissions.length) {
-                        let submission = question.submissions.find(
-                          (el) => el.studentId === student.id
-                        );
-                        allGrades += submission.grade;
-                        numGrades++;
-                        assessmentGrades.push(
-                          Math.round(allGrades / numGrades)
-                        );
-                        return (
-                          <td key={submission.id}>
-                            {submission.response} {submission.grade}
-                          </td>
-                        );
-                      } else {
-                        return <td>no submission yet</td>;
-                      }
-                    })}
-                  <td>{Math.round(allGrades / numGrades)}</td>
-                </tr>
-              );
-            })
-          ) : (
+      {currentAssessment && (
+        <Table striped bordered hover>
+          <thead>
             <tr>
-              <td>No students in this class!</td>
+              <th>Students</th>
+              <th>
+                {assessment &&
+                  assessment.questions.length &&
+                  assessment.questions.map((question) => {
+                    return (
+                      <span key={question.id}>{question.questionText}</span>
+                    );
+                  })}
+              </th>
+
+              <th>Average</th>
             </tr>
+          </thead>
+          <tbody>
+            {students && students.students.length ? (
+              students.students.map((student) => {
+                let allGrades = 0;
+                let numGrades = 0;
+                return (
+                  <tr key={student.id}>
+                    <td>{`${student.firstName} ${student.lastName}`}</td>
+                    <td>
+                      {assessment &&
+                        assessment.questions.length &&
+                        assessment.questions.map((question) => {
+                          if (question.submissions.length) {
+                            let submission = question.submissions.find(
+                              (el) => el.studentId === student.id
+                            );
+                            allGrades += submission.grade;
+                            numGrades++;
+                            assessmentGrades.push(
+                              Math.round(allGrades / numGrades)
+                            );
+                            return (
+                              <span key={submission.id}>
+                                {submission.response} {submission.grade}
+                              </span>
+                            );
+                          } else {
+                            return <td>no submission yet</td>;
+                          }
+                        })}
+                    </td>
+                    <td>{Math.round(allGrades / numGrades)}</td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td>No students in this class!</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      )}
+      {currentAssessment && (
+        <h3>
+          Overall Class Average:{" "}
+          {Math.round(
+            assessmentGrades.reduce((total, item) => total + item, 0) /
+              assessmentGrades.length
           )}
-        </tbody>
-      </Table>
-      <h3>
-        Overall Class Average:{" "}
-        {Math.round(
-          assessmentGrades.reduce((total, item) => total + item, 0) /
-            assessmentGrades.length
-        )}
-        %
-      </h3>
+          %
+        </h3>
+      )}
     </>
   );
 };
