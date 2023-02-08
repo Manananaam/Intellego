@@ -312,6 +312,12 @@ router.post(
   })
 );
 
+router.put("/:studentId", asyncHandler(async (req, res, next) => {
+  const student = await Student.findByPk(req.params.studentId);
+  await student.update(req.body);
+  res.status(200).json({student})
+}))
+
 // @desc: unenroll individual student
 // @route: DELETE /api/students/:studentId/courses/:courseId
 // @access: private
@@ -339,25 +345,6 @@ router.delete(
   })
 );
 
-// @desc: delete student
-// @route: DELETE /api/students/:studentId
-// @access: private
-// ? what would happen to course_student table
-// ? delete the student, and also delete the enroll history / enroll record?
-router.delete(
-  "/:studentId",
-  protectedRoute,
-  asyncHandler(async (req, res, next) => {
-    // 1. unenroll this student
-    const student = await Student.findByPk(req.params.studentId);
-    const enrollements = await student.getCourses();
-    await student.removeCourses(enrollements);
-    // 2. delete this student
-    const result = await student.destroy();
-    res.status(204).json(result);
-  })
-);
-
 /**
  * @desc: verify student ID
  * @author: Na Lin
@@ -376,6 +363,24 @@ router.get(
     res.status(200).json({
       result: verifyResult,
     });
+  })
+);
+//NATR NOTE FOR TOMORROW: maybe send id backfrom router?
+// @desc: delete student
+// @route: DELETE /api/students/:studentId
+// @access: private
+// ? what would happen to course_student table
+// ? delete the student, and also delete the enroll history / enroll record?
+router.delete(
+  "/:studentId",
+  asyncHandler(async (req, res, next) => {
+    // 1. unenroll this student
+    const student = await Student.findByPk(req.params.studentId);
+    const enrollements = await student.getCourses();
+    await student.removeCourses(enrollements);
+    // 2. delete this student
+    const result = await student.destroy();
+    res.status(204).json(result);
   })
 );
 

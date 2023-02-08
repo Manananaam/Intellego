@@ -55,7 +55,6 @@ const studentEnrollSlice = createSlice({
       state.numOfStudents = action.payload.numOfStudents;
       state.students = action.payload.students;
     });
-
     builder.addCase(getCourses.fulfilled, (state, action) => {
       state.allcourses = action.payload;
     });

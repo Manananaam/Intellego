@@ -11,6 +11,9 @@ import Nav from "react-bootstrap/Nav";
 import Figure from "react-bootstrap/Figure";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
+// import Router
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(selectAuthState);
@@ -37,32 +40,43 @@ const Sidebar = () => {
         </Figure.Caption>
 
         <Nav.Item>
-          <Nav.Link href="/dashboard">Home</Nav.Link>
+          <Nav.Link as={Link} to="/">
+            Home
+          </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="classes" href="/courses">
+          <Nav.Link eventKey="classes" as={Link} to="/courses">
             Classes
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="assessments" href="/assessments">
+          <Nav.Link eventKey="assessments" as={Link} to="/assessments">
             Assessments
           </Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
           <NavDropdown title="Reports" align="end">
-            <NavDropdown.Item eventKey="reportCourses" href="/report/courses">
+            <NavDropdown.Item
+              eventKey="reportCourses"
+              as={Link}
+              to="/report/courses"
+            >
               Classes
             </NavDropdown.Item>
-            <NavDropdown.Item eventKey="reportStudents" href="/report/students">
+            <NavDropdown.Item
+              eventKey="reportStudents"
+              as={Link}
+              to="/report/students"
+            >
               Students
             </NavDropdown.Item>
             <NavDropdown.Item
               eventKey="reportAssessments"
-              href="/report/assessments"
+              as={Link}
+              to="/report/assessments"
             >
               Assessments
             </NavDropdown.Item>
@@ -72,7 +86,8 @@ const Sidebar = () => {
         <Nav.Item>
           <Nav.Link
             eventKey="logout"
-            href="/"
+            as={Link}
+            to="/"
             onClick={(e) => dispatch(logout())}
           >
             Logout
