@@ -20,8 +20,8 @@ router.get(
       },
       include: {
         model: Question,
-        include: { model: Submission }
-      }
+        include: { model: Submission },
+      },
     });
     if (!assessments) {
       throw new AppError(
@@ -129,7 +129,7 @@ router.get(
           },
         },
       ],
-  });
+    });
     if (!assessment) {
       throw new AppError(
         `The assessment with id (${req.params.assessmentId}) does not exist or is unauthorized.`,
@@ -153,6 +153,13 @@ router.post(
       userId: req.user.id,
       title: req.body.title,
     });
+    // add associate with course if the user assign the assessment to existed course.
+    if (req.body.courseId) {
+      console.log("run", req.body.courseId);
+      const course = await Course.findByPk(req.body.courseId);
+      newAssessment.addCourse(course);
+    }
+
     const newQuestion = await Question.create({
       questionText: req.body.questionText,
     });
