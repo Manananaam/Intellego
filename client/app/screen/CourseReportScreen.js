@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -12,8 +12,8 @@ import {
 import { Bar } from "react-chartjs-2";
 import Dropdown from "react-bootstrap/Dropdown";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+
 import {
   fetchOverallGrade,
   fetchCourse,
@@ -22,6 +22,15 @@ import { fetchAllCourses } from "../store/slices/courseSlices";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 export default function CourseReportScreen() {
+  // export report chart
+  let chartRef = useRef(null);
+  const handleExport = () => {
+    const link = document.createElement("a");
+    link.download = `courseReport-${currentCourse.name}.png`;
+    link.href = chartRef.current.toBase64Image();
+    link.click();
+  };
+
   // use router hook to fetch current courseId
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -96,44 +105,43 @@ export default function CourseReportScreen() {
       <div>
         <p className="">Course Report</p>
         <div style={{ width: "50%" }}>
-          <Bar data={data} options={options}></Bar>
+          <Bar data={data} options={options} ref={chartRef}></Bar>
         </div>
       </div>
     );
   } else {
     chart = <p>Please select an active course. </p>;
-  };
+  }
 
   return (
     <div>
       <Container>
-        <Row>
-          <Col xs={3} id="sidebar-wrapper">
-            {/* <Sidebar /> */}
-          </Col>
-          <Col xs={9} id="page-content-wrapper"></Col>
-          <h1>Course Report</h1>
-          <Dropdown>
-            <Dropdown.Toggle>
-              {currentCourse ? currentCourse.name : "Course"}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {allCourses &&
-                allCourses.length &&
-                allCourses.map((course) => {
-                  return (
-                    <Dropdown.Item
-                      key={course.id}
-                      onClick={() => handleCurrentCourse(course)}
-                    >
-                      {course.name}
-                    </Dropdown.Item>
-                  );
-                })}
-            </Dropdown.Menu>
-          </Dropdown>
-          {currentCourse ? chart : <p>Please select a course</p>}
-        </Row>
+        {currentCourse && (
+          <Button variant="primary" onClick={handleExport}>
+            Export
+          </Button>
+        )}
+        <h1>Course Report</h1>
+        <Dropdown>
+          <Dropdown.Toggle>
+            {currentCourse ? currentCourse.name : "Course"}
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {allCourses &&
+              allCourses.length &&
+              allCourses.map((course) => {
+                return (
+                  <Dropdown.Item
+                    key={course.id}
+                    onClick={() => handleCurrentCourse(course)}
+                  >
+                    {course.name}
+                  </Dropdown.Item>
+                );
+              })}
+          </Dropdown.Menu>
+        </Dropdown>
+        {currentCourse ? chart : <p>Please select a course</p>}
       </Container>
     </div>
   );
