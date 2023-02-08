@@ -25,7 +25,7 @@ const CourseCreate = ({ setShow, show }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Create a Class</Modal.Title>
+        <Modal.Title>Create a Course</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -33,7 +33,7 @@ const CourseCreate = ({ setShow, show }) => {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Class Name"
+              placeholder="Course Name"
               autoFocus
               onChange={(e) => setName(e.target.value)}
             />

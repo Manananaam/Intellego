@@ -17,6 +17,7 @@ import { Dropbox } from "react-bootstrap-icons";
 const CourseStudentScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [currentStudentId, setCurrentStudentId] = useState("");
 
   const dispatch = useDispatch();
   const { courseId } = useParams();
@@ -24,7 +25,10 @@ const CourseStudentScreen = () => {
 
   //Eventhandlers
   const handleShow = () => setShow(true);
-  const handleShowEdit = () => setShowEdit(true);
+  const handleShowEdit = (selection) => {
+    setShowEdit(true);
+    setCurrentStudentId(selection.target.id);
+  };
 
   useEffect(() => {
     dispatch(fetchCourseStudents(courseId));
@@ -45,6 +49,7 @@ const CourseStudentScreen = () => {
         <tbody>
           {course.students && course.students.length
             ? course.students.map((student) => {
+                const studentId = student.id;
                 return (
                   <tr key={student.id}>
                     <td>{student.id}</td>
@@ -55,19 +60,21 @@ const CourseStudentScreen = () => {
                         <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
-                            as={Link}
-                            to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
+                            href={`/report/students?courseId=${courseId}&studentId=${studentId}`}
                           >
                             View Report
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={handleShowEdit}>
+                          <Dropdown.Item
+                            id={studentId}
+                            onClick={handleShowEdit}
+                          >
                             Edit/Remove Student
                           </Dropdown.Item>
                         </Dropdown.Menu>
                         <StudentEdit
                           showEdit={showEdit}
                           setShowEdit={setShowEdit}
-                          id={student.id}
+                          id={currentStudentId}
                         ></StudentEdit>
                       </Dropdown>
                     </td>

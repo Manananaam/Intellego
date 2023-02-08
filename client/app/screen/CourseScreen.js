@@ -17,7 +17,7 @@ import Button from "react-bootstrap/Button";
 import "../components/style/Sidebar.css";
 
 //CourseScreen
-const CousreScreen = () => {
+const CourseScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -39,9 +39,9 @@ const CousreScreen = () => {
   //render
   return (
     <>
-      <h1>Classes</h1>
+      <h1>Courses</h1>
       <Button variant="primary" onClick={handleShow}>
-        Create Class +
+        Create Course +
       </Button>
       <Table>
         <thead>
@@ -112,4 +112,4 @@ const CousreScreen = () => {
     </>
   );
 };
-export default CousreScreen;
+export default CourseScreen;
