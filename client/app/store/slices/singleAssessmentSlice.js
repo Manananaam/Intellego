@@ -223,6 +223,26 @@ export const fetchStudentSubmissions = createAsyncThunk(
   }
 );
 
+export const fetchSingleSubmission = createAsyncThunk(
+  "assessment/fetchSingleSubmission",
+  async (subId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/submissions/${subId}`, config);
+      return data;
+    } catch (err) {
+      const errorMessage = err.response.data.message;
+      throw new Error(errorMessage);
+    }
+  }
+);
+
 export const assessmentSlice = createSlice({
   name: "assessment",
   initialState,
