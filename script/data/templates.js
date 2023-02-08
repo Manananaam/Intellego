@@ -241,6 +241,27 @@ const submissionSeed = [
     courseId: 120,
     assessmentId: 110,
   },
+  {
+    response: "",
+    questionId: 104,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
+  },
+  {
+    response: "They are all bad people full of hate",
+    questionId: 103,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
+  },
+  {
+    response: "The nurse, she is the funniest character!",
+    questionId: 102,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
+  },
 ];
 
 const courseAssessmentsSeed = [

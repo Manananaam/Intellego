@@ -27,6 +27,9 @@ const GradeSubmissionTable = () => {
     `howdy from table component, here are student submissions`,
     studentSubmissions
   );
+  if (!studentSubmissions.length) {
+    return <h2>There are no student submissions for this assessment yet. </h2>;
+  }
 
   const questionHeaders = assessment.questions.map((question, idx) => {
     return <th key={question.id}>Question {idx + 1}</th>;
