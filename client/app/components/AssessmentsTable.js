@@ -5,7 +5,7 @@ import {
   selectAllAssessments,
   isActiveAssessment,
 } from "../store/slices/assessmentsTableSlice";
-import { deleteAssessment } from "../store/slices/singleAssessmentSlice";
+import { assessmentSlice, deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
@@ -22,6 +22,9 @@ const AssessmentsTable = () => {
   useEffect(() => {
     dispatch(fetchAllAssessments());
   }, [dispatch]);
+
+  let questionAverageArr = [];
+
 
   return (
     <>
@@ -50,7 +53,21 @@ const AssessmentsTable = () => {
                     </NavLink>
                   </td>
                   <td>Average for Course % Here</td>
-                  <td>Total Average % Here</td>
+                  {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
+                    if (question.submissions && question.submissions.length) {
+                      let sum = 0;
+                      question.submissions.forEach((submission) => {
+                        if (submission.grade) {
+                        sum += submission.grade;
+                        }
+                      });
+                      let questionAverage = Math.round(sum / question.submissions.length);
+                      questionAverageArr.push(questionAverage);
+                    }
+                  })
+                   : <td>Missing Questions</td>}
+                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>Missing Grades</td>}
+                   {questionAverageArr = []}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
