@@ -8,7 +8,6 @@ import {
 import {
   selectCourses,
   fetchAllCourses,
-  isActiveCourse,
 } from "../store/slices/courseSlices";
 import { assessmentSlice, deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
@@ -22,8 +21,6 @@ const AssessmentsTable = () => {
   const navigate = useNavigate();
   // const singleAssessment = useSelector(selectAssessment).assessment;
   const courses = useSelector(selectCourses);
-
-  console.log("courses are:", courses)
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
@@ -63,7 +60,29 @@ const AssessmentsTable = () => {
                       {assessment.title}
                     </NavLink>
                   </td>
-                  <td>Average for Course % Here</td>
+                  {courses && courses.length && courses.map((course) => {
+                    let courseGrades = [];
+                    assessment.questions.map((question) => {
+                      let questionsArr = [];
+                      question.submissions.map((submission) => {
+                        if (submission.courseId === course.id && submission.grade) {
+                          questionsArr.push(submission.grade)
+                        }
+                      })
+                      if (questionsArr.length) {
+                      courseGrades.push(Math.round(questionsArr.reduce((total, item) => total + item, 0) / questionsArr.length))
+                      }
+                    })
+                    if (courseGrades.length) {
+                    return (
+                      <td key={course.id}>{Math.round(courseGrades.reduce((total, item) => total + item, 0) / courseGrades.length)}</td>
+                    )
+                    } else {
+                      return (
+                        <td key={course.id}>Missing Grades</td>
+                      )
+                    }
+                  })}
                   {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
                     if (question.submissions && question.submissions.length) {
                       let sum = 0;
