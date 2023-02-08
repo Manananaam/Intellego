@@ -20,8 +20,8 @@ router.get(
       },
       include: {
         model: Question,
-        include: { model: Submission }
-      }
+        include: { model: Submission },
+      },
     });
     if (!assessments) {
       throw new AppError(
@@ -120,25 +120,27 @@ router.get(
       },
       include: [
         {
-          model: Course,
-        },
-        {
           model: Question,
           include: {
             model: Submission,
           },
         },
       ],
-  });
+    });
     if (!assessment) {
       throw new AppError(
         `The assessment with id (${req.params.assessmentId}) does not exist or is unauthorized.`,
         400
       );
     }
+
+    // find associated course related to this assessment
+    const courses = await assessment.getCourses();
+
     res.status(200).json({
       data: {
         assessment,
+        associatedCourse: courses,
       },
     });
   })
