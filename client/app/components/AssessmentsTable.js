@@ -5,7 +5,11 @@ import {
   selectAllAssessments,
   isActiveAssessment,
 } from "../store/slices/assessmentsTableSlice";
-import { deleteAssessment } from "../store/slices/singleAssessmentSlice";
+import {
+  selectCourses,
+  fetchAllCourses,
+} from "../store/slices/courseSlices";
+import { assessmentSlice, deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
@@ -16,12 +20,13 @@ const AssessmentsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const singleAssessment = useSelector(selectAssessment).assessment;
-
-  console.log("all assessments:", allAssessments);
+  const courses = useSelector(selectCourses);
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
+    dispatch(fetchAllCourses());
   }, [dispatch]);
+
 
   return (
     <>
@@ -29,7 +34,11 @@ const AssessmentsTable = () => {
         <thead>
           <tr>
             <th>Assessment</th>
-            <th>Course Name Here</th>
+            {courses && courses.length ? courses.map((course) => {
+              return (
+                <th key={course.id}>{course.name}</th>
+              )
+            }) : <th>No Courses Yet!</th>}
             <th>Average</th>
             <th>{<ArchiveFill />}</th>
           </tr>
@@ -41,7 +50,9 @@ const AssessmentsTable = () => {
                 return assessment.isActive;
               })
               .map((assessment) => {
+                let questionAverageArr = [];
                 const assessmentId = assessment.id;
+                let missing = "Grades";
                 return (
                 <tr key={assessment.id}>
                   <td>
@@ -49,8 +60,43 @@ const AssessmentsTable = () => {
                       {assessment.title}
                     </NavLink>
                   </td>
-                  <td>Average for Course % Here</td>
-                  <td>Total Average % Here</td>
+                  {courses && courses.length && courses.map((course) => {
+                    let courseGrades = [];
+                    assessment.questions.map((question) => {
+                      let questionsArr = [];
+                      question.submissions.map((submission) => {
+                        if (submission.courseId === course.id && submission.grade) {
+                          questionsArr.push(submission.grade)
+                        }
+                      })
+                      if (questionsArr.length) {
+                      courseGrades.push(Math.round(questionsArr.reduce((total, item) => total + item, 0) / questionsArr.length))
+                      }
+                    })
+                    if (courseGrades.length) {
+                    return (
+                      <td key={course.id}>{Math.round(courseGrades.reduce((total, item) => total + item, 0) / courseGrades.length)}</td>
+                    )
+                    } else {
+                      return (
+                        <td key={course.id}>Missing Grades</td>
+                      )
+                    }
+                  })}
+                  {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
+                    if (question.submissions && question.submissions.length) {
+                      let sum = 0;
+                      question.submissions.forEach((submission) => {
+                        if (submission.grade) {
+                        sum += submission.grade;
+                        }
+                      });
+                      let questionAverage = Math.round(sum / question.submissions.length);
+                      questionAverageArr.push(questionAverage);
+                    }
+                  })
+                   : missing = "Questions"}
+                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${missing}`}</td>}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
