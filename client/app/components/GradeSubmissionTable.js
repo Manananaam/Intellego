@@ -44,6 +44,9 @@ const GradeSubmissionTable = () => {
         </td>
         {student.submissions.map((sub) => {
           let key = `${student.id}-${sub.questionId}`;
+          if (sub.grade === null) {
+            return <td key={key}>Enter Grade</td>;
+          }
           return <td key={key}>{sub.grade}%</td>;
         })}
       </tr>
