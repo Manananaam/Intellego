@@ -19,11 +19,13 @@ import {
   selectAssessment,
   fetchAssessment,
   fetchStudentSubmissions,
+  fetchSingleSubmission,
 } from "../store/slices/singleAssessmentSlice";
 import { selectCourses } from "../store/slices/courseSlices";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 const GradeSubmissionTable = () => {
+  const dispatch = useDispatch();
   const { assessment, studentSubmissions } = useSelector(selectAssessment);
   const selectedCourse = useSelector(selectCourses);
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,8 +39,8 @@ const GradeSubmissionTable = () => {
     `howdy from table component, here are student submissions`,
     studentSubmissions
   );
-  const handleClick = (key) => {
-    console.log("click key", key);
+  const handleClick = (subId) => {
+    dispatch(fetchSingleSubmission(subId));
     setModalVisible(true);
   };
   const handleCloseModal = () => {
@@ -65,9 +67,9 @@ const GradeSubmissionTable = () => {
           let key = `${student.id}-${sub.questionId}`;
           if (sub.grade === null) {
             return (
-              <td key={key}>
+              <td key={sub.id}>
                 Enter Grade
-                <PlusCircleFill onClick={() => handleClick(key)} />
+                <PlusCircleFill onClick={() => handleClick(sub.id)} />
               </td>
             );
           }

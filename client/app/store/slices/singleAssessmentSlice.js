@@ -281,6 +281,9 @@ export const assessmentSlice = createSlice({
     builder.addCase(fetchStudentSubmissions.fulfilled, (state, action) => {
       state.studentSubmissions = action.payload;
     });
+    builder.addCase(fetchSingleSubmission.fulfilled, (state, action) => {
+      state.currentSubmission = action.payload;
+    });
   },
 });
 
