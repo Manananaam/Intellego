@@ -11,12 +11,19 @@ import Button from "react-bootstrap/Button";
 //how to get the questions into the questions array of assessment?
 //questionCreate says fulfilled: payload: {data: {newQuestion: {assessmentId: null, createdAt: blah, id: 1, questionText: "what I wrote", updatedAt: blah}} }
 
+const courses = [
+  { id: 1, name: "a" },
+  { id: 2, name: "b" },
+];
+
 const CreateAssessmentScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [questionText, setQuestionText] = useState("");
+  const [associatedCourse, setAssociatedCourse] = useState(null);
+  console.log(associatedCourse);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ const CreateAssessmentScreen = () => {
 
   return (
     <>
-       <Navbar bg="light">
+      <Navbar bg="light">
         <Container>
           <Navbar.Brand>New Assessment</Navbar.Brand>
         </Container>
@@ -51,6 +58,24 @@ const CreateAssessmentScreen = () => {
           ></Form.Control>
         </Form.Group>
         <br />
+        <Form.Select
+          aria-label="associated-course"
+          value={associatedCourse || ""}
+          onChange={(e) => {
+            setAssociatedCourse(e.target.value);
+          }}
+        >
+          <option key="blackChoice" hidden value>
+            Assign this assessment to course
+          </option>
+          {courses.map((course, idx) => {
+            return (
+              <option key={idx} value={course.id}>
+                {course.name}
+              </option>
+            );
+          })}
+        </Form.Select>
         <Button
           as="input"
           type="submit"
