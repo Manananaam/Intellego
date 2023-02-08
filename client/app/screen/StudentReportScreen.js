@@ -5,6 +5,7 @@ import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -226,9 +227,12 @@ export default function StudentReportScreen() {
   }
   return (
     <div>
-      <button type="button" onClick={handleExport}>
-        Export
-      </button>
+      {currentCourse && currentStudent && (
+        <Button variant="primary" onClick={handleExport}>
+          Export
+        </Button>
+      )}
+
       <h1>Students Report</h1>
       <Dropdown>
         <Dropdown.Toggle>
