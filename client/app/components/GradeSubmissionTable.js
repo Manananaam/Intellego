@@ -30,15 +30,15 @@ const GradeSubmissionTable = () => {
   const selectedCourse = useSelector(selectCourses);
   const [modalVisible, setModalVisible] = useState(false);
 
-  console.log(
-    `howdy from table component, here is selected course`,
-    selectedCourse
-  );
-  console.log(`howdy from table component, here is assessment`, assessment);
-  console.log(
-    `howdy from table component, here are student submissions`,
-    studentSubmissions
-  );
+  // console.log(
+  //   `howdy from table component, here is selected course`,
+  //   selectedCourse
+  // );
+  // console.log(`howdy from table component, here is assessment`, assessment);
+  // console.log(
+  //   `howdy from table component, here are student submissions`,
+  //   studentSubmissions
+  // );
   const handleClick = (subId) => {
     dispatch(fetchSingleSubmission(subId));
     setModalVisible(true);
@@ -57,7 +57,7 @@ const GradeSubmissionTable = () => {
   });
 
   const studentRows = studentSubmissions.map((student, idx) => {
-    console.log("mapping studentRows, here is current student", student);
+    // console.log("mapping studentRows, here is current student", student);
     return (
       <tr key={idx}>
         <td>
@@ -75,7 +75,7 @@ const GradeSubmissionTable = () => {
           }
           return (
             <td key={key}>
-              {sub.grade}% <Pencil onClick={() => handleClick(key)} />
+              {sub.grade}% <Pencil onClick={() => handleClick(sub.id)} />
             </td>
           );
         })}

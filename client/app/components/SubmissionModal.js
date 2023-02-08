@@ -5,7 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
 //boostrap
-import { Modal, Container, Row, Form } from "react-bootstrap";
+import { Modal, Container, Row, Form, Button } from "react-bootstrap";
+
+//slice methods
+import { selectAssessment } from "../store/slices/singleAssessmentSlice";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 
@@ -16,6 +19,17 @@ we either need two modal components OR we can pass down the onsubmit function in
 
 const SubmissionModal = (props) => {
   const { visible, handleCloseModal } = props;
+  const { currentSubmission } = useSelector(selectAssessment);
+  const [subGrade, setSubGrade] = useState(null);
+  const handleSubmit = (e) => {
+    console.log(
+      "handle submit: subId and grade",
+      currentSubmission.id,
+      subGrade
+    );
+    e.preventDefault();
+    handleCloseModal();
+  };
   return (
     <Modal
       size='lg'
@@ -24,14 +38,20 @@ const SubmissionModal = (props) => {
       show={visible}
       onHide={handleCloseModal}
     >
-      {/* NOTE - how to add in show= and onHide=? pass functions in props? */}
-
-      <Modal.Title>Text of Question</Modal.Title>
+      <Modal.Title>
+        {currentSubmission && Object.keys(currentSubmission).length
+          ? currentSubmission.question.questionText
+          : ""}
+      </Modal.Title>
       <Modal.Body>
         <Container>
-          <Row>Student's Response</Row>
+          <Row>
+            {currentSubmission && Object.keys(currentSubmission).length
+              ? currentSubmission.response
+              : ""}
+          </Row>
         </Container>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label>Grade</Form.Label>
             <Form.Control
@@ -39,8 +59,10 @@ const SubmissionModal = (props) => {
               min='1'
               max='100'
               step='1'
+              onChange={(e) => setSubGrade(e.target.value)}
             ></Form.Control>
           </Form.Group>
+          <Button type='submit'>Submit</Button>
         </Form>
       </Modal.Body>
     </Modal>

@@ -70,7 +70,7 @@ router.get(
     //   res.send("not yours");
     // }
     const sub = await Submission.findByPk(req.params.submissionId, {
-      include: { model: Assessment },
+      include: [{ model: Assessment }, { model: Question }],
     });
     if (sub.assessment.userId !== req.user.id) {
       res.send("You do not have access to this page.");
