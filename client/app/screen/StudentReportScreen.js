@@ -19,11 +19,21 @@ import {
   Legend,
   LinearScale,
   BarElement,
+  Title,
 } from "chart.js";
+import ChartDataLables from "chartjs-plugin-datalabels";
 
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  BarElement,
+  ChartDataLables,
+  Title
+);
 
 export default function StudentReportScreen() {
   // export chart
@@ -107,7 +117,7 @@ export default function StudentReportScreen() {
     labels: grades.map((el) => el.title),
     datasets: [
       {
-        label: "Test chart",
+        label: "Grade at each assessments",
         data: grades.map((el) => el.grade),
         backgroundColor: "aqua",
         borderColor: "#000",
@@ -118,6 +128,45 @@ export default function StudentReportScreen() {
   const options = {
     animation: {
       duration: 0,
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: `${currentStudent?.firstName} ${currentStudent?.lastName} Grade at Course: ${currentCourse?.name}`,
+        font: {
+          size: 32,
+        },
+      },
+      datalabels: {
+        display: true,
+        color: "#111",
+        font: {
+          weight: "bold",
+          size: 16,
+        },
+        anchor: "end",
+        offset: -20,
+        align: "start",
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 5,
+        },
+        title: {
+          display: true,
+          text: "Grade",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Assessment",
+        },
+      },
     },
   };
 
