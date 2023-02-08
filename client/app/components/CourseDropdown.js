@@ -5,18 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 
 //bootstrap
-import { Button, Dropdown } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 
 //slice methods
-import { fetchCourseAssessments } from "../store";
-import {
-  selectCourseReport,
-  fetchCourse,
-} from "../store/slices/courseReportSlice";
-import {
-  selectCourses,
-  fetchCourseStudents,
-} from "../store/slices/courseSlices";
+import { fetchCourseStudents } from "../store/slices/courseSlices";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 
