@@ -47,7 +47,7 @@ const Sidebar = () => {
 
         <Nav.Item>
           <Nav.Link eventKey="classes" as={Link} to="/courses">
-            Classes
+            Courses
           </Nav.Link>
         </Nav.Item>
 
@@ -64,7 +64,7 @@ const Sidebar = () => {
               as={Link}
               to="/report/courses"
             >
-              Classes
+              Courses
             </NavDropdown.Item>
             <NavDropdown.Item
               eventKey="reportStudents"
