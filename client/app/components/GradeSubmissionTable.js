@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 //bootstrap
-import { Table } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
+import {
+  ArchiveFill,
+  Archive,
+  Trash3,
+  PlusCircleFill,
+  Pencil,
+} from "react-bootstrap-icons";
 //slice methods
 import {
   selectAssessment,
@@ -27,6 +34,10 @@ const GradeSubmissionTable = () => {
     `howdy from table component, here are student submissions`,
     studentSubmissions
   );
+  const handleClick = (key) => {
+    console.log("click key", key);
+  };
+
   if (!studentSubmissions.length) {
     return <h2>There are no student submissions for this assessment yet. </h2>;
   }
@@ -45,9 +56,18 @@ const GradeSubmissionTable = () => {
         {student.submissions.map((sub) => {
           let key = `${student.id}-${sub.questionId}`;
           if (sub.grade === null) {
-            return <td key={key}>Enter Grade</td>;
+            return (
+              <td key={key}>
+                Enter Grade
+                <PlusCircleFill onClick={() => handleClick(key)} />
+              </td>
+            );
           }
-          return <td key={key}>{sub.grade}%</td>;
+          return (
+            <td key={key}>
+              {sub.grade}% <Pencil onClick={() => handleClick(key)} />
+            </td>
+          );
         })}
       </tr>
     );
