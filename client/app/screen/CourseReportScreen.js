@@ -136,7 +136,7 @@ export default function CourseReportScreen() {
       spacing,
       title: {
         display: true,
-        text: `Students' overall grade in course: ${currentCourse?.name} `,
+        text: `Student's overall grade in course: ${currentCourse?.name} `,
         font: {
           size: 32,
         },
@@ -184,7 +184,7 @@ export default function CourseReportScreen() {
         title: {
           display: true,
           color: "#111",
-          text: "student",
+          text: "name of student",
         },
       },
     },
