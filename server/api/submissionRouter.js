@@ -37,11 +37,12 @@ router.get(
 //get all submissions for one question
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions", protectedRoute,
+  "/assessments/:assessmentId/questions/:questionId/submissions",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findOne(req.params.assessmentId);
     if (assessment.userId !== req.user.id) {
-      res.send("not yours")
+      res.send("not yours");
     }
     const submissions = await Question.findByPk(req.params.questionId, {
       include: {
@@ -59,11 +60,12 @@ router.get(
 //To get a specific submission:
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId", protectedRoute,
+  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findByPk(req.params.assessmentId);
     if (assessment.userId !== req.user.id) {
-      res.send("not yours")
+      res.send("not yours");
     }
     const singleAssessment = await Submission.findByPk(req.params.submissionId);
     res.status(200).json({
@@ -136,6 +138,8 @@ router.post(
     const existedSubmissions = await Submission.findAll({
       where: {
         studentId,
+        courseId: req.params.courseId,
+        assessmentId: req.params.assessmentId,
         questionId: {
           [Sequelize.Op.in]: qusetionIds,
         },
@@ -184,11 +188,12 @@ router.put(
 //To delete a submission:
 
 router.delete(
-  "/assessments/:assessmentId/submissions/:submissionId", protectedRoute,
+  "/assessments/:assessmentId/submissions/:submissionId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.fineOne(req.params.assessmentId);
     if (assessment.userId !== req.user.id) {
-      res.send("not yours")
+      res.send("not yours");
     }
     const deletedSubmission = await Submission.findByPk(
       req.params.submissionId
