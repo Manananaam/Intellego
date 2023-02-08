@@ -47,6 +47,18 @@ export const verifyStudentId = createAsyncThunk(
   }
 );
 
+export const editStudent = createAsyncThunk(
+  "student/editStudent", async ({ id, firstName, lastName }, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.put(`/api/students/${id}`, { firstName, lastName});
+      console.log("Here it is", data)
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const studentViewSlice = createSlice({
   name: "studentView",
   initialState: {
@@ -116,6 +128,10 @@ const studentViewSlice = createSlice({
       state.isLoadingForVerifyStudentID = false;
       state.verifyResult = false;
       state.errorForVerifyStudentId = action.error.message;
+    });
+    //edit Student
+    builder.addCase(editStudent.fulfilled, (state, action) => {
+      state.students = action.payload.students;
     });
   },
 });

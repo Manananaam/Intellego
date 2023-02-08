@@ -77,13 +77,18 @@ export default function CourseReportScreen() {
       {
         label: "Course Report",
         data: allGrades && allGrades.map((obj) => obj.overall_grade),
-
         backgroundColor: "aqua",
         borderColor: "#000",
         borderWidth: 1,
       },
     ],
   };
+  const options = {
+    animation: {
+      duration: 0,
+    },
+  };
+
   //render chart
   let chart;
   if (currentCourse && allGrades && allGrades.length) {
@@ -97,13 +102,6 @@ export default function CourseReportScreen() {
     );
   } else {
     chart = <p>Please select an active course. </p>;
-  }
-
-  const options = {
-    responsive: true,
-    animation: {
-      duration: 0,
-    },
   };
 
   return (
