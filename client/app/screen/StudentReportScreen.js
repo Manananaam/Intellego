@@ -12,6 +12,19 @@ import { fetchGradeForEachAssessment, getCourses } from "../store";
 import { fetchCourseStudents } from "../store/slices/courseSlices";
 
 // Chart
+
+// customize canvas color of chart, so export chart have white background
+const canvasColor = {
+  id: "customCanvasBackgroundColor",
+  beforeDraw: (chart, args, options) => {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,7 +45,8 @@ ChartJS.register(
   Legend,
   BarElement,
   ChartDataLables,
-  Title
+  Title,
+  canvasColor
 );
 
 export default function StudentReportScreen() {
@@ -130,12 +144,14 @@ export default function StudentReportScreen() {
       duration: 0,
     },
     plugins: {
+      canvasColor,
       title: {
         display: true,
         text: `${currentStudent?.firstName} ${currentStudent?.lastName} Grade at Course: ${currentCourse?.name}`,
         font: {
           size: 32,
         },
+        color: "#111",
       },
       datalabels: {
         display: true,
@@ -148,6 +164,15 @@ export default function StudentReportScreen() {
         offset: -20,
         align: "start",
       },
+      legend: {
+        labels: {
+          color: "#111",
+          font: {
+            weight: "bold",
+            size: 16,
+          },
+        },
+      },
     },
     scales: {
       y: {
@@ -155,15 +180,21 @@ export default function StudentReportScreen() {
         max: 100,
         ticks: {
           stepSize: 5,
+          color: "#111",
         },
         title: {
           display: true,
           text: "Grade",
+          color: "#111",
         },
       },
       x: {
+        ticks: {
+          color: "#111",
+        },
         title: {
           display: true,
+          color: "#111",
           text: "Assessment",
         },
       },
@@ -174,7 +205,13 @@ export default function StudentReportScreen() {
   let chart;
   if (currentStudent && grades.length) {
     chart = (
-      <div style={{ height: "690px", width: "690px", margin: "auto" }}>
+      <div
+        style={{
+          height: "690px",
+          width: "690px",
+          margin: "auto",
+        }}
+      >
         <Bar data={data} options={options} ref={chartRef}></Bar>
       </div>
     );
