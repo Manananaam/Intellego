@@ -1,5 +1,5 @@
 //data: { assessment: {id, title, userId, courseId, questions:[]}}
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -309,6 +309,21 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(fetchSingleSubmission.fulfilled, (state, action) => {
       state.currentSubmission = action.payload;
+    });
+    builder.addCase(submitGrade.fulfilled, (state, action) => {
+      console.log(action.payload);
+      console.log(state);
+      state.currentSubmission = action.payload;
+      const updatedGrade = state.studentSubmissions.find(
+        (el) => el.id === action.payload.studentId
+      );
+      console.log(
+        "state.studentSubmissions",
+        current(state.studentSubmissions)
+      );
+
+      console.log("action.payload.id", action.payload.id);
+      console.log("updatedGrade", updatedGrade);
     });
   },
 });

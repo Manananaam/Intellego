@@ -26,6 +26,7 @@ import { selectCourses } from "../store/slices/courseSlices";
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 const GradeSubmissionTable = () => {
   const dispatch = useDispatch();
+  const { assessmentId } = useParams();
   const { assessment, studentSubmissions } = useSelector(selectAssessment);
   const selectedCourse = useSelector(selectCourses);
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,11 +40,13 @@ const GradeSubmissionTable = () => {
   //   `howdy from table component, here are student submissions`,
   //   studentSubmissions
   // );
+
   const handleClick = (subId) => {
     dispatch(fetchSingleSubmission(subId));
     setModalVisible(true);
   };
   const handleCloseModal = () => {
+    dispatch(fetchAssessment(assessmentId));
     console.log("closing modal");
     setModalVisible(false);
   };
@@ -56,32 +59,38 @@ const GradeSubmissionTable = () => {
     return <th key={question.id}>Question {idx + 1}</th>;
   });
 
-  const studentRows = studentSubmissions.map((student, idx) => {
-    // console.log("mapping studentRows, here is current student", student);
-    return (
-      <tr key={idx}>
-        <td>
-          {student.firstName} {student.lastName}
-        </td>
-        {student.submissions.map((sub) => {
-          let key = `${student.id}-${sub.questionId}`;
-          if (sub.grade === null) {
-            return (
-              <td key={sub.id}>
-                Enter Grade
-                <PlusCircleFill onClick={() => handleClick(sub.id)} />
-              </td>
-            );
-          }
+  const studentRows =
+    studentSubmissions && studentSubmissions.length
+      ? studentSubmissions.map((student, idx) => {
+          // console.log("mapping studentRows, here is current student", student);
           return (
-            <td key={key}>
-              {sub.grade}% <Pencil onClick={() => handleClick(sub.id)} />
-            </td>
+            <tr key={idx}>
+              <td>
+                {student.firstName} {student.lastName}
+              </td>
+              {student.submissions && student.submissions.length
+                ? student.submissions.map((sub) => {
+                    let key = `${student.id}-${sub.questionId}`;
+                    if (sub.grade === null) {
+                      return (
+                        <td key={sub.id}>
+                          Enter Grade
+                          <PlusCircleFill onClick={() => handleClick(sub.id)} />
+                        </td>
+                      );
+                    }
+                    return (
+                      <td key={key}>
+                        {sub.grade}%{" "}
+                        <Pencil onClick={() => handleClick(sub.id)} />
+                      </td>
+                    );
+                  })
+                : null}
+            </tr>
           );
-        })}
-      </tr>
-    );
-  });
+        })
+      : null;
 
   return (
     <>
