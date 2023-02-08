@@ -79,6 +79,23 @@ router.get(
   })
 );
 
+//@desc: submit a grade
+//note: this might overlap with one of the routes below - could delete later
+router.put(
+  "/:submissionId",
+  protectedRoute,
+  asyncHandler(async (req, res, next) => {
+    const sub = await Submission.findByPk(req.params.submissionId, {
+      include: [{ model: Assessment }, { model: Question }],
+    });
+    if (sub.assessment.userId !== req.user.id) {
+      res.send("You do not have access to this page.");
+    }
+    await sub.update(req.body);
+    res.status(200).json(sub);
+  })
+);
+
 // @desc: create a bunch of submission
 // @route: /api/submissions/courses/:coureseId/assessments/:assessmentId/students/:studentId
 // @access: public
