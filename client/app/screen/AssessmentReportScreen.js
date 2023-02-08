@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
 
 //Router
 import { useSearchParams } from "react-router-dom";
@@ -96,7 +96,7 @@ const AssessmentReportScreen = () => {
     <>
       <h1>Assessment Report Screen</h1>
       <Dropdown>
-        <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+        <Dropdown.Toggle variant="primary" id="dropdown-basic">
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -117,7 +117,7 @@ const AssessmentReportScreen = () => {
       <br />
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
             {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -138,9 +138,10 @@ const AssessmentReportScreen = () => {
       )}
       <br />
       <h2>
-        {currentAssessment ? currentAssessment.title : "Please select an assessment"}
+        {currentAssessment
+          ? currentAssessment.title
+          : "Please select an assessment"}
       </h2>
-      {currentAssessment &&
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -177,11 +178,9 @@ const AssessmentReportScreen = () => {
                           <td key={submission.id}>
                             {submission.response} {submission.grade}
                           </td>
-                      )
+                        );
                       } else {
-                        return (
-                          <td key={question.id}>no submission yet</td>
-                        )
+                        return <td>no submission yet</td>;
                       }
                     })}
                   <td>{Math.round(allGrades / numGrades)}</td>
@@ -190,21 +189,19 @@ const AssessmentReportScreen = () => {
             })
           ) : (
             <tr>
-              <td>No students in this course!</td>
+              <td>No students in this class!</td>
             </tr>
           )}
         </tbody>
-
-      </Table>}
-      {currentAssessment && <h3>
+      </Table>
+      <h3>
         Overall Class Average:{" "}
-
         {Math.round(
           assessmentGrades.reduce((total, item) => total + item, 0) /
             assessmentGrades.length
         )}
         %
-      </h3>}
+      </h3>
     </>
   );
 };

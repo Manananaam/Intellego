@@ -18,50 +18,80 @@ import EditAssessmentScreen from "./EditAssessmentScreen";
 import CreateAssessmentScreen from "./CreateAssessmentScreen";
 import AssessmentReportScreen from "./AssessmentReportScreen";
 import CourseReportScreen from "./CourseReportScreen";
+import StudentViewScreen from "./StudentViewScreen";
+
+import GradingScreen from "./GradingScreen";
+
+import DashHome from "./DashHome";
+
 
 const MainDashboardScreen = () => {
   return (
     <Container>
       <Row>
-        <Col xs={3} id="sidebar-wrapper">
+        <Col xs={3} id='sidebar-wrapper'>
           <Sidebar />
         </Col>
-        <Col xs={9} id="page-content-wrapper">
+        <Col xs={9} id='page-content-wrapper'>
           <Routes>
+
+            <Route path="/" element={<DashHome />} />
+
+            {/**Courses **/}
             <Route path="/courses" element={<CousreScreen />} />
+
             <Route
-              path="/courses/:courseId/students"
+              path='/courses/:courseId/students'
               element={<CourseStudentScreen />}
             />
             <Route
-              path="/courses/:courseId/assessments"
+              path='/courses/:courseId/assessments'
               element={<CourseAssessmentsScreen />}
             />
 
+
+            {/**Assessments **/}
             <Route path="/assessments" element={<AssessmentsScreen />} />
+
             <Route
-              path="/assessments/create"
+              path='/assessments/create'
               element={<CreateAssessmentScreen />}
             />
             <Route
-              path="/assessments/:assessmentId"
+              path='/assessments/:assessmentId'
               element={<EditAssessmentScreen />}
             />
-            <Route path="/report/students" element={<StudentReportScreen />} />
             <Route
-              path="/report/assessments"
+              path='/assessments/:assessmentId/grades'
+              element={<GradingScreen />}
+            />
+
+            {/**Reports **/}
+            <Route path="/report/students" element={<StudentReportScreen />} />
+
+            
+            <Route path='/report/students' element={<StudentReportScreen />} />
+            <Route
+              path='/report/assessments'
               element={<AssessmentReportScreen />}
             />
-            <Route path="/report/courses/" element={<CourseReportScreen />} />
 
+            <Route path='/report/courses/' element={<CourseReportScreen />} />
+            <Route
+              path='/student/courses/:courseId/assessments/:assessmentId'
+              element={<StudentViewScreen />}
+            />
             <Route
               path={"/*"}
               element={
-                <h1 className="text-center text-warning mt-4">
+                <h1 className='text-center text-warning mt-4'>
                   404: Not Found
                 </h1>
               }
             />
+
+            <Route path="/report/courses/" element={<CourseReportScreen />} />
+
           </Routes>
         </Col>
       </Row>

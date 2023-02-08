@@ -8,7 +8,7 @@ import {
 } from "../store/slices/courseSlices";
 import CourseCreate from "../components/CourseCreate";
 import CourseEdit from "../components/CourseEdit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
@@ -66,17 +66,18 @@ const CourseScreen = () => {
                         <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
-                            href={`/courses/${course.id}/students`}
+                            as={Link}
+                            to={`/courses/${course.id}/students`}
                           >
                             Students
                           </Dropdown.Item>
-
                           <Dropdown.Item
-                            href={`/courses/${course.id}/assessments`}
+                            as={Link}
+                            to={`/courses/${course.id}/assessments`}
                           >
                             Assessments
-                          </Dropdown.Item>
-                          <Dropdown.Item href={"/report/courses"}>
+                          </Dropdown.Item>{" "}
+                          <Dropdown.Item as={Link} to={"/report/courses"}>
                             Report
                           </Dropdown.Item>
                           <Dropdown.Divider />

@@ -49,7 +49,7 @@ const courseSeed = [
     name: "Test Course",
     subject: "ELA",
     gradeLevel: 3,
-    userId: 101,
+    userId: 102,
   },
   {
     id: 120,
@@ -122,15 +122,6 @@ const studentSeed = [
   },
 ];
 const submissionSeed = [
-  {
-    id: 108,
-    response: "This is a sample response.",
-    questionId: 101,
-    studentId: 100,
-    grade: 98,
-    courseId: 114,
-    assessmentId: 105,
-  },
   {
     id: 109,
     response: "Mercutio",
@@ -240,6 +231,27 @@ const submissionSeed = [
     grade: 65,
     courseId: 120,
     assessmentId: 110,
+  },
+  {
+    response: "",
+    questionId: 104,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
+  },
+  {
+    response: "They are all bad people full of hate",
+    questionId: 103,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
+  },
+  {
+    response: "The nurse, she is the funniest character!",
+    questionId: 102,
+    studentId: 100,
+    courseId: 114,
+    assessmentId: 108,
   },
 ];
 

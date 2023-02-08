@@ -3,7 +3,7 @@ const router = express.Router();
 
 const asyncHandler = require("express-async-handler");
 const {
-  models: { Assessment, Question, Submission, Course },
+  models: { Assessment, Question, Submission, Course, Student },
 } = require("../db");
 
 const protectedRoute = require("./middleware");
@@ -236,6 +236,48 @@ router.post(
     const assessmentId = req.params.assessmentId;
     const { questionText } = req.body;
     res.json(await Question.create({ questionText, assessmentId }));
+  })
+);
+
+//desc: route by Madeleine for use on grading page
+router.get(
+  "/:assessmentId/courses/:courseId/submissions",
+  protectedRoute,
+  asyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
+    const { assessmentId, courseId } = req.params;
+
+    const students = await Student.findAll({
+      include: {
+        model: Submission,
+        where: { assessmentId, courseId },
+      },
+    });
+
+    const submissions = await Assessment.findAll({
+      where: { id: assessmentId, userId: userId },
+      include: [
+        {
+          model: Course,
+          where: {
+            id: courseId,
+          },
+          include: {
+            model: Student,
+            include: {
+              model: Submission,
+              where: {
+                courseId,
+                assessmentId,
+              },
+            },
+          },
+        },
+        { model: Question },
+      ],
+    });
+
+    res.json(students);
   })
 );
 
