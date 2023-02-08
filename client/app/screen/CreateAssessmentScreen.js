@@ -72,7 +72,7 @@ const CreateAssessmentScreen = () => {
           ></Form.Control>
         </Form.Group>
         <br />
-        <FloatingLabel label="Assign this assessment to one of the course">
+        <FloatingLabel label="Assign to course">
           <Form.Select
             aria-label="associated-course"
             value={associatedCourse || ""}
