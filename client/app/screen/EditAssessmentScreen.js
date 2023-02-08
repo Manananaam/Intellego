@@ -105,6 +105,9 @@ const EditAssessmentScreen = () => {
         <h2>
           {assessmentTitle || ""} <Pencil onClick={setEditNameModalVisible} />
         </h2>
+        <Button onClick={() => navigate(`/assessments/${assessmentId}/grades`)}>
+          Assessment Grades
+        </Button>
         <Modal
           size='lg'
           aria-labelledby='contained-modal-title-vcenter'

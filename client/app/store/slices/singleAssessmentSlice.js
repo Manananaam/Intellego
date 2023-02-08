@@ -1,5 +1,5 @@
 //data: { assessment: {id, title, userId, courseId, questions:[]}}
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
@@ -9,6 +9,8 @@ const initialState = {
     associatedCourses: [],
     isActive: null,
   },
+  studentSubmissions: [],
+  currentSubmission: {},
 };
 
 //fetch a single assessment by id
@@ -196,6 +198,77 @@ export const createAssessment = createAsyncThunk(
     }
   }
 );
+
+//desc: pull in student submissions for a particular assessment/course combo
+export const fetchStudentSubmissions = createAsyncThunk(
+  "assessment/fetchStudentSubmissions",
+  async ({ assessmentId, courseId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `/api/assessments/${assessmentId}/courses/${courseId}/submissions`,
+        config
+      );
+      return data;
+    } catch (err) {
+      const errorMessage = err.response.data.message;
+      throw new Error(errorMessage);
+    }
+  }
+);
+
+export const fetchSingleSubmission = createAsyncThunk(
+  "assessment/fetchSingleSubmission",
+  async (subId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(`/api/submissions/${subId}`, config);
+      return data;
+    } catch (err) {
+      const errorMessage = err.response.data.message;
+      throw new Error(errorMessage);
+    }
+  }
+);
+
+export const submitGrade = createAsyncThunk(
+  "assessment/submitGrade",
+  async ({ subId, grade }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log("hello1 from thunk", subId, grade);
+      const { data } = await axios.put(
+        `/api/submissions/${subId}`,
+        { grade: grade },
+        config
+      );
+      console.log("hello2 from thunk", data);
+      return data;
+    } catch (err) {
+      const errorMessage = err.reponse.data.message;
+      throw new Error(errorMessage);
+    }
+  }
+);
+
 export const assessmentSlice = createSlice({
   name: "assessment",
   initialState,
@@ -229,6 +302,27 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(deleteAssessment.fulfilled, (state, action) => {
       state.assessment = {};
+    });
+    builder.addCase(fetchStudentSubmissions.fulfilled, (state, action) => {
+      state.studentSubmissions = action.payload;
+    });
+    builder.addCase(fetchSingleSubmission.fulfilled, (state, action) => {
+      state.currentSubmission = action.payload;
+    });
+    builder.addCase(submitGrade.fulfilled, (state, action) => {
+      console.log(action.payload);
+      console.log(state);
+      state.currentSubmission = action.payload;
+      const updatedGrade = state.studentSubmissions.find(
+        (el) => el.id === action.payload.studentId
+      );
+      console.log(
+        "state.studentSubmissions",
+        current(state.studentSubmissions)
+      );
+
+      console.log("action.payload.id", action.payload.id);
+      console.log("updatedGrade", updatedGrade);
     });
   },
 });
