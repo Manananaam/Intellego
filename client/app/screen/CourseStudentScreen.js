@@ -22,9 +22,9 @@ const CourseStudentScreen = () => {
   const { courseId } = useParams();
   const course = useSelector(selectCourses);
 
-    //Eventhandlers
-    const handleShow = () => setShow(true);
-    const handleShowEdit = () => setShowEdit(true);
+  //Eventhandlers
+  const handleShow = () => setShow(true);
+  const handleShowEdit = () => setShowEdit(true);
 
   useEffect(() => {
     dispatch(fetchCourseStudents(courseId));
@@ -32,49 +32,53 @@ const CourseStudentScreen = () => {
 
   return (
     <>
-          <h1>Students in {course.name}</h1>
-          <Table>
-            <thead>
-              <tr>
-                <th>Student ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {course.students && course.students.length
-                ? course.students.map((student) => {
-                    return (
-                      <tr key={student.id} href="">
-                        <td>{student.id}</td>
-                        <td>{student.firstName}</td>
-                        <td>{student.lastName}</td>
-                        <td>
-                          <Dropdown>
-                            <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
-                            <Dropdown.Menu>
-                            <Dropdown.Item href={`/report/students?courseId=${courseId}&studentId=${student.id}`}>View Report</Dropdown.Item>
-                            <Dropdown.Item onClick={handleShowEdit}>Edit/Remove Student</Dropdown.Item>
-
+      <h1>Students in {course.name}</h1>
+      <Table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {course.students && course.students.length
+            ? course.students.map((student) => {
+                return (
+                  <tr key={student.id}>
+                    <td>{student.id}</td>
+                    <td>{student.firstName}</td>
+                    <td>{student.lastName}</td>
+                    <td>
+                      <Dropdown>
+                        <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/report/students?courseId=${courseId}&studentId=${student.id}`}
+                          >
+                            View Report
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={handleShowEdit}>
+                            Edit/Remove Student
+                          </Dropdown.Item>
                         </Dropdown.Menu>
                         <StudentEdit
-                        showEdit={showEdit}
-                        setShowEdit={setShowEdit}
-                        id={student.id}
-                        >
-                        </StudentEdit>
-                          </Dropdown>
-                          </td>
-                        <td>
-                        </td>
-                      </tr>
-                    );
-                  })
-                : null}
-            </tbody>
-          </Table>
-          </>
+                          showEdit={showEdit}
+                          setShowEdit={setShowEdit}
+                          id={student.id}
+                        ></StudentEdit>
+                      </Dropdown>
+                    </td>
+                    <td></td>
+                  </tr>
+                );
+              })
+            : null}
+        </tbody>
+      </Table>
+    </>
   );
 };
 

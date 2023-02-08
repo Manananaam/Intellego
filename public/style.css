@@ -19,3 +19,8 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+/*Dashbaord*/
+h1 {
+  margin: 20px 0 20px 0 !important;
+}
