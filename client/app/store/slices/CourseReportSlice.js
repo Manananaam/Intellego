@@ -6,7 +6,14 @@ export const fetchCourse = createAsyncThunk(
   "/singleCourse/fetchCourse",
   async (courseId) => {
     try {
-      const { data } = await axios.get(`/api/courses/${courseId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        }
+      };
+      const { data } = await axios.get(`/api/courses/${courseId}`, config);
       return data;
     } catch (error) {
       return error.message;
@@ -18,7 +25,14 @@ export const fetchCourse = createAsyncThunk(
 // export const fetchCourseReport = createAsyncThunk(
 //   "courses/report/fetchGrades", async(courseId) => {
 //     try {
-//       const { data } = await axios.get(`/api/courses/${courseId}/submissions`);
+  // const token = JSON.parse(localStorage.getItem("jwt"));
+  // const config = {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${token}`,
+  //   }
+  // };
+//       const { data } = await axios.get(`/api/courses/${courseId}/submissions`, config);
 //       return data;
 //     }
 //     catch (err) {
@@ -31,8 +45,15 @@ export const fetchCourseReport = createAsyncThunk(
   "courses/report/fetchGrades",
   async (courseId) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        }
+      };
       const { data } = await axios.get(
-        `/api/courses/${courseId}/assessment/:assessmentId`
+        `/api/courses/${courseId}/assessment/:assessmentId`, config
       );
       return data;
     } catch (err) {
@@ -46,8 +67,15 @@ export const fetchOverallGrade = createAsyncThunk(
   `students/courses/:courseId/fetchOverallGrade`,
   async (courseId) => {
     try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        }
+      };
       const { data } = await axios.get(
-        `/api/students/courses/${courseId}/overallGrade`
+        `/api/students/courses/${courseId}/overallGrade`, config
       );
       return data;
     } catch (err) {
@@ -68,7 +96,6 @@ export const CourseReportSlice = createSlice({
       state.currentCourse = action.payload;
     });
     builder.addCase(fetchOverallGrade.fulfilled, (state, action) => {
-      console.log(action.payload.overallGradeForEachStudent);
       state.allGrades = action.payload.overallGradeForEachStudent;
     });
   },
