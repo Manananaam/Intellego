@@ -138,8 +138,9 @@ const AssessmentReportScreen = () => {
       )}
       <br />
       <h2>
-        {currentAssessment ? currentAssessment.title : "No Assessment Selected"}
+        {currentAssessment ? currentAssessment.title : "Please select an assessment"}
       </h2>
+      {currentAssessment &&
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -179,7 +180,7 @@ const AssessmentReportScreen = () => {
                       )
                       } else {
                         return (
-                          <td>no submission yet</td>
+                          <td key={question.id}>no submission yet</td>
                         )
                       }
                     })}
@@ -193,15 +194,17 @@ const AssessmentReportScreen = () => {
             </tr>
           )}
         </tbody>
-      </Table>
-      <h3>
-        Overall Course Average:{" "}
+
+      </Table>}
+      {currentAssessment && <h3>
+        Overall Class Average:{" "}
+
         {Math.round(
           assessmentGrades.reduce((total, item) => total + item, 0) /
             assessmentGrades.length
         )}
         %
-      </h3>
+      </h3>}
     </>
   );
 };
