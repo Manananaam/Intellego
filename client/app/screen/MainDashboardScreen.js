@@ -19,7 +19,11 @@ import CreateAssessmentScreen from "./CreateAssessmentScreen";
 import AssessmentReportScreen from "./AssessmentReportScreen";
 import CourseReportScreen from "./CourseReportScreen";
 import StudentViewScreen from "./StudentViewScreen";
+
 import GradingScreen from "./GradingScreen";
+
+import DashHome from "./DashHome";
+
 
 const MainDashboardScreen = () => {
   return (
@@ -30,7 +34,12 @@ const MainDashboardScreen = () => {
         </Col>
         <Col xs={9} id='page-content-wrapper'>
           <Routes>
-            <Route path='/courses' element={<CousreScreen />} />
+
+            <Route path="/" element={<DashHome />} />
+
+            {/**Courses **/}
+            <Route path="/courses" element={<CousreScreen />} />
+
             <Route
               path='/courses/:courseId/students'
               element={<CourseStudentScreen />}
@@ -40,7 +49,10 @@ const MainDashboardScreen = () => {
               element={<CourseAssessmentsScreen />}
             />
 
-            <Route path='/assessments' element={<AssessmentsScreen />} />
+
+            {/**Assessments **/}
+            <Route path="/assessments" element={<AssessmentsScreen />} />
+
             <Route
               path='/assessments/create'
               element={<CreateAssessmentScreen />}
@@ -49,6 +61,10 @@ const MainDashboardScreen = () => {
               path='/assessments/:assessmentId'
               element={<EditAssessmentScreen />}
             />
+
+            {/**Reports **/}
+            <Route path="/report/students" element={<StudentReportScreen />} />
+
             <Route
               path='/assessments/:assessmentId/grades'
               element={<GradingScreen />}
@@ -58,6 +74,7 @@ const MainDashboardScreen = () => {
               path='/report/assessments'
               element={<AssessmentReportScreen />}
             />
+
             <Route path='/report/courses/' element={<CourseReportScreen />} />
             <Route
               path='/student/courses/:courseId/assessments/:assessmentId'
@@ -71,6 +88,9 @@ const MainDashboardScreen = () => {
                 </h1>
               }
             />
+
+            <Route path="/report/courses/" element={<CourseReportScreen />} />
+
           </Routes>
         </Col>
       </Row>

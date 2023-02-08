@@ -32,7 +32,7 @@ export const fetchAllAssessments = createAsyncThunk(
 //does the course_assessmentModel associate them?
 export const createAssessment = createAsyncThunk(
   "/assessmentCreate",
-  async ({ title, questionText }) => {
+  async ({ title, questionText, courseId }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -41,10 +41,15 @@ export const createAssessment = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.post("/api/assessments", {
-        title,
-        questionText,
-      }, config);
+      const { data } = await axios.post(
+        "/api/assessments",
+        {
+          title,
+          questionText,
+          courseId,
+        },
+        config
+      );
       return data;
     } catch (err) {
       return err.message;
@@ -64,9 +69,13 @@ export const isActiveAssessment = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.put(`api/assessments/${assessmentId}`, {
-        isActive,
-      }, config);
+      const { data } = await axios.put(
+        `api/assessments/${assessmentId}`,
+        {
+          isActive,
+        },
+        config
+      );
       return data;
     } catch (err) {
       return err.message;
@@ -89,7 +98,7 @@ export const assessmentsSlice = createSlice({
       .addCase(isActiveAssessment.fulfilled, (state, action) => {
         return state.assessments.filter((assessment) => assessment.isActive);
       });
-    builder
+    builder;
   },
 });
 

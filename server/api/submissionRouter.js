@@ -62,6 +62,7 @@ router.get(
 // "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId"
 
 router.get(
+
   "/:submissionId",
   protectedRoute,
   asyncHandler(async (req, res, next) => {
@@ -74,6 +75,7 @@ router.get(
     });
     if (sub.assessment.userId !== req.user.id) {
       res.send("You do not have access to this page.");
+
     }
     res.status(200).json(sub);
   })
@@ -158,6 +160,8 @@ router.post(
     const existedSubmissions = await Submission.findAll({
       where: {
         studentId,
+        courseId: req.params.courseId,
+        assessmentId: req.params.assessmentId,
         questionId: {
           [Sequelize.Op.in]: qusetionIds,
         },

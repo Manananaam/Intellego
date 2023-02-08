@@ -96,7 +96,7 @@ const AssessmentReportScreen = () => {
     <>
       <h1>Assessment Report Screen</h1>
       <Dropdown>
-        <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+        <Dropdown.Toggle variant="primary" id="dropdown-basic">
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -117,7 +117,7 @@ const AssessmentReportScreen = () => {
       <br />
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
             {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -138,7 +138,9 @@ const AssessmentReportScreen = () => {
       )}
       <br />
       <h2>
-        {currentAssessment ? currentAssessment.title : "No Assessment Selected"}
+        {currentAssessment
+          ? currentAssessment.title
+          : "Please select an assessment"}
       </h2>
       <Table striped bordered hover>
         <thead>
@@ -176,11 +178,9 @@ const AssessmentReportScreen = () => {
                           <td key={submission.id}>
                             {submission.response} {submission.grade}
                           </td>
-                      )
+                        );
                       } else {
-                        return (
-                          <td>no submission yet</td>
-                        )
+                        return <td>no submission yet</td>;
                       }
                     })}
                   <td>{Math.round(allGrades / numGrades)}</td>

@@ -152,11 +152,10 @@ export const removeStudent = createAsyncThunk(
   async (studentId) => {
     try {
       const { data } = await axios.delete(`/api/students/${studentId}`);
-      console.log(data)
       return studentId;
     } catch (err) {
       // return rejectWithValue(err.message);
-      console.log(err)
+      console.log(err);
     }
   }
 );
@@ -187,9 +186,10 @@ export const courseSlice = createSlice({
     });
     //remove Student
     builder.addCase(removeStudent.fulfilled, (state, action) => {
-      console.log(action.payload)
-      state.students = state.students.filter((student) => student.id !== action.payload)
-   });
+      state.students = state.students.filter(
+        (student) => student.id !== action.payload
+      );
+    });
   },
 });
 

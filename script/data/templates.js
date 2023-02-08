@@ -123,15 +123,6 @@ const studentSeed = [
 ];
 const submissionSeed = [
   {
-    id: 108,
-    response: "This is a sample response.",
-    questionId: 101,
-    studentId: 100,
-    grade: 98,
-    courseId: 114,
-    assessmentId: 105,
-  },
-  {
     id: 109,
     response: "Mercutio",
     questionId: 102,
