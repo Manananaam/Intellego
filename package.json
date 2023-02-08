@@ -49,6 +49,7 @@
     "babel-loader": "^8.2.5",
     "bootstrap": "^5.2.3",
     "chai": "^4.3.6",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "css-loader": "^6.7.3",
     "esm": "^3.2.25",
     "mocha": "^10.1.0",
