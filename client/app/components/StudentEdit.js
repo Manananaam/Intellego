@@ -29,6 +29,7 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
     e.preventDefault();
     dispatch(removeStudent(id))
     handleEditClose();
+    console.log(id)
   };
 
   return (
