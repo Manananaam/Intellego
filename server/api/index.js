@@ -14,7 +14,7 @@ router.use("/assessments", require("./assessmentRouter"));
 router.use("/questions", protectedRoute, require("./questionRouter"));
 router.use("/students", require("./studentRouter"));
 router.use("/courses", protectedRoute, require("./courseRouter"));
-router.use("/submissions", protectedRoute, require("./submissionRouter"));
+router.use("/submissions", require("./submissionRouter"));
 router.use("/authentication", require("./authenticationRoutes"));
 
 module.exports = router;
