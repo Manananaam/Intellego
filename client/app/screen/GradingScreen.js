@@ -8,6 +8,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   selectAssessment,
   fetchAssessment,
+  fetchStudentSubmissions,
 } from "../store/slices/singleAssessmentSlice";
 import { fetchCourseAssessments } from "../store";
 import { selectCourses } from "../store/slices/courseSlices";
@@ -32,11 +33,23 @@ const GradingScreen = () => {
     dispatch(fetchAssessment(assessmentId));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (selectedCourse.id) {
+      dispatch(
+        fetchStudentSubmissions({ assessmentId, courseId: selectedCourse.id })
+      );
+    }
+  }, [selectedCourse]);
+
   return (
     <>
       <h1>howdy, it is time to grade, pardner</h1>
       <CourseDropdown courses={assessment.associatedCourses} />
-      <GradeSubmissionTable />
+      {selectedCourse && Object.keys(selectedCourse).length ? (
+        <GradeSubmissionTable />
+      ) : (
+        ""
+      )}
     </>
   );
 };

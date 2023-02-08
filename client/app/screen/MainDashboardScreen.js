@@ -18,6 +18,7 @@ import EditAssessmentScreen from "./EditAssessmentScreen";
 import CreateAssessmentScreen from "./CreateAssessmentScreen";
 import AssessmentReportScreen from "./AssessmentReportScreen";
 import CourseReportScreen from "./CourseReportScreen";
+import StudentViewScreen from "./StudentViewScreen";
 import GradingScreen from "./GradingScreen";
 
 const MainDashboardScreen = () => {

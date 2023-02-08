@@ -9,37 +9,44 @@ import { Table } from "react-bootstrap";
 import {
   selectAssessment,
   fetchAssessment,
+  fetchStudentSubmissions,
 } from "../store/slices/singleAssessmentSlice";
 import { selectCourses } from "../store/slices/courseSlices";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 const GradeSubmissionTable = () => {
-  const { assessment } = useSelector(selectAssessment);
+  const { assessment, studentSubmissions } = useSelector(selectAssessment);
   const selectedCourse = useSelector(selectCourses);
+
   console.log(
     `howdy from table component, here is selected course`,
     selectedCourse
   );
   console.log(`howdy from table component, here is assessment`, assessment);
+  console.log(
+    `howdy from table component, here are student submissions`,
+    studentSubmissions
+  );
 
   const questionHeaders = assessment.questions.map((question, idx) => {
     return <th key={question.id}>Question {idx + 1}</th>;
   });
-  // const studentRows =
-  // selectedCourse.students && selectedCourse.students ? (
-  //   selectedCourse.students.map((student) => {
-  //     return (
-  //       <tr key={student.id}>
-  //         <td>{student.name}</td>
-  //       </tr>
-  //     );
-  //   })
-  // ) : (
-  //   <tr>
-  //     <td>no students to display</td>
-  //   </tr>
-  // );
-  if()
+
+  const studentRows = studentSubmissions.map((student, idx) => {
+    console.log("mapping studentRows, here is current student", student);
+    return (
+      <tr key={idx}>
+        <td>
+          {student.firstName} {student.lastName}
+        </td>
+        {student.submissions.map((sub) => {
+          let key = `${student.id}-${sub.questionId}`;
+          return <td key={key}>{sub.grade}%</td>;
+        })}
+      </tr>
+    );
+  });
+
   return (
     <Table striped bordered hover>
       <thead>
@@ -48,21 +55,7 @@ const GradeSubmissionTable = () => {
           {questionHeaders}
         </tr>
       </thead>
-      <tbody>
-        {selectedCourse.students && selectedCourse.students ? (
-          selectedCourse.students.map((student) => {
-            return (
-              <tr key={student.id}>
-                <td>{student.name}</td>
-              </tr>
-            );
-          })
-        ) : (
-          <tr>
-            <td>no students to display</td>
-          </tr>
-        )}
-      </tbody>
+      <tbody>{studentRows}</tbody>
     </Table>
   );
 };
