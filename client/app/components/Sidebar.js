@@ -46,7 +46,7 @@ const Sidebar = () => {
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="classes" as={Link} to="/courses">
+          <Nav.Link eventKey="courses" as={Link} to="/courses">
             Courses
           </Nav.Link>
         </Nav.Item>
