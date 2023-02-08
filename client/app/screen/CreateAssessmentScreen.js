@@ -23,12 +23,18 @@ const CreateAssessmentScreen = () => {
   const [title, setTitle] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [associatedCourse, setAssociatedCourse] = useState(null);
-  console.log(associatedCourse);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createAssessment({ title, questionText }));
-    navigate("/assessments");
+    console.log({ title, questionText, courseId: Number(associatedCourse) });
+    // dispatch(
+    //   createAssessment({
+    //     title,
+    //     questionText,
+    //     courseId: Number(associatedCourse),
+    //   })
+    // );
+    // navigate("/assessments");
   };
 
   return (
