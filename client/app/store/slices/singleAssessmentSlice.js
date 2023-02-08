@@ -257,6 +257,9 @@ export const assessmentSlice = createSlice({
     builder.addCase(deleteAssessment.fulfilled, (state, action) => {
       state.assessment = {};
     });
+    builder.addCase(fetchStudentSubmissions.fulfilled, (state, action) => {
+      state.studentSubmissions = action.payload;
+    });
   },
 });
 
