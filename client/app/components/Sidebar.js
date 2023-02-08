@@ -37,7 +37,7 @@ const Sidebar = () => {
         </Figure.Caption>
 
         <Nav.Item>
-          <Nav.Link href="/dashboard">Home</Nav.Link>
+          <Nav.Link href="/">Home</Nav.Link>
         </Nav.Item>
 
         <Nav.Item>
