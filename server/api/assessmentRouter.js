@@ -238,15 +238,38 @@ router.get(
     const userId = req.user.id;
     const { assessmentId, courseId } = req.params;
 
-    const students = await Student.findAll({
-      include: {
-        model: Submission,
-        where: { assessmentId: assessmentId },
-        include: { model: Question },
-      },
+    // const students = await Student.findAll({
+    //   include: {
+    //     model: Submission,
+    //     where: { assessmentId: assessmentId },
+    //     include: { model: Question },
+    //   },
+    // });
+
+    const submissions = await Assessment.findAll({
+      where: { id: assessmentId, userId: userId },
+      include: [
+        {
+          model: Course,
+          where: {
+            id: courseId,
+          },
+          include: {
+            model: Student,
+            include: {
+              model: Submission,
+              where: {
+                courseId,
+                assessmentId,
+              },
+            },
+          },
+        },
+        { model: Question },
+      ],
     });
 
-    res.json(students);
+    res.json(submissions);
   })
 );
 
