@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 //Router
 import { useSearchParams } from "react-router-dom";
 
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +13,35 @@ import { fetchGradeForEachAssessment, getCourses } from "../store";
 import { fetchCourseStudents } from "../store/slices/courseSlices";
 
 // Chart
+
+// customize canvas color of chart, so export chart have white background
+const canvasColor = {
+  id: "customCanvasBackgroundColor",
+  beforeDraw: (chart, args, options) => {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
+const spacing = {
+  id: "increase-legend-spacing",
+  beforeInit(chart) {
+    // Get reference to the original fit function
+    const originalFit = chart.legend.fit;
+
+    // Override the fit function
+    chart.legend.fit = function fit() {
+      // Call original function and bind scope in order to use `this` correctly inside it
+      originalFit.bind(chart.legend)();
+      // Change the height as suggested in another answers
+      this.height += 10;
+    };
+  },
+};
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,13 +49,34 @@ import {
   Legend,
   LinearScale,
   BarElement,
+  Title,
 } from "chart.js";
+import ChartDataLables from "chartjs-plugin-datalabels";
 
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  BarElement,
+  ChartDataLables,
+  Title,
+  canvasColor,
+  spacing
+);
 
 export default function StudentReportScreen() {
+  // export chart
+  let chartRef = useRef(null);
+  const handleExport = () => {
+    const link = document.createElement("a");
+    link.download = `studentReport-${currentStudent.firstName}${currentStudent.lastName}.png`;
+    link.href = chartRef.current.toBase64Image();
+    link.click();
+  };
+
   // use router hook to fetch current courseId and studentId
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -98,7 +149,7 @@ export default function StudentReportScreen() {
     labels: grades.map((el) => el.title),
     datasets: [
       {
-        label: "Test chart",
+        label: "Grade at each assessments",
         data: grades.map((el) => el.grade),
         backgroundColor: "aqua",
         borderColor: "#000",
@@ -110,14 +161,77 @@ export default function StudentReportScreen() {
     animation: {
       duration: 0,
     },
+    plugins: {
+      canvasColor,
+      spacing,
+      title: {
+        display: true,
+        text: `${currentStudent?.firstName} ${currentStudent?.lastName} Grade at Course: ${currentCourse?.name}`,
+        font: {
+          size: 32,
+        },
+        color: "#111",
+      },
+      datalabels: {
+        display: true,
+        color: "#111",
+        font: {
+          weight: "bold",
+          size: 16,
+        },
+        anchor: "end",
+        offset: -20,
+        align: "start",
+      },
+      legend: {
+        labels: {
+          color: "#111",
+          font: {
+            weight: "bold",
+            size: 16,
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        min: 0,
+        max: 100,
+        ticks: {
+          stepSize: 5,
+          color: "#111",
+        },
+        title: {
+          display: true,
+          text: "Grade",
+          color: "#111",
+        },
+      },
+      x: {
+        ticks: {
+          color: "#111",
+        },
+        title: {
+          display: true,
+          color: "#111",
+          text: "Assessment",
+        },
+      },
+    },
   };
 
   // conditional render chart or alert message
   let chart;
   if (currentStudent && grades.length) {
     chart = (
-      <div style={{ width: "50%" }}>
-        <Bar data={data} options={options}></Bar>
+      <div
+        style={{
+          height: "690px",
+          width: "690px",
+          margin: "auto",
+        }}
+      >
+        <Bar data={data} options={options} ref={chartRef}></Bar>
       </div>
     );
   } else {
@@ -131,6 +245,12 @@ export default function StudentReportScreen() {
   }
   return (
     <div>
+      {currentCourse && currentStudent && (
+        <Button variant="primary" onClick={handleExport}>
+          Export
+        </Button>
+      )}
+
       <h1>Students Report</h1>
       <Dropdown>
         <Dropdown.Toggle>
