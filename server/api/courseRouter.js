@@ -73,7 +73,9 @@ router.get(
 router.post(
   "/",
   asyncHandler(async (req, res, next) => {
-    res.status(200).send(await Course.create(req.body));
+    res
+      .status(200)
+      .send(await Course.create({ ...req.body, userId: req.user.id }));
   })
 );
 

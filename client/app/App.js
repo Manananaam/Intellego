@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Screen
 import MainDashboardScreen from "./screen/MainDashboardScreen";
 import StudentViewScreen from "./screen/StudentViewScreen";
+import DashHome from "./screen/DashHome";
 
 import HomeScreen from "./screen/HomeScreen";
 import LogInScreen from "./screen/LogInScreen";
@@ -22,10 +23,6 @@ export default function App() {
         <>
           <Routes>
             <Route path="*" element={<MainDashboardScreen />} />
-            <Route
-              path="/student/courses/:courseId/assessments/:assessmentId"
-              element={<StudentViewScreen />}
-            />
           </Routes>
         </>
       ) : (

@@ -51,7 +51,7 @@ const CourseStudentScreen = () => {
             ? course.students.map((student) => {
                 const studentId = student.id;
                 return (
-                  <tr key={student.id} href="">
+                  <tr key={student.id}>
                     <td>{student.id}</td>
                     <td>{student.firstName}</td>
                     <td>{student.lastName}</td>
