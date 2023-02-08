@@ -9,6 +9,12 @@ import {
   selectAssessment,
   fetchAssessment,
 } from "../store/slices/singleAssessmentSlice";
+import { fetchCourseAssessments } from "../store";
+import { selectCourses } from "../store/slices/courseSlices";
+import { fetchCourseStudents } from "../store/slices/courseSlices";
+
+//components
+import CourseDropdown from "../components/CourseDropdown";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 const GradingScreen = () => {
@@ -19,14 +25,16 @@ const GradingScreen = () => {
   //state variables
   const { assessmentId } = useParams();
   const { assessment } = useSelector(selectAssessment);
+  const selectedCourse = useSelector(selectCourses);
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
   }, [dispatch]);
-  console.log("checking on variables", assessmentId, assessment);
+
   return (
     <>
       <h1>howdy, it is time to grade, pardner</h1>
+      <CourseDropdown courses={assessment.associatedCourses} />
     </>
   );
 };

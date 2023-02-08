@@ -49,7 +49,7 @@ const courseSeed = [
     name: "Test Course",
     subject: "ELA",
     gradeLevel: 3,
-    userId: 101,
+    userId: 102,
   },
   {
     id: 120,
