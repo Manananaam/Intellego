@@ -37,11 +37,12 @@ router.get(
 //get all submissions for one question
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions", protectedRoute,
+  "/assessments/:assessmentId/questions/:questionId/submissions",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.findOne(req.params.assessmentId);
     if (assessment.userId !== req.user.id) {
-      res.send("not yours")
+      res.send("not yours");
     }
     const submissions = await Question.findByPk(req.params.questionId, {
       include: {
@@ -57,20 +58,24 @@ router.get(
 );
 
 //To get a specific submission:
+//MLD note - making change to route URL, but preserving original URL here in case someone wants me to change it back
+// "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId"
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId", protectedRoute,
+  "/:submissionId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const assessment = await Assessment.findByPk(req.params.assessmentId);
-    if (assessment.userId !== req.user.id) {
-      res.send("not yours")
-    }
-    const singleAssessment = await Submission.findByPk(req.params.submissionId);
-    res.status(200).json({
-      data: {
-        singleAssessment,
-      },
+    // const assessment = await Assessment.findByPk(req.params.assessmentId);
+    // if (assessment.userId !== req.user.id) {
+    //   res.send("not yours");
+    // }
+    const sub = await Submission.findByPk(req.params.submissionId, {
+      include: { model: Assessment },
     });
+    if (sub.assessment.userId !== req.user.id) {
+      res.send("You do not have access to this page.");
+    }
+    res.status(200).json(sub);
   })
 );
 
@@ -184,11 +189,12 @@ router.put(
 //To delete a submission:
 
 router.delete(
-  "/assessments/:assessmentId/submissions/:submissionId", protectedRoute,
+  "/assessments/:assessmentId/submissions/:submissionId",
+  protectedRoute,
   asyncHandler(async (req, res, next) => {
     const assessment = await Assessment.fineOne(req.params.assessmentId);
     if (assessment.userId !== req.user.id) {
-      res.send("not yours")
+      res.send("not yours");
     }
     const deletedSubmission = await Submission.findByPk(
       req.params.submissionId

@@ -10,6 +10,7 @@ const initialState = {
     isActive: null,
   },
   studentSubmissions: [],
+  currentSubmission: {},
 };
 
 //fetch a single assessment by id

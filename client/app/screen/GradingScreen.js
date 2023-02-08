@@ -17,6 +17,7 @@ import { fetchCourseStudents } from "../store/slices/courseSlices";
 //components
 import CourseDropdown from "../components/CourseDropdown";
 import GradeSubmissionTable from "../components/GradeSubmissionTable";
+import SubmissionModal from "../components/SubmissionModal";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 const GradingScreen = () => {
@@ -46,7 +47,9 @@ const GradingScreen = () => {
       <h1>howdy, it is time to grade, pardner</h1>
       <CourseDropdown courses={assessment.associatedCourses} />
       {selectedCourse && Object.keys(selectedCourse).length ? (
-        <GradeSubmissionTable />
+        <>
+          <GradeSubmissionTable />
+        </>
       ) : (
         ""
       )}

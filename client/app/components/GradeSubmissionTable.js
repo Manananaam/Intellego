@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
+//components
+import SubmissionModal from "./SubmissionModal";
 //bootstrap
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Modal } from "react-bootstrap";
 import {
   ArchiveFill,
   Archive,
@@ -24,6 +26,7 @@ import { selectCourses } from "../store/slices/courseSlices";
 const GradeSubmissionTable = () => {
   const { assessment, studentSubmissions } = useSelector(selectAssessment);
   const selectedCourse = useSelector(selectCourses);
+  const [modalVisible, setModalVisible] = useState(false);
 
   console.log(
     `howdy from table component, here is selected course`,
@@ -36,6 +39,11 @@ const GradeSubmissionTable = () => {
   );
   const handleClick = (key) => {
     console.log("click key", key);
+    setModalVisible(true);
+  };
+  const handleCloseModal = () => {
+    console.log("closing modal");
+    setModalVisible(false);
   };
 
   if (!studentSubmissions.length) {
@@ -74,15 +82,29 @@ const GradeSubmissionTable = () => {
   });
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Student</th>
-          {questionHeaders}
-        </tr>
-      </thead>
-      <tbody>{studentRows}</tbody>
-    </Table>
+    <>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Student</th>
+            {questionHeaders}
+          </tr>
+        </thead>
+        <tbody>{studentRows}</tbody>
+      </Table>
+      <SubmissionModal
+        visible={modalVisible}
+        handleCloseModal={handleCloseModal}
+      />
+    </>
   );
 };
 export default GradeSubmissionTable;
+
+/* notes heading into break
+move modal import here instead of main grading screen
+add redux state for current submission if it doesn't already exist
+differentiate between put and post can be determined on this page? like, the click handler will determine what the submit button is based on whether you clicked pencil or plus
+AHA these are ALL put - just editing the grade field !
+
+*/
