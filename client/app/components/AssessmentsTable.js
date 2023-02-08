@@ -23,8 +23,6 @@ const AssessmentsTable = () => {
     dispatch(fetchAllAssessments());
   }, [dispatch]);
 
-  let questionAverageArr = [];
-
 
   return (
     <>
@@ -44,6 +42,7 @@ const AssessmentsTable = () => {
                 return assessment.isActive;
               })
               .map((assessment) => {
+                let questionAverageArr = [];
                 const assessmentId = assessment.id;
                 return (
                 <tr key={assessment.id}>
@@ -67,7 +66,6 @@ const AssessmentsTable = () => {
                   })
                    : <td>Missing Questions</td>}
                    {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>Missing Grades</td>}
-                   {questionAverageArr = []}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
