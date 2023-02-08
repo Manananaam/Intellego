@@ -18,7 +18,6 @@ import EditAssessmentScreen from "./EditAssessmentScreen";
 import CreateAssessmentScreen from "./CreateAssessmentScreen";
 import AssessmentReportScreen from "./AssessmentReportScreen";
 import CourseReportScreen from "./CourseReportScreen";
-import StudentViewScreen from "./StudentViewScreen";
 
 const MainDashboardScreen = () => {
   return (
@@ -54,10 +53,7 @@ const MainDashboardScreen = () => {
               element={<AssessmentReportScreen />}
             />
             <Route path="/report/courses/" element={<CourseReportScreen />} />
-            <Route
-              path="/student/courses/:courseId/assessments/:assessmentId"
-              element={<StudentViewScreen />}
-            />
+
             <Route
               path={"/*"}
               element={
