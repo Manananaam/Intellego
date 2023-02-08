@@ -5,6 +5,11 @@ import {
   selectAllAssessments,
   isActiveAssessment,
 } from "../store/slices/assessmentsTableSlice";
+import {
+  selectCourses,
+  fetchAllCourses,
+  isActiveCourse,
+} from "../store/slices/courseSlices";
 import { assessmentSlice, deleteAssessment } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -16,11 +21,13 @@ const AssessmentsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const singleAssessment = useSelector(selectAssessment).assessment;
+  const courses = useSelector(selectCourses);
 
-  console.log("all assessments:", allAssessments);
+  console.log("courses are:", courses)
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
+    dispatch(fetchAllCourses());
   }, [dispatch]);
 
 
@@ -30,7 +37,11 @@ const AssessmentsTable = () => {
         <thead>
           <tr>
             <th>Assessment</th>
-            <th>Course Name Here</th>
+            {courses && courses.length ? courses.map((course) => {
+              return (
+                <th key={course.id}>{course.name}</th>
+              )
+            }) : <th>No Courses Yet!</th>}
             <th>Average</th>
             <th>{<ArchiveFill />}</th>
           </tr>
