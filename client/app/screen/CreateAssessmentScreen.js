@@ -7,6 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 
 //atm courseId, userId not associated with this assessment
 //how to get the questions into the questions array of assessment?
@@ -50,6 +51,7 @@ const CreateAssessmentScreen = () => {
           <Navbar.Brand>New Assessment</Navbar.Brand>
         </Container>
       </Navbar>
+
       <Form>
         <Form.Group>
           <Form.Label>Title</Form.Label>
@@ -70,31 +72,32 @@ const CreateAssessmentScreen = () => {
           ></Form.Control>
         </Form.Group>
         <br />
-        <Form.Select
-          aria-label="associated-course"
-          value={associatedCourse || ""}
-          disabled={allcourses?.length === 0}
-          onChange={(e) => {
-            setAssociatedCourse(e.target.value);
-          }}
-        >
-          {allcourses && allcourses.length ? (
-            <>
-              <option key="blackChoice" hidden value>
-                Assign this assessment to course
+        <FloatingLabel label="Assign this assessment to one of the course">
+          <Form.Select
+            aria-label="associated-course"
+            value={associatedCourse || ""}
+            disabled={allcourses?.length === 0}
+            onChange={(e) => {
+              setAssociatedCourse(e.target.value);
+            }}
+          >
+            {allcourses && allcourses.length ? (
+              <>
+                <option key="blackChoice" hidden value></option>
+                {allcourses.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.name}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <option key="empty-course-prompt" hidden>
+                Please create course before assign
               </option>
-              {allcourses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.name}
-                </option>
-              ))}
-            </>
-          ) : (
-            <option key="empty-course-prompt" hidden>
-              Please create course before assign
-            </option>
-          )}
-        </Form.Select>
+            )}
+          </Form.Select>
+        </FloatingLabel>
+        <br />
         <Button
           as="input"
           type="submit"
