@@ -44,6 +44,7 @@ const AssessmentsTable = () => {
               .map((assessment) => {
                 let questionAverageArr = [];
                 const assessmentId = assessment.id;
+                let missing = "Grades";
                 return (
                 <tr key={assessment.id}>
                   <td>
@@ -64,8 +65,8 @@ const AssessmentsTable = () => {
                       questionAverageArr.push(questionAverage);
                     }
                   })
-                   : <td>Missing Questions</td>}
-                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>Missing Grades</td>}
+                   : missing = "Questions"}
+                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${missing}`}</td>}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
