@@ -1,8 +1,8 @@
 //react stuff
-import React, { useState  } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { editStudent } from "../store/slices/studentViewSlice";
-import { removeStudent } from "../store/slices/courseSlices"
+import { removeStudent } from "../store/slices/courseSlices";
 
 //bootstrap stuff
 import Button from "react-bootstrap/Button";
@@ -19,17 +19,14 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
     e.preventDefault();
     dispatch(editStudent({ id, firstName, lastName }));
     setShowEdit(false);
-    console.log(id)
-    console.log(firstName, lastName)
   };
 
   const handleEditClose = () => setShowEdit(false);
 
   const handleRemoveStudent = (e) => {
     e.preventDefault();
-    dispatch(removeStudent(id))
+    dispatch(removeStudent(id));
     handleEditClose();
-    console.log(id)
   };
 
   return (
@@ -59,8 +56,7 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
             </Form.Group>
 
             <Form.Group controlId="">
-              <Button onClick={handleRemoveStudent}>Remove Student
-              </Button>
+              <Button onClick={handleRemoveStudent}>Remove Student</Button>
             </Form.Group>
           </Form>
         </Modal.Body>

@@ -48,10 +48,13 @@ export const verifyStudentId = createAsyncThunk(
 );
 
 export const editStudent = createAsyncThunk(
-  "student/editStudent", async ({ id, firstName, lastName }, { rejectWithValue }) => {
+  "student/editStudent",
+  async ({ id, firstName, lastName }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.put(`/api/students/${id}`, { firstName, lastName});
-      console.log("Here it is", data)
+      const { data } = await axios.put(`/api/students/${id}`, {
+        firstName,
+        lastName,
+      });
       return data;
     } catch (err) {
       return rejectWithValue(err.message);

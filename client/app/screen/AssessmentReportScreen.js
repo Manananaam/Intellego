@@ -190,13 +190,15 @@ const AssessmentReportScreen = () => {
             })
           ) : (
             <tr>
-              <td>No students in this class!</td>
+              <td>No students in this course!</td>
             </tr>
           )}
         </tbody>
+
       </Table>}
       {currentAssessment && <h3>
         Overall Class Average:{" "}
+
         {Math.round(
           assessmentGrades.reduce((total, item) => total + item, 0) /
             assessmentGrades.length
