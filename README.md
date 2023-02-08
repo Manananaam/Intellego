@@ -1,34 +1,24 @@
-## Steps to setup project
+### Steps to setup project
 
-1.  update project name and description in `package.json`
-2.  `npm install`
-3.  Create two postgres databases
+1. create a PostgreSQL Database with the name `intellego`
+2. clone the project main branch to your local computer
+3. add`.env` file to the root directory of the project foler
+4. paste this content to the .env file
 
-    - These commands will create both your **development** and **test** databases
+   ```jsx
+   NODE_ENV= development
+   PORT = 3015
 
-      ```jsx
-      createdb <YOUR APP NAME HERE FROM package.json>
-      createdb <YOUR APP NAME HERE FROM package.json>-test
-      ```
+   JWT_SECRET = test_jwt_secret_key
+   JWT_EXPIRES = 30d
+   ```
 
-    - (`MY_APP_NAME` should match the `name` parameter in `package.json`):
-
-4.  By default, running `npm test` will use your test database, while regular development uses the development database
-
-## Commands
-
-- `npm run seed` : sync and seed your database
-- `npm run start:dev` : start this full-stack application
-  - `start:dev` will both start your server and build your client side files using webpack
-  - `start:dev:logger` is the same as start:dev, but you will see your SQL queries (can be helpful for debugging)
-  - `start:dev:seed` will start your server and also seed your database (this is useful when you are making schema changes and you don't want to run your seed script separately)
-- `npm install package-name`: install package that related to server
-- `npm install -D package-name`: install package that not related to server, for instance, package that use for React.
-
-### File structure
-
-fileStructure.md includes more detail and instruction of this template
-
-### Figma Wireframe
-
-[Figma Wireframe](https://www.figma.com/file/F9plwsERgQoIpaSZufk6Vs/Manananaam?node-id=0%3A1&t=Am8z6RWiUBZGN0Lk-0)
+5. `npm install` to install packages
+6. `npm run seed` to seed data to database
+7. `npm run start:dev` to run the project.
+8. in browser, go to url : `localhost:3015`
+9. log in with existed account or signup with new account.
+   ```jsx
+   email: kara@email.com
+   password: 123123
+   ```
