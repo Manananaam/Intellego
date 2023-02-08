@@ -61,14 +61,15 @@ const MainDashboardScreen = () => {
               path='/assessments/:assessmentId'
               element={<EditAssessmentScreen />}
             />
-
-            {/**Reports **/}
-            <Route path="/report/students" element={<StudentReportScreen />} />
-
             <Route
               path='/assessments/:assessmentId/grades'
               element={<GradingScreen />}
             />
+
+            {/**Reports **/}
+            <Route path="/report/students" element={<StudentReportScreen />} />
+
+            
             <Route path='/report/students' element={<StudentReportScreen />} />
             <Route
               path='/report/assessments'
