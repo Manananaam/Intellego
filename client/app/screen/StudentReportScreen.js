@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 //Router
 import { useSearchParams } from "react-router-dom";
@@ -26,6 +26,15 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, Tooltip, Legend, BarElement);
 
 export default function StudentReportScreen() {
+  // export chart
+  let chartRef = useRef(null);
+  const handleExport = () => {
+    const link = document.createElement("a");
+    link.download = `studentReport-${currentStudent.firstName}${currentStudent.lastName}.png`;
+    link.href = chartRef.current.toBase64Image();
+    link.click();
+  };
+
   // use router hook to fetch current courseId and studentId
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -116,8 +125,8 @@ export default function StudentReportScreen() {
   let chart;
   if (currentStudent && grades.length) {
     chart = (
-      <div style={{ width: "50%" }}>
-        <Bar data={data} options={options}></Bar>
+      <div style={{ height: "690px", width: "690px", margin: "auto" }}>
+        <Bar data={data} options={options} ref={chartRef}></Bar>
       </div>
     );
   } else {
@@ -131,6 +140,9 @@ export default function StudentReportScreen() {
   }
   return (
     <div>
+      <button type="button" onClick={handleExport}>
+        Export
+      </button>
       <h1>Students Report</h1>
       <Dropdown>
         <Dropdown.Toggle>
