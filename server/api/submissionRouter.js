@@ -58,21 +58,43 @@ router.get(
 );
 
 //To get a specific submission:
+//MLD note - making change to route URL, but preserving original URL here in case someone wants me to change it back
+// "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId"
 
 router.get(
-  "/assessments/:assessmentId/questions/:questionId/submissions/:submissionId",
+
+  "/:submissionId",
   protectedRoute,
   asyncHandler(async (req, res, next) => {
-    const assessment = await Assessment.findByPk(req.params.assessmentId);
-    if (assessment.userId !== req.user.id) {
-      res.send("not yours");
-    }
-    const singleAssessment = await Submission.findByPk(req.params.submissionId);
-    res.status(200).json({
-      data: {
-        singleAssessment,
-      },
+    // const assessment = await Assessment.findByPk(req.params.assessmentId);
+    // if (assessment.userId !== req.user.id) {
+    //   res.send("not yours");
+    // }
+    const sub = await Submission.findByPk(req.params.submissionId, {
+      include: [{ model: Assessment }, { model: Question }],
     });
+    if (sub.assessment.userId !== req.user.id) {
+      res.send("You do not have access to this page.");
+
+    }
+    res.status(200).json(sub);
+  })
+);
+
+//@desc: submit a grade
+//note: this might overlap with one of the routes below - could delete later
+router.put(
+  "/:submissionId",
+  protectedRoute,
+  asyncHandler(async (req, res, next) => {
+    const sub = await Submission.findByPk(req.params.submissionId, {
+      include: [{ model: Assessment }, { model: Question }],
+    });
+    if (sub.assessment.userId !== req.user.id) {
+      res.send("You do not have access to this page.");
+    }
+    await sub.update(req.body);
+    res.status(200).json(sub);
   })
 );
 
