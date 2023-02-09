@@ -1,5 +1,3 @@
-const path = require("path");
-
 module.exports = {
   entry: ["./client/index.js"],
   output: {
@@ -7,9 +5,9 @@ module.exports = {
     filename: "bundle.js",
   },
   devServer: {
-    static: path.resolve(__dirname, "./dist"),
-    historyApiFallback: true,
-    allowedHosts: "all",
+    static: {
+      directory: __dirname + "/public",
+    },
   },
   context: __dirname,
   devtool: "source-map",
