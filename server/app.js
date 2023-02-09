@@ -1,12 +1,11 @@
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-const keys = require("./config/dev");
 const AppError = require("./utils/appError");
 const app = express();
 
 // Development logging
-if (keys.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
