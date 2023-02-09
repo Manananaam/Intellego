@@ -21,6 +21,7 @@ const CourseScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [id, setId] = useState(null);
 
   //Redux
   const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const CourseScreen = () => {
 
   //Eventhandlers
   const handleShow = () => setShow(true);
-  const handleShowEdit = () => setShowEdit(true);
 
   //Hooks
   useEffect(() => {
@@ -56,6 +56,10 @@ const CourseScreen = () => {
           {courses && courses.length
             ? courses.map((course) => {
                 const courseId = course.id;
+                const handleShowEdit = () => {
+                  setId(course.id);
+                  setShowEdit(true);
+                };
                 return (
                   <tr key={course.id}>
                     <td>{course.name}</td>
@@ -76,7 +80,7 @@ const CourseScreen = () => {
                             to={`/courses/${course.id}/assessments`}
                           >
                             Assessments
-                          </Dropdown.Item>{" "}
+                          </Dropdown.Item>
                           <Dropdown.Item as={Link} to={"/report/courses"}>
                             Report
                           </Dropdown.Item>
@@ -98,9 +102,8 @@ const CourseScreen = () => {
                         <CourseEdit
                           showEdit={showEdit}
                           setShowEdit={setShowEdit}
-                          id={course.id}
+                          id={id}
                         />
-                        <CourseCreate show={show} setShow={setShow} />
                       </Dropdown>
                     </td>
                   </tr>
@@ -109,6 +112,7 @@ const CourseScreen = () => {
             : null}
         </tbody>
       </Table>
+      <CourseCreate show={show} setShow={setShow} />
     </>
   );
 };

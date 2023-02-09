@@ -1,75 +1,92 @@
 //react stuff
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editCourse } from "../store/slices/courseSlices";
+import { selectCourses } from "../store/slices/courseSlices";
 
 //bootstrap stuff
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-const CourseCreate = ({ showEdit, setShowEdit, id }) => {
+const CourseCreate = ({ showEdit, setShowEdit, id, setId }) => {
+  console.log(id);
+  const handleEditClose = () => setShowEdit(false);
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
+  const [validated, setValidated] = useState(false);
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    dispatch(editCourse({ id, name, subject, gradeLevel }));
-    setShowEdit(false);
-    console.log(showEdit, setShowEdit, id);
+    const form = e.currentTarget;
+
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      dispatch(editCourse({ id, name, subject, gradeLevel }));
+      // console.log(id);
+      setShowEdit(false);
+    }
+    setValidated(true);
   };
 
-  const handleEditClose = () => setShowEdit(false);
-
   return (
-    <>
-      <Modal show={showEdit} onHide={handleEditClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Course</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Course Name"
-                autoFocus
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="">
-              <Form.Label>Subject</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Subject Name"
-                onChange={(e) => setSubject(e.target.value)}
-              />
-            </Form.Group>
+    <Modal show={showEdit} onHide={handleEditClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Edit Course</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form noValidate validated={validated} onSubmit={handleEditSubmit}>
+          <Form.Group>
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              autoFocus
+              required
+              placeholder="Course Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please enter a Course Name.
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Subject</Form.Label>
+            <Form.Control
+              type="text"
+              required
+              placeholder="Subject Name"
+              onChange={(e) => setSubject(e.target.value)}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please enter a Subject Name.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <Form.Group controlId="">
-              <Form.Label>Grade</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Grade"
-                onChange={(e) => setGradeLevel(e.target.value)}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleEditClose}>
-            Close
-          </Button>
-          <Button variant="primary" type="submit" onClick={handleEditSubmit}>
+          <Form.Group>
+            <Form.Label>Grade</Form.Label>
+            <Form.Control
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              required
+              placeholder="Grade"
+              onChange={(e) => setGradeLevel(e.target.value)}
+            />
+            <Form.Control.Feedback type="invalid">
+              Please enter a number between 0 to 100.
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Button variant="primary" type="submit">
             Save Changes
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
 

@@ -163,7 +163,9 @@ export const removeStudent = createAsyncThunk(
 //Slices
 export const courseSlice = createSlice({
   name: "courses",
-  initialState: {},
+  initialState: {
+    students: [],
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchAllCourses.fulfilled, (state, action) => {
@@ -184,6 +186,7 @@ export const courseSlice = createSlice({
     builder.addCase(isActiveCourse.fulfilled, (state, action) => {
       return state.filter((course) => course.isActive);
     });
+
     //remove Student
     builder.addCase(removeStudent.fulfilled, (state, action) => {
       state.students = state.students.filter(
