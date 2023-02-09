@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 
 //Router
 import { useSearchParams } from "react-router-dom";
@@ -96,7 +96,7 @@ const AssessmentReportScreen = () => {
     <>
       <h1>Assessment Report Screen</h1>
       <Dropdown>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+        <Dropdown.Toggle variant='primary' id='dropdown-basic'>
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -117,7 +117,7 @@ const AssessmentReportScreen = () => {
       <br />
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle variant="primary" id="dropdown-basic">
+          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
             {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -191,7 +191,7 @@ const AssessmentReportScreen = () => {
                           }
                         })}
                     </td>
-                    <td>{Math.round(allGrades / numGrades)}</td>
+                    <td>did i do it{Math.round(allGrades / numGrades)}</td>
                   </tr>
                 );
               })
