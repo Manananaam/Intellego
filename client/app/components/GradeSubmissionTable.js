@@ -55,37 +55,44 @@ const GradeSubmissionTable = () => {
     return <h2>There are no student submissions for this assessment yet. </h2>;
   }
 
-  const questionHeaders = assessment.questions.map((question, idx) => {
-    return <th key={question.id}>Question {idx + 1}</th>;
-  });
+  const questionHeaders = [...assessment.questions]
+    .sort((a, b) => a.id - b.id)
+    .map((question, idx) => {
+      return <th key={question.id}>Question {idx + 1}</th>;
+    });
 
   const studentRows =
     studentSubmissions && studentSubmissions.length
-      ? studentSubmissions.map((student, idx) => {
-          // console.log("mapping studentRows, here is current student", student);
+      ? // [...studentSubmissions]
+        // .sort((a, b) => a.submissions.questionId - b.submissions.questionId)
+        studentSubmissions.map((student, idx) => {
           return (
             <tr key={idx}>
               <td>
                 {student.firstName} {student.lastName}
               </td>
               {student.submissions && student.submissions.length
-                ? student.submissions.map((sub) => {
-                    let key = `${student.id}-${sub.questionId}`;
-                    if (sub.grade === null) {
+                ? [...student.submissions]
+                    .sort((a, b) => a.questionId - b.questionId)
+                    .map((sub) => {
+                      let key = `${student.id}-${sub.questionId}`;
+                      if (sub.grade === null) {
+                        return (
+                          <td key={sub.id}>
+                            Enter Grade
+                            <PlusCircleFill
+                              onClick={() => handleClick(sub.id)}
+                            />
+                          </td>
+                        );
+                      }
                       return (
-                        <td key={sub.id}>
-                          Enter Grade
-                          <PlusCircleFill onClick={() => handleClick(sub.id)} />
+                        <td key={key}>
+                          {sub.grade}%{" "}
+                          <Pencil onClick={() => handleClick(sub.id)} />
                         </td>
                       );
-                    }
-                    return (
-                      <td key={key}>
-                        {sub.grade}%{" "}
-                        <Pencil onClick={() => handleClick(sub.id)} />
-                      </td>
-                    );
-                  })
+                    })
                 : null}
             </tr>
           );
@@ -112,10 +119,7 @@ const GradeSubmissionTable = () => {
 };
 export default GradeSubmissionTable;
 
-/* notes heading into break
-move modal import here instead of main grading screen
-add redux state for current submission if it doesn't already exist
-differentiate between put and post can be determined on this page? like, the click handler will determine what the submit button is based on whether you clicked pencil or plus
-AHA these are ALL put - just editing the grade field !
-
+/*
+fix order - before mapping, sort everything by question id smallest to biggest?
+idk WHAT to do about updating state
 */
