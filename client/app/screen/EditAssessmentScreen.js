@@ -97,7 +97,6 @@ const EditAssessmentScreen = () => {
     navigate("/assessments");
     navigate(0);
   }
-  //NOTE - still not auto updating listview when you navigate back
 
   return (
     <>

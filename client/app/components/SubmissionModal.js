@@ -34,7 +34,9 @@ const SubmissionModal = (props) => {
       })
     );
     handleCloseModal();
+    setSubGrade(null);
   };
+
   return (
     <Modal
       size='lg'
@@ -62,6 +64,7 @@ const SubmissionModal = (props) => {
             <Form.Control
               type='number'
               min='1'
+              // value={subGrade}
               max='100'
               step='1'
               onChange={(e) => setSubGrade(e.target.value)}

@@ -254,13 +254,11 @@ export const submitGrade = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("hello1 from thunk", subId, grade);
       const { data } = await axios.put(
         `/api/submissions/${subId}`,
         { grade: grade },
         config
       );
-      console.log("hello2 from thunk", data);
       return data;
     } catch (err) {
       const errorMessage = err.reponse.data.message;
@@ -310,19 +308,7 @@ export const assessmentSlice = createSlice({
       state.currentSubmission = action.payload;
     });
     builder.addCase(submitGrade.fulfilled, (state, action) => {
-      console.log(action.payload);
-      console.log(state);
       state.currentSubmission = action.payload;
-      const updatedGrade = state.studentSubmissions.find(
-        (el) => el.id === action.payload.studentId
-      );
-      console.log(
-        "state.studentSubmissions",
-        current(state.studentSubmissions)
-      );
-
-      console.log("action.payload.id", action.payload.id);
-      console.log("updatedGrade", updatedGrade);
     });
   },
 });
