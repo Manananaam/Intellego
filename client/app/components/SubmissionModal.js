@@ -11,28 +11,28 @@ import { Modal, Container, Row, Form, Button } from "react-bootstrap";
 import {
   selectAssessment,
   submitGrade,
+  fetchAssessment,
+  fetchStudentSubmissions,
 } from "../store/slices/singleAssessmentSlice";
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~THE GOOD STUFF~~~~~~~~~~~~~~~~~
 
-/*
-note - if we want to differentiate on submit whether we're doing post or put, i think
-we either need two modal components OR we can pass down the onsubmit function in props?
-*/
-
 const SubmissionModal = (props) => {
   const dispatch = useDispatch();
   const { visible, handleCloseModal } = props;
-  const { currentSubmission } = useSelector(selectAssessment);
+  const { currentSubmission, studentSubmissions } =
+    useSelector(selectAssessment);
+  const { assessmentId } = useParams();
   const [subGrade, setSubGrade] = useState(null);
   const handleSubmit = (e) => {
-    console.log(
-      "handle submit: subId and grade",
-      currentSubmission.id,
-      subGrade
-    );
-    dispatch(submitGrade({ subId: currentSubmission.id, grade: subGrade }));
     e.preventDefault();
+    dispatch(submitGrade({ subId: currentSubmission.id, grade: subGrade }));
+    dispatch(
+      fetchStudentSubmissions({
+        assessmentId: assessmentId,
+        courseId: currentSubmission.courseId,
+      })
+    );
     handleCloseModal();
   };
   return (
