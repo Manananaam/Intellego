@@ -47,7 +47,6 @@ const GradeSubmissionTable = () => {
   };
   const handleCloseModal = () => {
     dispatch(fetchAssessment(assessmentId));
-    console.log("closing modal");
     setModalVisible(false);
   };
 
