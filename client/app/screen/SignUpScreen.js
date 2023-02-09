@@ -33,8 +33,6 @@ const SignUpScreen = () => {
         initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
         validationSchema={SignupValidate}
         onSubmit={(values) => {
-          console.log("formik handlesubmit");
-          console.log("values", values);
           dispatch(signup(values));
           navigate("/");
         }}
