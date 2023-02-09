@@ -26,6 +26,7 @@ const CreateAssessmentScreen = () => {
   const [questionText, setQuestionText] = useState("");
   const [associatedCourse, setAssociatedCourse] = useState(null);
   const [validated, setValidated] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   const { allcourses } = useSelector((state) => state.studentEnroll);
 
   // fetch a list of course belongs to the logged in user to let user assign assessment to course.
@@ -46,6 +47,7 @@ const CreateAssessmentScreen = () => {
         courseId: associatedCourse ? Number(associatedCourse) : null,
       }));
       e.preventDefault();
+      setShowButton(true);
     }
     setValidated(true);
   };
@@ -119,6 +121,9 @@ const CreateAssessmentScreen = () => {
           value="Create Assessment"
         ></Button>
       </Form>
+      {showButton ? (
+        <Button onClick={() => navigate("/assessments")}>Back to Assessments</Button>
+      ) : null}
     </>
   );
 };
