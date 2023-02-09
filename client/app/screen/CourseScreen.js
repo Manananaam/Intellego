@@ -77,7 +77,10 @@ const CourseScreen = () => {
                           >
                             Assessments
                           </Dropdown.Item>{" "}
-                          <Dropdown.Item as={Link} to={`/report/course?courseId=${courseId}`}>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/report/course?courseId=${courseId}`}
+                          >
                             Report
                           </Dropdown.Item>
                           <Dropdown.Divider />
