@@ -1,7 +1,7 @@
 // env setting
-const dotenv = require("dotenv");
-dotenv.config({ path: "./.env" });
-
+// const dotenv = require("dotenv");
+// dotenv.config({ path: "./.env" });
+const port = process.env.PORT || 8080;
 const { db } = require("./db");
 const app = require("./app");
 const seed = require("../script/seed");
@@ -13,6 +13,7 @@ const init = async () => {
     } else {
       await db.sync();
     }
+    app.listen(port, () => console.log(`Mixing it up on port ${port}`));
   } catch (ex) {
     console.log(ex);
   }
@@ -20,7 +21,3 @@ const init = async () => {
 
 // connect to database
 init();
-
-// start listening (and create a 'server' object representing our server)
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Mixing it up on port ${PORT}`));

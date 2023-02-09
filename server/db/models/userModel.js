@@ -2,6 +2,7 @@ const db = require("../db");
 const Sequelize = require("sequelize");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const User = db.define("user", {
   firstName: {
