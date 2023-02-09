@@ -19,7 +19,6 @@ const AssessmentsTable = () => {
   const allAssessments = useSelector(selectAllAssessments).assessments;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const singleAssessment = useSelector(selectAssessment).assessment;
   const courses = useSelector(selectCourses);
 
   useEffect(() => {
@@ -27,6 +26,7 @@ const AssessmentsTable = () => {
     dispatch(fetchAllCourses());
   }, [dispatch]);
 
+  console.log(allAssessments)
 
   return (
     <>
@@ -52,7 +52,6 @@ const AssessmentsTable = () => {
               .map((assessment) => {
                 let questionAverageArr = [];
                 const assessmentId = assessment.id;
-                let missing = "Grades";
                 return (
                 <tr key={assessment.id}>
                   <td>
@@ -95,8 +94,8 @@ const AssessmentsTable = () => {
                       questionAverageArr.push(questionAverage);
                     }
                   })
-                   : missing = "Questions"}
-                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${missing}`}</td>}
+                   : null}
+                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${!assessment.questions.length ? 'Questions' : 'Grades'}`}</td>}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
