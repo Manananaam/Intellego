@@ -22,17 +22,21 @@ export default function App() {
       {user ? (
         <>
           <Routes>
-            <Route path="*" element={<MainDashboardScreen />} />
+            <Route path='*' element={<MainDashboardScreen />} />
+            <Route
+              path='/student/courses/:courseId/assessments/:assessmentId'
+              element={<StudentViewScreen />}
+            />
           </Routes>
         </>
       ) : (
         <>
           <Routes>
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/login" element={<LogInScreen />} />
-            <Route path="/signup" element={<SignUpScreen />} />
+            <Route path='/' element={<HomeScreen />} />
+            <Route path='/login' element={<LogInScreen />} />
+            <Route path='/signup' element={<SignUpScreen />} />
             <Route
-              path="/student/courses/:courseId/assessments/:assessmentId"
+              path='/student/courses/:courseId/assessments/:assessmentId'
               element={<StudentViewScreen />}
             />
           </Routes>
