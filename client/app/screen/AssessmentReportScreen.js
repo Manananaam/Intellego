@@ -187,11 +187,11 @@ const AssessmentReportScreen = () => {
                               </span>
                             );
                           } else {
-                            return <td>no submission yet</td>;
+                            return <td>No Submission Yet</td>;
                           }
                         })}
                     </td>
-                    <td>did i do it{Math.round(allGrades / numGrades)}</td>
+                    {allGrades > 0 ? <td>{Math.round(allGrades / numGrades)}</td> : <td>No Grades Yet</td>}
                   </tr>
                 );
               })
@@ -203,7 +203,7 @@ const AssessmentReportScreen = () => {
           </tbody>
         </Table>
       )}
-      {currentAssessment && (
+      {currentAssessment && assessmentGrades.length ? (
         <h3>
           Overall Class Average:{" "}
           {Math.round(
@@ -212,7 +212,7 @@ const AssessmentReportScreen = () => {
           )}
           %
         </h3>
-      )}
+      ) : null}
     </>
   );
 };
