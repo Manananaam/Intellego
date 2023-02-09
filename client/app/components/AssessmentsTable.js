@@ -26,8 +26,6 @@ const AssessmentsTable = () => {
     dispatch(fetchAllCourses());
   }, [dispatch]);
 
-  console.log(allAssessments)
-
   return (
     <>
       <Table striped bordered hover>
@@ -59,7 +57,11 @@ const AssessmentsTable = () => {
                       {assessment.title}
                     </NavLink>
                   </td>
-                  {courses && courses.length && courses.map((course) => {
+                  {courses && courses.length ? courses.map((course) => {
+                    const map = assessment.courses.map((el)=>{
+                      return course.id === el.id
+                    })
+                    if (assessment.courses.length && map.includes(true)) {
                     let courseGrades = [];
                     assessment.questions.map((question) => {
                       let questionsArr = [];
@@ -81,7 +83,11 @@ const AssessmentsTable = () => {
                         <td key={course.id}>Missing Grades</td>
                       )
                     }
-                  })}
+                  } else {
+                    return (
+                      <td key={course.id}>Not Assigned</td>
+                    )
+                  }}) : null }
                   {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
                     if (question.submissions && question.submissions.length) {
                       let sum = 0;
