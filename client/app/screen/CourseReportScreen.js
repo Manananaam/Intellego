@@ -21,6 +21,7 @@ const canvasColor = {
     ctx.restore();
   },
 };
+
 const spacing = {
   id: "increase-legend-spacing",
   beforeInit(chart) {
