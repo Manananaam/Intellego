@@ -32,7 +32,7 @@ export const fetchAllAssessments = createAsyncThunk(
 //does the course_assessmentModel associate them?
 export const createAssessment = createAsyncThunk(
   "/assessmentCreate",
-  async ({ title, questionText, courseId }) => {
+  async ({ title, questions, courseId }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -45,7 +45,7 @@ export const createAssessment = createAsyncThunk(
         "/api/assessments",
         {
           title,
-          questionText,
+          questions,
           courseId,
         },
         config
