@@ -58,23 +58,23 @@ export const editAssessmentTitle = createAsyncThunk(
 );
 
 //DELETING an assessment (that has no submissions)
-export const deleteAssessment = createAsyncThunk(
-  "/deleteAssessment",
-  async ({ assessmentId }) => {
-    try {
-      const token = JSON.parse(localStorage.getItem("jwt"));
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.delete(`api/assessments/${assessmentId}`, config);
-    } catch (err) {
-      return err.message;
-    }
-  }
-);
+// export const deleteAssessment = createAsyncThunk(
+//   "/deleteAssessment",
+//   async ({ assessmentId }) => {
+//     try {
+//       const token = JSON.parse(localStorage.getItem("jwt"));
+//       const config = {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       };
+//       await axios.delete(`api/assessments/${assessmentId}`, config);
+//     } catch (err) {
+//       return err.message;
+//     }
+//   }
+// );
 
 //delete question from assessment (on 'edit assessment' page)
 export const deleteQuestion = createAsyncThunk(
@@ -298,9 +298,9 @@ export const assessmentSlice = createSlice({
     builder.addCase(createAssessment.fulfilled, (state, action) => {
       state.assessment = action.payload.data.newAssessment;
     });
-    builder.addCase(deleteAssessment.fulfilled, (state, action) => {
-      state.assessment = {};
-    });
+    // builder.addCase(deleteAssessment.fulfilled, (state, action) => {
+    //   state.assessment = {};
+    // });
     builder.addCase(fetchStudentSubmissions.fulfilled, (state, action) => {
       state.studentSubmissions = action.payload;
     });

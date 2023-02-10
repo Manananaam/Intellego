@@ -21,7 +21,7 @@ const CourseScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [id, setId] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   //Redux
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const CourseScreen = () => {
             ? courses.map((course) => {
                 const courseId = course.id;
                 const handleShowEdit = () => {
-                  setId(course.id);
+                  setSelectedCourse(course);
                   setShowEdit(true);
                 };
                 return (
@@ -95,7 +95,6 @@ const CourseScreen = () => {
                             onClick={() => {
                               setIsActive(false);
                               dispatch(isActiveCourse({ courseId, isActive }));
-                              navigate(0);
                             }}
                           >
                             Delete
@@ -109,7 +108,14 @@ const CourseScreen = () => {
             : null}
         </tbody>
       </Table>
-      <CourseEdit showEdit={showEdit} setShowEdit={setShowEdit} id={id} />
+      {selectedCourse && (
+        <CourseEdit
+          showEdit={showEdit}
+          setShowEdit={setShowEdit}
+          course={selectedCourse}
+        />
+      )}
+
       <CourseCreate show={show} setShow={setShow} />
     </>
   );

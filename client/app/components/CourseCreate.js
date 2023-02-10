@@ -22,13 +22,14 @@ const CourseCreate = ({ setShow, show }) => {
 
     if (form.checkValidity() === false) {
       e.preventDefault();
+      setValidated(true);
       e.stopPropagation();
     } else {
       dispatch(createCourse({ name, subject, gradeLevel }));
       e.preventDefault();
       setShow(false);
+      setValidated(false);
     }
-    setValidated(true);
   };
 
   return (

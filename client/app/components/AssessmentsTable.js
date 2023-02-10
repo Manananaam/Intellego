@@ -4,15 +4,18 @@ import {
   fetchAllAssessments,
   selectAllAssessments,
   isActiveAssessment,
+  deleteAssessment,
 } from "../store/slices/assessmentsTableSlice";
-import {
-  selectCourses,
-  fetchAllCourses,
-} from "../store/slices/courseSlices";
-import { assessmentSlice, deleteAssessment } from "../store/slices/singleAssessmentSlice";
+import { selectCourses, fetchAllCourses } from "../store/slices/courseSlices";
+import { assessmentSlice } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArchiveFill, Archive, Trash3, InfoSquareFill } from "react-bootstrap-icons";
+import {
+  ArchiveFill,
+  Archive,
+  Trash3,
+  InfoSquareFill,
+} from "react-bootstrap-icons";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -35,19 +38,22 @@ const AssessmentsTable = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Assessment {<InfoSquareFill ref={target} onClick={() => setShow(!show)} />}</th>
+            <th>
+              Assessment{" "}
+              {<InfoSquareFill ref={target} onClick={() => setShow(!show)} />}
+            </th>
             <Overlay target={target.current} show={show} placement="right">
-            {(props) => (
-              <Tooltip {...props}>
-                Click an assessment to make edits.
-              </Tooltip>
+              {(props) => (
+                <Tooltip {...props}>Click an assessment to make edits.</Tooltip>
+              )}
+            </Overlay>
+            {courses && courses.length ? (
+              courses.map((course) => {
+                return <th key={course.id}>{course.name}</th>;
+              })
+            ) : (
+              <th>No Courses Yet!</th>
             )}
-          </Overlay>
-            {courses && courses.length ? courses.map((course) => {
-              return (
-                <th key={course.id}>{course.name}</th>
-              )
-            }) : <th>No Courses Yet!</th>}
             <th>Average</th>
             <th>{<ArchiveFill />}</th>
           </tr>
@@ -62,79 +68,116 @@ const AssessmentsTable = () => {
                 let questionAverageArr = [];
                 const assessmentId = assessment.id;
                 return (
-                <tr key={assessment.id}>
-                  <td>
-                    <NavLink to={`/assessments/${assessment.id}`}>
-                      {assessment.title}
-                    </NavLink>
-                  </td>
-                  {courses && courses.length ? courses.map((course) => {
-                    const map = assessment.courses.map((el)=>{
-                      return course.id === el.id
-                    })
-                    if (assessment.courses.length && map.includes(true)) {
-                    let courseGrades = [];
-                    assessment.questions.map((question) => {
-                      let questionsArr = [];
-                      question.submissions.map((submission) => {
-                        if (submission.courseId === course.id && submission.grade) {
-                          questionsArr.push(submission.grade)
-                        }
-                      })
-                      if (questionsArr.length) {
-                      courseGrades.push(Math.round(questionsArr.reduce((total, item) => total + item, 0) / questionsArr.length))
-                      }
-                    })
-                    if (courseGrades.length) {
-                    return (
-                      <td key={course.id}>{Math.round(courseGrades.reduce((total, item) => total + item, 0) / courseGrades.length)}</td>
-                    )
-                    } else {
-                      return (
-                        <td key={course.id}>Missing Grades</td>
-                      )
-                    }
-                  } else {
-                    return (
-                      <td key={course.id}>Not Assigned</td>
-                    )
-                  }}) : null }
-                  {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
-                    if (question.submissions && question.submissions.length) {
-                      let sum = 0;
-                      question.submissions.forEach((submission) => {
-                        if (submission.grade) {
-                        sum += submission.grade;
-                        }
-                      });
-                      let questionAverage = Math.round(sum / question.submissions.length);
-                      questionAverageArr.push(questionAverage);
-                    }
-                  })
-                   : null}
-                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${!assessment.questions.length ? 'Questions' : 'Grades'}`}</td>}
-                  <td>
-                    {assessment.questions.filter(
-                      (question) => {return question.submissions.length > 0}
-                    ).length ? (
-                      <Archive
-                        onClick={() => {
-                          setIsActive(false);
-                          dispatch(
-                            isActiveAssessment({ assessmentId, isActive })
-                          );
-                          navigate(0)
-                        }}
-                      />
+                  <tr key={assessment.id}>
+                    <td>
+                      <NavLink to={`/assessments/${assessment.id}`}>
+                        {assessment.title}
+                      </NavLink>
+                    </td>
+                    {courses && courses.length
+                      ? courses.map((course) => {
+                          const map = assessment.courses.map((el) => {
+                            return course.id === el.id;
+                          });
+                          if (assessment.courses.length && map.includes(true)) {
+                            let courseGrades = [];
+                            assessment.questions.map((question) => {
+                              let questionsArr = [];
+                              question.submissions.map((submission) => {
+                                if (
+                                  submission.courseId === course.id &&
+                                  submission.grade
+                                ) {
+                                  questionsArr.push(submission.grade);
+                                }
+                              });
+                              if (questionsArr.length) {
+                                courseGrades.push(
+                                  Math.round(
+                                    questionsArr.reduce(
+                                      (total, item) => total + item,
+                                      0
+                                    ) / questionsArr.length
+                                  )
+                                );
+                              }
+                            });
+                            if (courseGrades.length) {
+                              return (
+                                <td key={course.id}>
+                                  {Math.round(
+                                    courseGrades.reduce(
+                                      (total, item) => total + item,
+                                      0
+                                    ) / courseGrades.length
+                                  )}
+                                </td>
+                              );
+                            } else {
+                              return <td key={course.id}>Missing Grades</td>;
+                            }
+                          } else {
+                            return <td key={course.id}>Not Assigned</td>;
+                          }
+                        })
+                      : null}
+                    {assessment.questions && assessment.questions.length
+                      ? assessment.questions.map((question) => {
+                          if (
+                            question.submissions &&
+                            question.submissions.length
+                          ) {
+                            let sum = 0;
+                            question.submissions.forEach((submission) => {
+                              if (submission.grade) {
+                                sum += submission.grade;
+                              }
+                            });
+                            let questionAverage = Math.round(
+                              sum / question.submissions.length
+                            );
+                            questionAverageArr.push(questionAverage);
+                          }
+                        })
+                      : null}
+                    {questionAverageArr.length ? (
+                      <td>
+                        {Math.round(
+                          questionAverageArr.reduce(
+                            (total, item) => total + item,
+                            0
+                          )
+                        ) / questionAverageArr.length}
+                      </td>
                     ) : (
-                      <Trash3 onClick={() => {
-                      dispatch(deleteAssessment({assessmentId}));
-                      navigate(0)
-                      }}/>
+                      <td>{`Missing ${
+                        !assessment.questions.length ? "Questions" : "Grades"
+                      }`}</td>
                     )}
-                  </td>
-                </tr>
-                )
+                    <td>
+                      {assessment.questions.filter((question) => {
+                        return question.submissions.length > 0;
+                      }).length ? (
+                        <Archive
+                          onClick={() => {
+                            setIsActive(false);
+                            dispatch(
+                              isActiveAssessment({ assessmentId, isActive })
+                            );
+                            // navigate(0);
+                          }}
+                        />
+                      ) : (
+                        <Trash3
+                          onClick={() => {
+                            dispatch(deleteAssessment({ assessmentId }));
+                            // navigate(0);
+                          }}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                );
               })
           ) : (
             <tr>

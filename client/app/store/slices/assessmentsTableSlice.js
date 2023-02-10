@@ -32,7 +32,7 @@ export const fetchAllAssessments = createAsyncThunk(
 //does the course_assessmentModel associate them?
 export const createAssessment = createAsyncThunk(
   "/assessmentCreate",
-  async ({ title, questionText, courseId }) => {
+  async ({ title, questions, courseId }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -45,7 +45,7 @@ export const createAssessment = createAsyncThunk(
         "/api/assessments",
         {
           title,
-          questionText,
+          questions,
           courseId,
         },
         config
@@ -76,7 +76,29 @@ export const isActiveAssessment = createAsyncThunk(
         },
         config
       );
-      return data;
+      // return data;
+      return assessmentId;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
+// delete assessment
+//DELETING an assessment (that has no submissions)
+export const deleteAssessment = createAsyncThunk(
+  "/deleteAssessment",
+  async ({ assessmentId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.delete(`api/assessments/${assessmentId}`, config);
+      return assessmentId;
     } catch (err) {
       return err.message;
     }
@@ -96,9 +118,15 @@ export const assessmentsSlice = createSlice({
         state.assessments.push(action.payload.data.newAssessment);
       })
       .addCase(isActiveAssessment.fulfilled, (state, action) => {
-        return state.assessments.filter((assessment) => assessment.isActive);
+        state.assessments = state.assessments.filter(
+          (assessment) => assessment.id !== action.payload
+        );
       });
-    builder;
+    builder.addCase(deleteAssessment.fulfilled, (state, action) => {
+      state.assessments = state.assessments.filter(
+        (el) => el.id !== action.payload
+      );
+    });
   },
 });
 
