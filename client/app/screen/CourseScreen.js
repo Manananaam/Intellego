@@ -39,7 +39,7 @@ const CourseScreen = () => {
   //render
   return (
     <>
-      <h1>Courses</h1>
+      <h1>Courses </h1>
       <Button variant="primary" onClick={handleShow}>
         Create Course +
       </Button>
