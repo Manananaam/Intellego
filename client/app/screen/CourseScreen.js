@@ -95,15 +95,9 @@ const CourseScreen = () => {
                               navigate(0);
                             }}
                           >
-                            Archive
+                            Delete
                           </Dropdown.Item>
                         </Dropdown.Menu>
-
-                        <CourseEdit
-                          showEdit={showEdit}
-                          setShowEdit={setShowEdit}
-                          id={id}
-                        />
                       </Dropdown>
                     </td>
                   </tr>
@@ -112,6 +106,7 @@ const CourseScreen = () => {
             : null}
         </tbody>
       </Table>
+      <CourseEdit showEdit={showEdit} setShowEdit={setShowEdit} id={id} />
       <CourseCreate show={show} setShow={setShow} />
     </>
   );

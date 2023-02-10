@@ -3,16 +3,17 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editCourse } from "../store/slices/courseSlices";
 import { selectCourses } from "../store/slices/courseSlices";
+import { useNavigate } from "react-router-dom";
 
 //bootstrap stuff
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-const CourseCreate = ({ showEdit, setShowEdit, id, setId }) => {
-  console.log(id);
+const CourseCreate = ({ showEdit, setShowEdit, id }) => {
   const handleEditClose = () => setShowEdit(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
@@ -27,8 +28,9 @@ const CourseCreate = ({ showEdit, setShowEdit, id, setId }) => {
       e.stopPropagation();
     } else {
       dispatch(editCourse({ id, name, subject, gradeLevel }));
-      // console.log(id);
       setShowEdit(false);
+
+      navigate(0);
     }
     setValidated(true);
   };

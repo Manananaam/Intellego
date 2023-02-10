@@ -29,7 +29,7 @@ const Sidebar = () => {
             width={150}
             height={150}
             alt="150x150"
-            src="https://via.placeholder.com/150"
+            src="/assets/animal_avatar_01.png"
           />
         </Figure>
 

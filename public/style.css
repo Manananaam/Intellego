@@ -1,26 +1,32 @@
-body {
-  font-family: sans-serif;
+/*Common*/
+* {
+  font-family: "Montserrat", sans-serif !important;
 }
 
-a {
-  text-decoration: none;
+h1 {
+  position: relative;
+  margin: 40px 0 60px 0 !important;
 }
-
-label {
-  display: block;
-}
-
-nav a {
-  display: inline-block;
-  margin: 1em;
-}
-
-form div {
-  margin: 1em;
-  display: inline-block;
+table {
+  margin-top: 20px;
 }
 
 /*Dashbaord*/
-h1 {
-  margin: 20px 0 20px 0 !important;
+h1:after {
+  display: block;
+  content: "";
+  width: 100%;
+  height: 1px;
+  background: #eee;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+}
+.sidebar-wrapper {
+}
+.page-content-wrapper {
+}
+
+.xs {
+  width: 50 !important;
 }
