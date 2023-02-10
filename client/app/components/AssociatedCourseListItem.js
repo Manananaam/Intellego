@@ -8,7 +8,22 @@ import { removeCourseFromAssessment } from "../store/slices/singleAssessmentSlic
 const AssociatedCourseListItem = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseName, courseId, assessmentId } = props;
+  const { courseName, courseId, assessmentId, activeSubmissions } = props;
+
+  // let courseSub = () => {
+  //   let assessQs = assessment.assessment.questions;
+  //   for (let i = 0; i < assessQs.length; i++) {
+  //     let tempSubmissions = assessQs[i].submissions;
+  //     for (let j = 0; j < tempSubmissions.length; j++) {
+  //       if (
+  //         tempSubmissions[j].courseId === currentCourseId
+  //       ) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // };
 
   const handleDelete = () => {
     dispatch(removeCourseFromAssessment({ assessmentId, courseId }));
@@ -20,7 +35,9 @@ const AssociatedCourseListItem = (props) => {
   return (
     <>
       <ListGroup.Item key={courseId}>{courseName}</ListGroup.Item>
-      <DashCircle onClick={handleDelete}></DashCircle>
+      {!activeSubmissions ? (
+        <DashCircle onClick={handleDelete}></DashCircle>
+      ) : null}
     </>
   );
 };

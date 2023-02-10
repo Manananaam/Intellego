@@ -98,11 +98,24 @@ const EditAssessmentScreen = () => {
     navigate(0);
   }
 
+  const activeSubmissions = () => {
+    const arr = assessment.assessment.questions;
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].submissions.length > 0) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
         <h2>
-          {assessmentTitle || ""} <Pencil onClick={setEditNameModalVisible} />
+          {assessmentTitle || ""}
+          {!activeSubmissions() ? (
+            <Pencil onClick={setEditNameModalVisible} />
+          ) : null}
         </h2>
         <Button onClick={() => navigate(`/assessments/${assessmentId}/grades`)}>
           Assessment Grades
@@ -155,12 +168,26 @@ const EditAssessmentScreen = () => {
                 const courseId = course.id;
                 const courseName = course.name;
 
+                let courseSub = () => {
+                  let assessQs = assessment.assessment.questions;
+                  for (let i = 0; i < assessQs.length; i++) {
+                    let tempSubmissions = assessQs[i].submissions;
+                    for (let j = 0; j < tempSubmissions.length; j++) {
+                      if (tempSubmissions[j].courseId === courseId) {
+                        return true;
+                      }
+                    }
+                  }
+                  return false;
+                };
+
                 return (
                   <AssociatedCourseListItem
                     key={course.id}
                     assessmentId={assessmentId}
                     courseId={courseId}
                     courseName={courseName}
+                    activeSubmissions={courseSub()}
                   />
                 );
               })}
@@ -200,11 +227,7 @@ const EditAssessmentScreen = () => {
                               (el) => el.id === currentCourseId
                             )
                           : [];
-                      console.log(
-                        "201",
-                        assessment.assessment.associatedCourses,
-                        currentCourseId
-                      );
+
                       return alreadyAssociated.length ? (
                         <ListGroup.Item disabled key={course.id}>
                           {course.name}
@@ -257,8 +280,12 @@ const EditAssessmentScreen = () => {
               return (
                 <div key={question.id}>
                   <Container rows={6}>{question.questionText}</Container>
-                  <Trash3 onClick={handleDeleteQuestion} />
-                  <Pencil onClick={handleOpenEditQuestion} />
+                  {!activeSubmissions() ? (
+                    <>
+                      <Trash3 onClick={handleDeleteQuestion} />
+                      <Pencil onClick={handleOpenEditQuestion} />
+                    </>
+                  ) : null}
                   <Modal
                     size='lg'
                     aria-labelledby='contained-modal-title-vcenter'
@@ -287,9 +314,11 @@ const EditAssessmentScreen = () => {
             <></>
           )}
           <br />
-          <Button type='button' onClick={setAddQuestionModalVisible}>
-            Add Question
-          </Button>
+          {!activeSubmissions() ? (
+            <Button type='button' onClick={setAddQuestionModalVisible}>
+              Add Question
+            </Button>
+          ) : null}
           <Modal
             size='lg'
             aria-labelledby='contained-modal-title-vcenter'
