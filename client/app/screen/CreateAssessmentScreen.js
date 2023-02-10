@@ -25,6 +25,8 @@ const CreateAssessmentScreen = () => {
   const [title, setTitle] = useState("");
   const [questionText, setQuestionText] = useState("");
   const [associatedCourse, setAssociatedCourse] = useState(null);
+  const [validated, setValidated] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   const { allcourses } = useSelector((state) => state.studentEnroll);
 
   // fetch a list of course belongs to the logged in user to let user assign assessment to course.
@@ -32,16 +34,22 @@ const CreateAssessmentScreen = () => {
     dispatch(getCourses());
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(
-      createAssessment({
+  const handleFormSubmit = (e) => {
+    const form = e.currentTarget;
+
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      dispatch(createAssessment({
         title,
         questionText,
         courseId: associatedCourse ? Number(associatedCourse) : null,
-      })
-    );
-    navigate("/assessments");
+      }));
+      e.preventDefault();
+      setShowButton(true);
+    }
+    setValidated(true);
   };
 
   return (
@@ -52,24 +60,33 @@ const CreateAssessmentScreen = () => {
         </Container>
       </Navbar>
 
-      <Form>
+      <Form noValidate validated={validated} onSubmit={handleFormSubmit} >
         <Form.Group>
           <Form.Label>Title</Form.Label>
           <Form.Control
+            required
             size="lg"
             type="text"
             placeholder="Your Title Here"
             onChange={(e) => setTitle(e.target.value)}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+              Please enter a Title.
+            </Form.Control.Feedback>
         </Form.Group>
         <br />
         <Form.Group>
           <Form.Control
+            required
             as="textarea"
+            type="text"
             rows={6}
             placeholder="Your Question Here"
             onChange={(e) => setQuestionText(e.target.value)}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+              Please enter a Question.
+            </Form.Control.Feedback>
         </Form.Group>
         <br />
         <FloatingLabel label="Assign to course">
@@ -102,9 +119,12 @@ const CreateAssessmentScreen = () => {
           as="input"
           type="submit"
           value="Create Assessment"
-          onClick={handleSubmit}
         ></Button>
       </Form>
+      <br />
+      {showButton ? (
+        <Button onClick={() => navigate("/assessments")}>Back to Assessments</Button>
+      ) : null}
     </>
   );
 };

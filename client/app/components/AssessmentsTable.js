@@ -19,14 +19,12 @@ const AssessmentsTable = () => {
   const allAssessments = useSelector(selectAllAssessments).assessments;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const singleAssessment = useSelector(selectAssessment).assessment;
   const courses = useSelector(selectCourses);
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
     dispatch(fetchAllCourses());
   }, [dispatch]);
-
 
   return (
     <>
@@ -52,7 +50,6 @@ const AssessmentsTable = () => {
               .map((assessment) => {
                 let questionAverageArr = [];
                 const assessmentId = assessment.id;
-                let missing = "Grades";
                 return (
                 <tr key={assessment.id}>
                   <td>
@@ -60,7 +57,11 @@ const AssessmentsTable = () => {
                       {assessment.title}
                     </NavLink>
                   </td>
-                  {courses && courses.length && courses.map((course) => {
+                  {courses && courses.length ? courses.map((course) => {
+                    const map = assessment.courses.map((el)=>{
+                      return course.id === el.id
+                    })
+                    if (assessment.courses.length && map.includes(true)) {
                     let courseGrades = [];
                     assessment.questions.map((question) => {
                       let questionsArr = [];
@@ -82,7 +83,11 @@ const AssessmentsTable = () => {
                         <td key={course.id}>Missing Grades</td>
                       )
                     }
-                  })}
+                  } else {
+                    return (
+                      <td key={course.id}>Not Assigned</td>
+                    )
+                  }}) : null }
                   {assessment.questions && assessment.questions.length ? assessment.questions.map((question) => {
                     if (question.submissions && question.submissions.length) {
                       let sum = 0;
@@ -95,8 +100,8 @@ const AssessmentsTable = () => {
                       questionAverageArr.push(questionAverage);
                     }
                   })
-                   : missing = "Questions"}
-                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${missing}`}</td>}
+                   : null}
+                   {questionAverageArr.length ? <td>{Math.round(questionAverageArr.reduce((total , item) => total + item, 0)) / questionAverageArr.length}</td> : <td>{`Missing ${!assessment.questions.length ? 'Questions' : 'Grades'}`}</td>}
                   <td>
                     {assessment.questions.filter(
                       (question) => {return question.submissions.length > 0}
