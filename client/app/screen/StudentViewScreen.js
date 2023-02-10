@@ -179,7 +179,7 @@ export default function StudentViewScreen() {
     });
 
   return (
-    <div>
+    <div className="mx-5">
       <ToastContainer position="top-center">
         <Toast
           show={showToast}
@@ -197,7 +197,6 @@ export default function StudentViewScreen() {
       </ToastContainer>
 
       <h1>Assessment </h1>
-      <hr />
 
       <Stack direction="horizontal">
         <h2> Title: {assessment && assessment.title}</h2>
