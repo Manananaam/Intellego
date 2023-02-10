@@ -151,7 +151,14 @@ export const removeStudent = createAsyncThunk(
   "student/removeStudent",
   async (studentId) => {
     try {
-      const { data } = await axios.delete(`/api/students/${studentId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.delete(`/api/students/${studentId}`, config);
       return studentId;
     } catch (err) {
       // return rejectWithValue(err.message);
