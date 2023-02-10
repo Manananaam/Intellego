@@ -83,7 +83,7 @@ const CourseScreen = () => {
                           </Dropdown.Item>{" "}
                           <Dropdown.Item
                             as={Link}
-                            to={`/report/course?courseId=${courseId}`}
+                            to={`/report/courses?courseId=${courseId}`}
                           >
                             Report
                           </Dropdown.Item>
