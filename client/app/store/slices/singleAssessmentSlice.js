@@ -215,6 +215,7 @@ export const fetchStudentSubmissions = createAsyncThunk(
         `/api/assessments/${assessmentId}/courses/${courseId}/submissions`,
         config
       );
+
       return data;
     } catch (err) {
       const errorMessage = err.response.data.message;
@@ -245,7 +246,7 @@ export const fetchSingleSubmission = createAsyncThunk(
 
 export const submitGrade = createAsyncThunk(
   "assessment/submitGrade",
-  async ({ subId, grade }) => {
+  async ({ subId, grade, assessmentId, courseId }, { dispatch }) => {
     try {
       const token = JSON.parse(localStorage.getItem("jwt"));
       const config = {
@@ -259,6 +260,10 @@ export const submitGrade = createAsyncThunk(
         { grade: grade },
         config
       );
+      const updatedAllSubs = await dispatch(
+        fetchStudentSubmissions({ assessmentId, courseId })
+      );
+
       return data;
     } catch (err) {
       const errorMessage = err.reponse.data.message;
@@ -309,27 +314,6 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(submitGrade.fulfilled, (state, action) => {
       state.currentSubmission = action.payload;
-      state.studentSubmissions = state.studentSubmissions.map((student) => {
-        let subId = action.payload.id;
-        for (let i = 0; i < student.submissions.length; i++) {
-          let currentSub = student.submissions[i];
-          if (subId !== currentSub.id) {
-            console.log(
-              "currentSub is not the one we changed",
-              current(currentSub)
-            );
-          } else {
-            currentSub.grade = action.payload.grade;
-            console.log(
-              "currentsub is the one we want, new currentsub and grade",
-              current(currentSub),
-              action.payload.grade
-            );
-          }
-
-          return student;
-        }
-      });
     });
   },
 });
