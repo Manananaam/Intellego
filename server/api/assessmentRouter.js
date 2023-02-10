@@ -18,10 +18,12 @@ router.get(
       where: {
         userId: req.user.id,
       },
-      include: {
+      include: [{
         model: Question,
         include: { model: Submission },
       },
+      { model: Course },
+    ],
     });
     if (!assessments) {
       throw new AppError(

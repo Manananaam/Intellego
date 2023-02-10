@@ -94,7 +94,7 @@ const AssessmentReportScreen = () => {
 
   return (
     <>
-      <h1>Assessment Report Screen</h1>
+      <h1>Assessment Report</h1>
       <Dropdown>
         <Dropdown.Toggle variant='primary' id='dropdown-basic'>
           {currentCourse ? currentCourse.name : "Course"}
@@ -147,15 +147,13 @@ const AssessmentReportScreen = () => {
           <thead>
             <tr>
               <th>Students</th>
-              <th>
                 {assessment &&
-                  assessment.questions.length &&
+                  assessment.questions.length ?
                   assessment.questions.map((question) => {
                     return (
-                      <span key={question.id}>{question.questionText}</span>
+                      <th key={question.id}>{question.questionText}</th>
                     );
-                  })}
-              </th>
+                  }) : null}
 
               <th>Average</th>
             </tr>
@@ -168,7 +166,6 @@ const AssessmentReportScreen = () => {
                 return (
                   <tr key={student.id}>
                     <td>{`${student.firstName} ${student.lastName}`}</td>
-                    <td>
                       {assessment &&
                         assessment.questions.length &&
                         assessment.questions.map((question) => {
@@ -181,29 +178,35 @@ const AssessmentReportScreen = () => {
                             assessmentGrades.push(
                               Math.round(allGrades / numGrades)
                             );
+                            if (submission) {
                             return (
-                              <span key={submission.id}>
+                              <td key={submission.id}>
                                 {submission.response} {submission.grade}
-                              </span>
-                            );
+                              </td>
+                            )} else {
+                              return (
+                                <td></td>
+                              )
+                            };
                           } else {
-                            return <td>no submission yet</td>;
+                            return <td>No Submission Yet</td>;
                           }
                         })}
-                    </td>
-                    <td>did i do it{Math.round(allGrades / numGrades)}</td>
+                    {allGrades > 0 ? <td>{Math.round(allGrades / numGrades)}</td> : <td>No Grades Yet</td>}
                   </tr>
                 );
               })
             ) : (
               <tr>
                 <td>No students in this class!</td>
+                <td></td>
+                <td></td>
               </tr>
             )}
           </tbody>
         </Table>
       )}
-      {currentAssessment && (
+      {currentAssessment && assessmentGrades.length ? (
         <h3>
           Overall Class Average:{" "}
           {Math.round(
@@ -212,7 +215,7 @@ const AssessmentReportScreen = () => {
           )}
           %
         </h3>
-      )}
+      ) : null}
     </>
   );
 };
