@@ -15,11 +15,20 @@ const CourseCreate = ({ setShow, show }) => {
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [gradeLevel, setGradeLevel] = useState("");
+  const [validated, setValidated] = useState(false);
 
   const handleCreateSubmit = (e) => {
-    e.preventDefault();
-    dispatch(createCourse({ name, subject, gradeLevel }));
-    setShow(false);
+    const form = e.currentTarget;
+
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      dispatch(createCourse({ name, subject, gradeLevel }));
+      e.preventDefault();
+      setShow(false);
+    }
+    setValidated(true);
   };
 
   return (
@@ -28,43 +37,56 @@ const CourseCreate = ({ setShow, show }) => {
         <Modal.Title>Create a Course</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group controlId="">
+        <Form noValidate validated={validated} onSubmit={handleCreateSubmit}>
+          <Form.Group>
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
+              required
               placeholder="Course Name"
               autoFocus
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                return setName(e.target.value);
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Please enter a Course Name.
+            </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="">
+          <Form.Group>
             <Form.Label>Subject</Form.Label>
             <Form.Control
               type="text"
+              required
               placeholder="Subject Name"
               onChange={(e) => setSubject(e.target.value)}
             />
+            <Form.Control.Feedback type="invalid">
+              Please enter a Subject Name.
+            </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="">
+          <Form.Group>
             <Form.Label>Grade</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              required
               placeholder="Grade"
               onChange={(e) => setGradeLevel(e.target.value)}
             />
+            <Form.Control.Feedback type="invalid">
+              Please enter a number between 0 to 100.
+            </Form.Control.Feedback>
           </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Save Changes
+          </Button>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button variant="primary" type="submit" onClick={handleCreateSubmit}>
-          Save Changes
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

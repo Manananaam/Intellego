@@ -21,6 +21,7 @@ const CourseScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [id, setId] = useState(null);
 
   //Redux
   const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const CourseScreen = () => {
 
   //Eventhandlers
   const handleShow = () => setShow(true);
-  const handleShowEdit = () => setShowEdit(true);
 
   //Hooks
   useEffect(() => {
@@ -39,7 +39,7 @@ const CourseScreen = () => {
   //render
   return (
     <>
-      <h1>Courses</h1>
+      <h1>Courses </h1>
       <Button variant="primary" onClick={handleShow}>
         Create Course +
       </Button>
@@ -56,6 +56,10 @@ const CourseScreen = () => {
           {courses && courses.length
             ? courses.map((course) => {
                 const courseId = course.id;
+                const handleShowEdit = () => {
+                  setId(course.id);
+                  setShowEdit(true);
+                };
                 return (
                   <tr key={course.id}>
                     <td>{course.name}</td>
@@ -77,7 +81,10 @@ const CourseScreen = () => {
                           >
                             Assessments
                           </Dropdown.Item>{" "}
-                          <Dropdown.Item as={Link} to={"/report/courses"}>
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/report/course?courseId=${courseId}`}
+                          >
                             Report
                           </Dropdown.Item>
                           <Dropdown.Divider />
@@ -91,16 +98,9 @@ const CourseScreen = () => {
                               navigate(0);
                             }}
                           >
-                            Archive
+                            Delete
                           </Dropdown.Item>
                         </Dropdown.Menu>
-
-                        <CourseEdit
-                          showEdit={showEdit}
-                          setShowEdit={setShowEdit}
-                          id={course.id}
-                        />
-                        <CourseCreate show={show} setShow={setShow} />
                       </Dropdown>
                     </td>
                   </tr>
@@ -109,6 +109,8 @@ const CourseScreen = () => {
             : null}
         </tbody>
       </Table>
+      <CourseEdit showEdit={showEdit} setShowEdit={setShowEdit} id={id} />
+      <CourseCreate show={show} setShow={setShow} />
     </>
   );
 };
