@@ -181,7 +181,12 @@ const AssessmentReportScreen = () => {
                           if (submission) {
                             return (
                               <td key={submission.id}>
-                                {submission.response} {submission.grade}
+                                {submission.response.length ? (
+                                  submission.response
+                                ) : (
+                                  <i>no response</i>
+                                )}{" "}
+                                {submission.grade}
                               </td>
                             );
                           }
