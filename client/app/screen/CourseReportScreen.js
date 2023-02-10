@@ -210,15 +210,14 @@ export default function CourseReportScreen() {
   } else {
     chart = <p>Please select an active course. </p>;
   }
-
   return (
     <div>
       <Container>
-        {currentCourse && (
+        {currentCourse && allGrades && allGrades.length ? (
           <Button variant="primary" onClick={handleExport}>
             Export
           </Button>
-        )}
+        ) : null}
         <h1>Course Report</h1>
         <Dropdown>
           <Dropdown.Toggle>
