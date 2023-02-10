@@ -25,14 +25,15 @@ const CourseCreate = ({ showEdit, setShowEdit, course }) => {
     const form = e.currentTarget;
 
     if (form.checkValidity() === false) {
+      setValidated(true);
       e.stopPropagation();
     } else {
       dispatch(editCourse({ id: course.id, name, subject, gradeLevel }));
       setShowEdit(false);
 
-      navigate(0);
+      // navigate(0);
+      setValidated(false);
     }
-    setValidated(true);
   };
 
   return (
