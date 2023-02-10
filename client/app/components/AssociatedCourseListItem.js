@@ -8,7 +8,7 @@ import { removeCourseFromAssessment } from "../store/slices/singleAssessmentSlic
 const AssociatedCourseListItem = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseName, courseId, assessmentId } = props;
+  const { courseName, courseId, assessmentId, activeSubmissions } = props;
 
   const handleDelete = () => {
     dispatch(removeCourseFromAssessment({ assessmentId, courseId }));
@@ -20,7 +20,9 @@ const AssociatedCourseListItem = (props) => {
   return (
     <>
       <ListGroup.Item key={courseId}>{courseName}</ListGroup.Item>
-      <DashCircle onClick={handleDelete}></DashCircle>
+      {!activeSubmissions ? (
+        <DashCircle onClick={handleDelete}></DashCircle>
+      ) : null}
     </>
   );
 };
