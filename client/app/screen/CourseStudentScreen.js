@@ -68,7 +68,8 @@ const CourseStudentScreen = () => {
                         <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
-                            href={`/report/students?courseId=${courseId}&studentId=${studentId}`}
+                            as={Link}
+                            to={`/report/students?courseId=${courseId}&studentId=${studentId}`}
                           >
                             View Report
                           </Dropdown.Item>
