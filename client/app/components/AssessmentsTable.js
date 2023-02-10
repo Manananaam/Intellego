@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchAllAssessments,
@@ -10,7 +10,14 @@ import { selectCourses, fetchAllCourses } from "../store/slices/courseSlices";
 import { assessmentSlice } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ArchiveFill, Archive, Trash3 } from "react-bootstrap-icons";
+import {
+  ArchiveFill,
+  Archive,
+  Trash3,
+  InfoSquareFill,
+} from "react-bootstrap-icons";
+import Overlay from "react-bootstrap/Overlay";
+import Tooltip from "react-bootstrap/Tooltip";
 
 const AssessmentsTable = () => {
   const [isActive, setIsActive] = useState(false);
@@ -18,6 +25,8 @@ const AssessmentsTable = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const courses = useSelector(selectCourses);
+  const [show, setShow] = useState(false);
+  const target = useRef(null);
 
   useEffect(() => {
     dispatch(fetchAllAssessments());
@@ -29,7 +38,15 @@ const AssessmentsTable = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Assessment</th>
+            <th>
+              Assessment{" "}
+              {<InfoSquareFill ref={target} onClick={() => setShow(!show)} />}
+            </th>
+            <Overlay target={target.current} show={show} placement="right">
+              {(props) => (
+                <Tooltip {...props}>Click an assessment to make edits.</Tooltip>
+              )}
+            </Overlay>
             {courses && courses.length ? (
               courses.map((course) => {
                 return <th key={course.id}>{course.name}</th>;
