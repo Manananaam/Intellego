@@ -140,7 +140,8 @@ export const isActiveCourse = createAsyncThunk(
         },
         config
       );
-      return data;
+
+      return courseId;
     } catch (err) {
       return err.message;
     }
@@ -151,10 +152,43 @@ export const removeStudent = createAsyncThunk(
   "student/removeStudent",
   async (studentId) => {
     try {
-      const { data } = await axios.delete(`/api/students/${studentId}`);
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.delete(`/api/students/${studentId}`, config);
       return studentId;
     } catch (err) {
       // return rejectWithValue(err.message);
+      console.log(err);
+    }
+  }
+);
+
+export const addNewStudent = createAsyncThunk(
+  "student/addNew",
+  async ({ firstName, lastName, courseId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `/api/students/courses/${courseId}`,
+        {
+          firstName,
+          lastName,
+        },
+        config
+      );
+      return data.student;
+    } catch (err) {
       console.log(err);
     }
   }
@@ -182,7 +216,7 @@ export const courseSlice = createSlice({
       return state.filter((course) => course.courseId !== action.payload);
     });
     builder.addCase(isActiveCourse.fulfilled, (state, action) => {
-      return state.filter((course) => course.isActive);
+      return state.filter((course) => course.id !== action.payload);
     });
 
     //remove Student
@@ -190,6 +224,11 @@ export const courseSlice = createSlice({
       state.students = state.students.filter(
         (student) => student.id !== action.payload
       );
+    });
+
+    // add new student
+    builder.addCase(addNewStudent.fulfilled, (state, action) => {
+      state.students.push(action.payload);
     });
   },
 });
