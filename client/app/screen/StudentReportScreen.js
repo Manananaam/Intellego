@@ -149,7 +149,7 @@ export default function StudentReportScreen() {
     labels: grades.map((el) => el.title),
     datasets: [
       {
-        label: "Grade at each assessments",
+        label: "Assessment Grade",
         data: grades.map((el) => el.grade),
         backgroundColor: "aqua",
         borderColor: "#000",
@@ -166,7 +166,7 @@ export default function StudentReportScreen() {
       spacing,
       title: {
         display: true,
-        text: `${currentStudent?.firstName} ${currentStudent?.lastName} Grade at Course: ${currentCourse?.name}`,
+        text: `${currentStudent?.firstName} ${currentStudent?.lastName} : ${currentCourse?.name}`,
         font: {
           size: 32,
         },
@@ -251,7 +251,7 @@ export default function StudentReportScreen() {
         </Button>
       )}
 
-      <h1>Students Report</h1>
+      <h1>Student Report</h1>
       <Dropdown>
         <Dropdown.Toggle>
           {currentCourse ? currentCourse.name : "Course"}

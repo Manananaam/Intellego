@@ -109,7 +109,7 @@ const CreateAssessmentScreen = () => {
               </>
             ) : (
               <option key="empty-course-prompt" hidden>
-                Please create course before assign
+                Please create a course to enable assigning.
               </option>
             )}
           </Form.Select>
