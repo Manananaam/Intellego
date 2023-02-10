@@ -43,6 +43,7 @@ export default function StudentCreate({ show, setShow }) {
 
     dispatch(addNewStudent({ ...values, courseId }));
     setShow(false);
+    setValidated(false);
   };
 
   return (
