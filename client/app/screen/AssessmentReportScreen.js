@@ -96,7 +96,7 @@ const AssessmentReportScreen = () => {
     <>
       <h1>Assessment Report</h1>
       <Dropdown>
-        <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+        <Dropdown.Toggle variant="primary" id="dropdown-basic">
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -117,7 +117,7 @@ const AssessmentReportScreen = () => {
       <br />
       {currentCourse && (
         <Dropdown>
-          <Dropdown.Toggle variant='primary' id='dropdown-basic'>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
             {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -147,13 +147,13 @@ const AssessmentReportScreen = () => {
           <thead>
             <tr>
               <th>Students</th>
-                {assessment &&
-                  assessment.questions.length ?
-                  assessment.questions.map((question) => {
-                    return (
-                      <th key={question.id}>{question.questionText}</th>
-                    );
-                  }) : null}
+              {assessment && assessment.questions.length ? (
+                assessment.questions.map((question) => {
+                  return <th key={question.id}>{question.questionText}</th>;
+                })
+              ) : (
+                <th style={{ display: "none" }}> </th>
+              )}
 
               <th>Average</th>
             </tr>
@@ -166,40 +166,50 @@ const AssessmentReportScreen = () => {
                 return (
                   <tr key={student.id}>
                     <td>{`${student.firstName} ${student.lastName}`}</td>
-                      {assessment &&
-                        assessment.questions.length &&
-                        assessment.questions.map((question) => {
-                          if (question.submissions.length) {
-                            let submission = question.submissions.find(
-                              (el) => el.studentId === student.id
-                            );
-                            allGrades += submission.grade;
-                            numGrades++;
-                            assessmentGrades.push(
-                              Math.round(allGrades / numGrades)
-                            );
-                            if (submission) {
+
+                    {assessment && assessment.questions.length ? (
+                      assessment.questions.map((question) => {
+                        if (question.submissions.length) {
+                          let submission = question.submissions.find(
+                            (el) => el.studentId === student.id
+                          );
+                          allGrades += submission.grade;
+                          numGrades++;
+                          assessmentGrades.push(
+                            Math.round(allGrades / numGrades)
+                          );
+                          if (submission) {
                             return (
                               <td key={submission.id}>
                                 {submission.response} {submission.grade}
                               </td>
-                            )} else {
-                              return (
-                                <td></td>
-                              )
-                            };
-                          } else {
-                            return <td>No Submission Yet</td>;
+                            );
                           }
-                        })}
-                    {allGrades > 0 ? <td>{Math.round(allGrades / numGrades)}</td> : <td>No Grades Yet</td>}
+                          // else {
+                          //   return <td>No Submission Yet</td>;
+                          // }
+                        } else {
+                          return <td key={question.id}>No Submission Yet</td>;
+                        }
+                      })
+                    ) : (
+                      <td style={{ display: "none" }}> </td>
+                    )}
+                    {allGrades > 0 ? (
+                      <td>{Math.round(allGrades / numGrades)}</td>
+                    ) : (
+                      <td>No Grades Yet</td>
+                    )}
                   </tr>
                 );
               })
             ) : (
+              //needs to have matching # of questions
               <tr>
                 <td>No students in this class!</td>
-                <td></td>
+                {assessment.questions.map((question) => (
+                  <td key={question.id}></td>
+                ))}
                 <td></td>
               </tr>
             )}
@@ -215,7 +225,9 @@ const AssessmentReportScreen = () => {
           )}
           %
         </h3>
-      ) : null}
+      ) : (
+        <h3> </h3>
+      )}
     </>
   );
 };
