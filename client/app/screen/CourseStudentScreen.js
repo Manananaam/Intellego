@@ -19,17 +19,17 @@ const CourseStudentScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showAddNewStudent, setShowAddNewStudent] = useState(false);
-  const [currentStudentId, setCurrentStudentId] = useState("");
+
+  const [currentStudent, setCurrentStudent] = useState(null);
 
   const dispatch = useDispatch();
   const { courseId } = useParams();
   const course = useSelector(selectCourses);
 
   //Eventhandlers
-  const handleShow = () => setShow(true);
-  const handleShowEdit = (selection) => {
+  const handleShowEdit = (student) => {
     setShowEdit(true);
-    setCurrentStudentId(selection.target.id);
+    setCurrentStudent(student);
   };
 
   // Add new Student Handler
@@ -75,25 +75,27 @@ const CourseStudentScreen = () => {
                           </Dropdown.Item>
                           <Dropdown.Item
                             id={studentId}
-                            onClick={handleShowEdit}
+                            onClick={() => handleShowEdit(student)}
                           >
                             Edit/Remove Student
                           </Dropdown.Item>
                         </Dropdown.Menu>
-                        <StudentEdit
-                          showEdit={showEdit}
-                          setShowEdit={setShowEdit}
-                          id={currentStudentId}
-                        ></StudentEdit>
                       </Dropdown>
                     </td>
-                    <td></td>
                   </tr>
                 );
               })
             : null}
         </tbody>
       </Table>
+      {currentStudent && (
+        <StudentEdit
+          showEdit={showEdit}
+          setShowEdit={setShowEdit}
+          student={currentStudent}
+        />
+      )}
+
       <StudentCreate show={showAddNewStudent} setShow={setShowAddNewStudent} />
     </>
   );
