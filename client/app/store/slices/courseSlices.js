@@ -140,7 +140,8 @@ export const isActiveCourse = createAsyncThunk(
         },
         config
       );
-      return data;
+
+      return courseId;
     } catch (err) {
       return err.message;
     }
@@ -215,7 +216,7 @@ export const courseSlice = createSlice({
       return state.filter((course) => course.courseId !== action.payload);
     });
     builder.addCase(isActiveCourse.fulfilled, (state, action) => {
-      return state.filter((course) => course.isActive);
+      return state.filter((course) => course.id !== action.payload);
     });
 
     //remove Student

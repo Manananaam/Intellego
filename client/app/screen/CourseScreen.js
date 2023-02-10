@@ -95,7 +95,6 @@ const CourseScreen = () => {
                             onClick={() => {
                               setIsActive(false);
                               dispatch(isActiveCourse({ courseId, isActive }));
-                              navigate(0);
                             }}
                           >
                             Delete
