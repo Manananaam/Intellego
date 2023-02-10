@@ -147,13 +147,11 @@ const AssessmentReportScreen = () => {
           <thead>
             <tr>
               <th>Students</th>
-                {assessment &&
-                  assessment.questions.length ?
-                  assessment.questions.map((question) => {
-                    return (
-                      <th key={question.id}>{question.questionText}</th>
-                    );
-                  }) : null}
+              {assessment && assessment.questions.length
+                ? assessment.questions.map((question) => {
+                    return <th key={question.id}>{question.questionText}</th>;
+                  })
+                : null}
 
               <th>Average</th>
             </tr>
@@ -166,33 +164,41 @@ const AssessmentReportScreen = () => {
                 return (
                   <tr key={student.id}>
                     <td>{`${student.firstName} ${student.lastName}`}</td>
-                      {assessment &&
-                        assessment.questions.length &&
-                        assessment.questions.map((question) => {
-                          if (question.submissions.length) {
-                            let submission = question.submissions.find(
-                              (el) => el.studentId === student.id
-                            );
-                            allGrades += submission.grade;
-                            numGrades++;
-                            assessmentGrades.push(
-                              Math.round(allGrades / numGrades)
-                            );
-                            if (submission) {
+                    {assessment &&
+                      assessment.questions.length &&
+                      assessment.questions.map((question) => {
+                        if (question.submissions.length) {
+                          let submission = question.submissions.find(
+                            (el) => el.studentId === student.id
+                          );
+                          allGrades += submission.grade;
+                          numGrades++;
+                          assessmentGrades.push(
+                            Math.round(allGrades / numGrades)
+                          );
+                          if (submission) {
                             return (
                               <td key={submission.id}>
-                                {submission.response} {submission.grade}
+                                {submission.response.length ? (
+                                  submission.response
+                                ) : (
+                                  <i>no response</i>
+                                )}{" "}
+                                {submission.grade}
                               </td>
-                            )} else {
-                              return (
-                                <td></td>
-                              )
-                            };
+                            );
                           } else {
-                            return <td>No Submission Yet</td>;
+                            return <td></td>;
                           }
-                        })}
-                    {allGrades > 0 ? <td>{Math.round(allGrades / numGrades)}</td> : <td>No Grades Yet</td>}
+                        } else {
+                          return <td>No Submission Yet</td>;
+                        }
+                      })}
+                    {allGrades > 0 ? (
+                      <td>{Math.round(allGrades / numGrades)}</td>
+                    ) : (
+                      <td>No Grades Yet</td>
+                    )}
                   </tr>
                 );
               })
