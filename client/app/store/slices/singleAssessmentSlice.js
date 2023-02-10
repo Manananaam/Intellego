@@ -327,7 +327,7 @@ export const assessmentSlice = createSlice({
             );
           }
 
-          // return student;
+          return student;
         }
       });
     });

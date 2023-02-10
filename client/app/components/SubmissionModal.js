@@ -27,12 +27,12 @@ const SubmissionModal = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(submitGrade({ subId: currentSubmission.id, grade: subGrade }));
-    dispatch(
-      fetchStudentSubmissions({
-        assessmentId: assessmentId,
-        courseId: currentSubmission.courseId,
-      })
-    );
+    // dispatch(
+    //   fetchStudentSubmissions({
+    //     assessmentId: assessmentId,
+    //     courseId: currentSubmission.courseId,
+    //   })
+    // );
     handleCloseModal();
     setSubGrade(null);
   };
