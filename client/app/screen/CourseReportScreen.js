@@ -119,7 +119,7 @@ export default function CourseReportScreen() {
 
     datasets: [
       {
-        label: "Student's overall grade",
+        label: "Student Overall Grade",
         data: allGrades && allGrades.map((obj) => obj.overall_grade),
         backgroundColor: "aqua",
         borderColor: "#000",
@@ -136,7 +136,7 @@ export default function CourseReportScreen() {
       spacing,
       title: {
         display: true,
-        text: `Student's overall grade in course: ${currentCourse?.name} `,
+        text: `Student Grades: ${currentCourse?.name} `,
         font: {
           size: 32,
         },
@@ -173,7 +173,7 @@ export default function CourseReportScreen() {
         },
         title: {
           display: true,
-          text: "Overall grade",
+          text: "Overall Grade",
           color: "#111",
         },
       },
@@ -184,7 +184,7 @@ export default function CourseReportScreen() {
         title: {
           display: true,
           color: "#111",
-          text: "name of student",
+          text: "Student",
         },
       },
     },
