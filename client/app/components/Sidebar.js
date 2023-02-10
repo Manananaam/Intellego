@@ -82,7 +82,11 @@ const Sidebar = () => {
             </NavDropdown.Item>
           </NavDropdown>
         </Nav.Item>
-
+        <Nav.Item>
+          <Nav.Link as={Link} to="/faq">
+            FAQ
+          </Nav.Link>
+        </Nav.Item>
         <Nav.Item>
           <Nav.Link
             eventKey="logout"

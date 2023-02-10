@@ -21,6 +21,7 @@ import CourseReportScreen from "./CourseReportScreen";
 import GradingScreen from "./GradingScreen";
 
 import DashHome from "./DashHome";
+import FAQ from "../components/FAQ";
 
 const MainDashboardScreen = () => {
   return (
@@ -32,6 +33,7 @@ const MainDashboardScreen = () => {
         <Col xs={9} id='page-content-wrapper'>
           <Routes>
             <Route path='/' element={<DashHome />} />
+            <Route path='/faq' element={<FAQ />} />
 
             {/**Courses **/}
             <Route path='/courses' element={<CousreScreen />} />
