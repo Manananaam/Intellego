@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
+import { Button, Dropdown } from "react-bootstrap";
+import { Dropbox } from "react-bootstrap-icons";
 
 //React related imports
 import { useDispatch, useSelector } from "react-redux";
@@ -11,12 +13,12 @@ import {
   selectCourses,
 } from "../store/slices/courseSlices";
 import { StudentEdit } from "../components/StudentEdit";
-import { Button, Dropdown } from "react-bootstrap";
-import { Dropbox } from "react-bootstrap-icons";
+import StudentCreate from "../components/StudentCreate";
 
 const CourseStudentScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showAddNewStudent, setShowAddNewStudent] = useState(false);
   const [currentStudentId, setCurrentStudentId] = useState("");
 
   const dispatch = useDispatch();
@@ -30,6 +32,9 @@ const CourseStudentScreen = () => {
     setCurrentStudentId(selection.target.id);
   };
 
+  // Add new Student Handler
+  const handleShowAddNewStudent = () => setShowAddNewStudent(true);
+
   useEffect(() => {
     dispatch(fetchCourseStudents(courseId));
   }, [showEdit, show]);
@@ -37,6 +42,9 @@ const CourseStudentScreen = () => {
   return (
     <>
       <h1>Students in {course.name}</h1>
+      <Button variant="primary" onClick={handleShowAddNewStudent}>
+        Add new Student +
+      </Button>
       <Table>
         <thead>
           <tr>
@@ -85,6 +93,7 @@ const CourseStudentScreen = () => {
             : null}
         </tbody>
       </Table>
+      <StudentCreate show={showAddNewStudent} setShow={setShowAddNewStudent} />
     </>
   );
 };

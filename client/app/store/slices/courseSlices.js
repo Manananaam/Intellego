@@ -160,6 +160,32 @@ export const removeStudent = createAsyncThunk(
   }
 );
 
+export const addNewStudent = createAsyncThunk(
+  "student/addNew",
+  async ({ firstName, lastName, courseId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `/api/students/courses/${courseId}`,
+        {
+          firstName,
+          lastName,
+        },
+        config
+      );
+      return data.student;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
 //Slices
 export const courseSlice = createSlice({
   name: "courses",
@@ -190,6 +216,11 @@ export const courseSlice = createSlice({
       state.students = state.students.filter(
         (student) => student.id !== action.payload
       );
+    });
+
+    // add new student
+    builder.addCase(addNewStudent.fulfilled, (state, action) => {
+      state.students.push(action.payload);
     });
   },
 });
