@@ -28,6 +28,7 @@ export default function App() {
               element={<StudentViewScreen />}
             />
             <Route path="/login" element={<LogInScreen />} />
+            <Route path="/signup" element={<SignUpScreen />} />
           </Routes>
         </>
       ) : (
