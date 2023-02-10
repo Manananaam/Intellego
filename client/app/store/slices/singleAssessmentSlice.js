@@ -254,13 +254,11 @@ export const submitGrade = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("hello1 from thunk", subId, grade);
       const { data } = await axios.put(
         `/api/submissions/${subId}`,
         { grade: grade },
         config
       );
-      console.log("hello2 from thunk", data);
       return data;
     } catch (err) {
       const errorMessage = err.reponse.data.message;
@@ -310,19 +308,28 @@ export const assessmentSlice = createSlice({
       state.currentSubmission = action.payload;
     });
     builder.addCase(submitGrade.fulfilled, (state, action) => {
-      console.log(action.payload);
-      console.log(state);
       state.currentSubmission = action.payload;
-      const updatedGrade = state.studentSubmissions.find(
-        (el) => el.id === action.payload.studentId
-      );
-      console.log(
-        "state.studentSubmissions",
-        current(state.studentSubmissions)
-      );
+      state.studentSubmissions = state.studentSubmissions.map((student) => {
+        let subId = action.payload.id;
+        for (let i = 0; i < student.submissions.length; i++) {
+          let currentSub = student.submissions[i];
+          if (subId !== currentSub.id) {
+            console.log(
+              "currentSub is not the one we changed",
+              current(currentSub)
+            );
+          } else {
+            currentSub.grade = action.payload.grade;
+            console.log(
+              "currentsub is the one we want, new currentsub and grade",
+              current(currentSub),
+              action.payload.grade
+            );
+          }
 
-      console.log("action.payload.id", action.payload.id);
-      console.log("updatedGrade", updatedGrade);
+          return student;
+        }
+      });
     });
   },
 });
