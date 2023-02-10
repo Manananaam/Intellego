@@ -94,7 +94,7 @@ const AssessmentReportScreen = () => {
 
   return (
     <>
-      <h1>Assessment Report Screen</h1>
+      <h1>Assessment Report</h1>
       <Dropdown>
         <Dropdown.Toggle variant='primary' id='dropdown-basic'>
           {currentCourse ? currentCourse.name : "Course"}
@@ -166,7 +166,6 @@ const AssessmentReportScreen = () => {
                 return (
                   <tr key={student.id}>
                     <td>{`${student.firstName} ${student.lastName}`}</td>
-                    <td>
                       {assessment &&
                         assessment.questions.length &&
                         assessment.questions.map((question) => {
@@ -179,16 +178,20 @@ const AssessmentReportScreen = () => {
                             assessmentGrades.push(
                               Math.round(allGrades / numGrades)
                             );
+                            if (submission) {
                             return (
-                              <span key={submission.id}>
+                              <td key={submission.id}>
                                 {submission.response} {submission.grade}
-                              </span>
-                            );
+                              </td>
+                            )} else {
+                              return (
+                                <td></td>
+                              )
+                            };
                           } else {
                             return <td>No Submission Yet</td>;
                           }
                         })}
-                    </td>
                     {allGrades > 0 ? <td>{Math.round(allGrades / numGrades)}</td> : <td>No Grades Yet</td>}
                   </tr>
                 );
