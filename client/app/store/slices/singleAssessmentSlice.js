@@ -309,6 +309,27 @@ export const assessmentSlice = createSlice({
     });
     builder.addCase(submitGrade.fulfilled, (state, action) => {
       state.currentSubmission = action.payload;
+      state.studentSubmissions = state.studentSubmissions.map((student) => {
+        let subId = action.payload.id;
+        for (let i = 0; i < student.submissions.length; i++) {
+          let currentSub = student.submissions[i];
+          if (subId !== currentSub.id) {
+            console.log(
+              "currentSub is not the one we changed",
+              current(currentSub)
+            );
+          } else {
+            currentSub.grade = action.payload.grade;
+            console.log(
+              "currentsub is the one we want, new currentsub and grade",
+              current(currentSub),
+              action.payload.grade
+            );
+          }
+
+          // return student;
+        }
+      });
     });
   },
 });
