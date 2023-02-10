@@ -10,21 +10,6 @@ const AssociatedCourseListItem = (props) => {
   const navigate = useNavigate();
   const { courseName, courseId, assessmentId, activeSubmissions } = props;
 
-  // let courseSub = () => {
-  //   let assessQs = assessment.assessment.questions;
-  //   for (let i = 0; i < assessQs.length; i++) {
-  //     let tempSubmissions = assessQs[i].submissions;
-  //     for (let j = 0; j < tempSubmissions.length; j++) {
-  //       if (
-  //         tempSubmissions[j].courseId === currentCourseId
-  //       ) {
-  //         return true;
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // };
-
   const handleDelete = () => {
     dispatch(removeCourseFromAssessment({ assessmentId, courseId }));
     navigate(0);
