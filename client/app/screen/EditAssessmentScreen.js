@@ -101,7 +101,11 @@ const EditAssessmentScreen = () => {
   const activeSubmissions = () => {
     const arr = assessment.assessment.questions;
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i].submissions.length > 0) {
+      // if (arr[i].submissions.length && arr[i].submissions.length > 0) {
+      //   return true;
+      // }
+
+      if (arr[i].submissions && arr[i].submissions[0]) {
         return true;
       }
     }
@@ -170,11 +174,15 @@ const EditAssessmentScreen = () => {
 
                 let courseSub = () => {
                   let assessQs = assessment.assessment.questions;
-                  for (let i = 0; i < assessQs.length; i++) {
-                    let tempSubmissions = assessQs[i].submissions;
-                    for (let j = 0; j < tempSubmissions.length; j++) {
-                      if (tempSubmissions[j].courseId === courseId) {
-                        return true;
+                  if (assessQs && assessQs[0]) {
+                    for (let i = 0; i < assessQs.length; i++) {
+                      let tempSubmissions = assessQs[i].submissions;
+                      if (tempSubmissions && tempSubmissions[0]) {
+                        for (let j = 0; j < tempSubmissions.length; j++) {
+                          if (tempSubmissions[j].courseId === courseId) {
+                            return true;
+                          }
+                        }
                       }
                     }
                   }
