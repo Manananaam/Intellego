@@ -80,8 +80,11 @@ const CourseScreen = () => {
                             to={`/courses/${course.id}/assessments`}
                           >
                             Assessments
-                          </Dropdown.Item>
-                          <Dropdown.Item as={Link} to={"/report/courses"}>
+                          </Dropdown.Item>{" "}
+                          <Dropdown.Item
+                            as={Link}
+                            to={`/report/course?courseId=${courseId}`}
+                          >
                             Report
                           </Dropdown.Item>
                           <Dropdown.Divider />
