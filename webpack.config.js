@@ -4,6 +4,11 @@ module.exports = {
     path: __dirname + "/public",
     filename: "bundle.js",
   },
+  devServer: {
+    static: {
+      directory: __dirname + "/public",
+    },
+  },
   context: __dirname,
   devtool: "source-map",
   module: {
