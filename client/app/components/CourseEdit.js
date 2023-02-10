@@ -10,14 +10,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-const CourseCreate = ({ showEdit, setShowEdit, id }) => {
+const CourseCreate = ({ showEdit, setShowEdit, course }) => {
   const handleEditClose = () => setShowEdit(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [name, setName] = useState("");
-  const [subject, setSubject] = useState("");
-  const [gradeLevel, setGradeLevel] = useState("");
+  const [name, setName] = useState(course.name);
+  const [subject, setSubject] = useState(course.subject);
+  const [gradeLevel, setGradeLevel] = useState(course.gradeLevel);
   const [validated, setValidated] = useState(false);
 
   const handleEditSubmit = (e) => {
@@ -27,7 +27,7 @@ const CourseCreate = ({ showEdit, setShowEdit, id }) => {
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      dispatch(editCourse({ id, name, subject, gradeLevel }));
+      dispatch(editCourse({ id: course.id, name, subject, gradeLevel }));
       setShowEdit(false);
 
       navigate(0);
@@ -46,6 +46,7 @@ const CourseCreate = ({ showEdit, setShowEdit, id }) => {
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
+              value={name}
               autoFocus
               required
               placeholder="Course Name"
@@ -59,6 +60,7 @@ const CourseCreate = ({ showEdit, setShowEdit, id }) => {
             <Form.Label>Subject</Form.Label>
             <Form.Control
               type="text"
+              value={subject}
               required
               placeholder="Subject Name"
               onChange={(e) => setSubject(e.target.value)}
@@ -72,6 +74,7 @@ const CourseCreate = ({ showEdit, setShowEdit, id }) => {
             <Form.Label>Grade</Form.Label>
             <Form.Control
               type="number"
+              value={gradeLevel}
               min="0"
               max="100"
               step="1"
