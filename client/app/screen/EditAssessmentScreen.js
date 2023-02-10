@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -27,6 +27,9 @@ import {
   Modal,
 } from "react-bootstrap";
 import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Overlay from "react-bootstrap/Overlay";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import {
   ArchiveFill,
@@ -34,6 +37,8 @@ import {
   Trash3,
   PlusCircleFill,
   Pencil,
+  QuestionSquareFill,
+  ExclamationDiamondFill,
 } from "react-bootstrap-icons";
 
 const EditAssessmentScreen = () => {
@@ -54,6 +59,8 @@ const EditAssessmentScreen = () => {
   const [newQuestion, setNewQuestion] = useState("");
   const [editQuestion, setEditQuestion] = useState("");
   const [questionId, setQuestionId] = useState(null);
+  const [show, setShow] = useState(false);
+  const target = useRef(null);
 
   useEffect(() => {
     dispatch(fetchAssessment(assessmentId));
@@ -112,6 +119,17 @@ const EditAssessmentScreen = () => {
     return false;
   };
 
+  const renderTooltip = (props) => (
+    <Tooltip {...props}>Click here to grade student submissions.</Tooltip>
+  );
+
+  const renderExclamationTooltip = (props) => (
+    <Tooltip {...props}>
+      Questions may only be edited if there are no student submissions for the
+      question.{" "}
+    </Tooltip>
+  );
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
@@ -121,12 +139,21 @@ const EditAssessmentScreen = () => {
             <Pencil onClick={setEditNameModalVisible} />
           ) : null}
         </h2>
-        <Button onClick={() => navigate(`/assessments/${assessmentId}/grades`)}>
-          Assessment Grades
-        </Button>
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 400 }}
+          overlay={renderTooltip}
+        >
+          <Button
+            onClick={() => navigate(`/assessments/${assessmentId}/grades`)}
+          >
+            Assessment Grades
+          </Button>
+        </OverlayTrigger>
+        <br />
         <Modal
-          size='lg'
-          aria-labelledby='contained-modal-title-vcenter'
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
           centered
           show={editNameModalVisible}
           onHide={handleCloseEditNameModal}
@@ -137,9 +164,9 @@ const EditAssessmentScreen = () => {
               <Form.Label>Assessment Title</Form.Label>
 
               <Form.Control
-                size='lg'
+                size="lg"
                 //how can i make this change size to fit text?
-                type='text'
+                type="text"
                 value={assessmentTitle || ""}
                 onChange={(e) => setAssessmentTitle(e.target.value)}
               ></Form.Control>
@@ -161,7 +188,15 @@ const EditAssessmentScreen = () => {
         </Form.Group> */}
         <br />
         <Form.Group>
-          <Form.Label>Associated Courses</Form.Label>
+          <Form.Label>Associated Courses</Form.Label>{" "}
+          <QuestionSquareFill ref={target} onClick={() => setShow(!show)} />
+          <Overlay target={target.current} show={show} placement="right">
+            {(props) => (
+              <Tooltip {...props}>
+                Click "Add Course" to assign this assessment to other courses.
+              </Tooltip>
+            )}
+          </Overlay>
           <br />
           {/* note: i would love these to appear like chip tags, but don't want to spend too much time right now trying to get that working. in the future, could be worth playing with.
           https://codepen.io/broneks/pen/objeqq */}
@@ -203,10 +238,11 @@ const EditAssessmentScreen = () => {
           ) : (
             <></>
           )}
+          <br />
           <Button onClick={setAddCourseModalVisible}>Add Course</Button>
           <Modal
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
             centered
             show={addCourseModalVisible}
             onHide={handleCloseCourseModal}
@@ -254,7 +290,14 @@ const EditAssessmentScreen = () => {
         </Form.Group>
         <br />
         <Form.Group>
-          <Form.Label>Questions</Form.Label>
+          <Form.Label>Questions</Form.Label>{" "}
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderExclamationTooltip}
+          >
+            <ExclamationDiamondFill />
+          </OverlayTrigger>
           <br />
           {assessment && assessment.assessment.questions.length ? (
             assessment.assessment.questions.map((question) => {
@@ -295,8 +338,8 @@ const EditAssessmentScreen = () => {
                     </>
                   ) : null}
                   <Modal
-                    size='lg'
-                    aria-labelledby='contained-modal-title-vcenter'
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
                     centered
                     show={editQuestionModalVisible}
                     onHide={handleCloseEditQuestionModal}
@@ -305,7 +348,7 @@ const EditAssessmentScreen = () => {
                     <Modal.Body>
                       <Form.Group>
                         <Form.Control
-                          as='textarea'
+                          as="textarea"
                           rows={6}
                           value={editQuestion}
                           onChange={(e) => setEditQuestion(e.target.value)}
@@ -323,13 +366,13 @@ const EditAssessmentScreen = () => {
           )}
           <br />
           {!activeSubmissions() ? (
-            <Button type='button' onClick={setAddQuestionModalVisible}>
+            <Button type="button" onClick={setAddQuestionModalVisible}>
               Add Question
             </Button>
           ) : null}
           <Modal
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
             centered
             show={addQuestionModalVisible}
             onHide={handleCloseAddQuestionModal}
@@ -338,7 +381,7 @@ const EditAssessmentScreen = () => {
             <Modal.Body>
               <Form.Group>
                 <Form.Control
-                  as='textarea'
+                  as="textarea"
                   rows={6}
                   value={newQuestion || ""}
                   onChange={(e) => setNewQuestion(e.target.value)}
