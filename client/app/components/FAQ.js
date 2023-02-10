@@ -15,7 +15,7 @@ const FAQ = () => {
             <Accordion.Header>
             FAQ #1: What is Intellego?
               </Accordion.Header>
-            <Accordion.Body>Intellego a dashboard for teachers to create and administer casual formative assessments during class time, and track and review data on student performance.</Accordion.Body>
+            <Accordion.Body>Intellego is a dashboard for teachers to create and administer casual formative assessments during class time, and track and review data on student performance.</Accordion.Body>
           </Accordion.Item>
       <Accordion.Item eventKey="1">
             <Accordion.Header>
@@ -51,7 +51,7 @@ const FAQ = () => {
             <Accordion.Header>
             FAQ #6: How do I view reports on Intellego?
               </Accordion.Header>
-            <Accordion.Body>Selecting the "courses" tab will lead you to your course dashboard. If you want to create a class, you can do so here, or you can select an option from the dropdown menu. You can view all the students in the course, and from here, view a student report or edit the student. Selecting assessment will take you to all of the assessments for that course, where you can also view a report featuring all assessment submissions, as well as grades and a course average. Selecting report will take you to the report for overall student grades in the course. You can also edit or delete a course.
+            <Accordion.Body>After clicking on "reports," selecting the "courses" tab will lead you to your course dashboard. If you want to create a class, you can do so here, or you can select an option from the dropdown menu. You can view all the students in the course, and from here, view a student report or edit the student. Selecting assessment will take you to all of the assessments for that course, where you can also view a report featuring all assessment submissions, as well as grades and a course average. Selecting report will take you to the report for overall student grades in the course. You can also edit or delete a course.
             </Accordion.Body>
           </Accordion.Item>
       <Accordion.Item eventKey="6">
