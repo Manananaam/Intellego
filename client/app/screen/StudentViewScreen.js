@@ -179,7 +179,7 @@ export default function StudentViewScreen() {
     });
 
   return (
-    <div className="mx-5">
+    <div>
       <ToastContainer position="top-center">
         <Toast
           show={showToast}
