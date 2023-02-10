@@ -147,15 +147,13 @@ const AssessmentReportScreen = () => {
           <thead>
             <tr>
               <th>Students</th>
-              <th>
                 {assessment &&
-                  assessment.questions.length &&
+                  assessment.questions.length ?
                   assessment.questions.map((question) => {
                     return (
-                      <span key={question.id}>{question.questionText}</span>
+                      <th key={question.id}>{question.questionText}</th>
                     );
-                  })}
-              </th>
+                  }) : null}
 
               <th>Average</th>
             </tr>
@@ -198,6 +196,8 @@ const AssessmentReportScreen = () => {
             ) : (
               <tr>
                 <td>No students in this class!</td>
+                <td></td>
+                <td></td>
               </tr>
             )}
           </tbody>
