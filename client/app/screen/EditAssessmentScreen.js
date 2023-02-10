@@ -30,7 +30,6 @@ import AssociatedCourseListItem from "../components/AssociatedCourseListItem";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
-import { QuestionSquareFill } from "react-bootstrap-icons";
 
 import {
   ArchiveFill,
@@ -38,6 +37,8 @@ import {
   Trash3,
   PlusCircleFill,
   Pencil,
+  QuestionSquareFill,
+  ExclamationDiamondFill,
 } from "react-bootstrap-icons";
 
 const EditAssessmentScreen = () => {
@@ -116,6 +117,13 @@ const EditAssessmentScreen = () => {
 
   const renderTooltip = (props) => (
     <Tooltip {...props}>Click here to grade student submissions.</Tooltip>
+  );
+
+  const renderExclamationTooltip = (props) => (
+    <Tooltip {...props}>
+      Questions may only be edited if there are no student submissions for the
+      question.{" "}
+    </Tooltip>
   );
 
   return (
@@ -274,7 +282,14 @@ const EditAssessmentScreen = () => {
         </Form.Group>
         <br />
         <Form.Group>
-          <Form.Label>Questions</Form.Label>
+          <Form.Label>Questions</Form.Label>{" "}
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderExclamationTooltip}
+          >
+            <ExclamationDiamondFill />
+          </OverlayTrigger>
           <br />
           {assessment && assessment.assessment.questions.length ? (
             assessment.assessment.questions.map((question) => {
