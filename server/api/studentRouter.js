@@ -316,7 +316,10 @@ router.put(
   "/:studentId",
   asyncHandler(async (req, res, next) => {
     const student = await Student.findByPk(req.params.studentId);
-    await student.update(req.body);
+    await student.update({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    });
     res.status(200).json({ student });
   })
 );
