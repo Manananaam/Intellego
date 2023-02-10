@@ -76,7 +76,29 @@ export const isActiveAssessment = createAsyncThunk(
         },
         config
       );
-      return data;
+      // return data;
+      return assessmentId;
+    } catch (err) {
+      return err.message;
+    }
+  }
+);
+
+// delete assessment
+//DELETING an assessment (that has no submissions)
+export const deleteAssessment = createAsyncThunk(
+  "/deleteAssessment",
+  async ({ assessmentId }) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("jwt"));
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      await axios.delete(`api/assessments/${assessmentId}`, config);
+      return assessmentId;
     } catch (err) {
       return err.message;
     }
@@ -96,9 +118,15 @@ export const assessmentsSlice = createSlice({
         state.assessments.push(action.payload.data.newAssessment);
       })
       .addCase(isActiveAssessment.fulfilled, (state, action) => {
-        return state.assessments.filter((assessment) => assessment.isActive);
+        state.assessments = state.assessments.filter(
+          (assessment) => assessment.id !== action.payload
+        );
       });
-    builder;
+    builder.addCase(deleteAssessment.fulfilled, (state, action) => {
+      state.assessments = state.assessments.filter(
+        (el) => el.id !== action.payload
+      );
+    });
   },
 });
 
