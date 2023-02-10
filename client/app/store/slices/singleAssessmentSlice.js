@@ -1,7 +1,6 @@
 //data: { assessment: {id, title, userId, courseId, questions:[]}}
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { dispatch } from "d3";
 
 const initialState = {
   assessment: {
