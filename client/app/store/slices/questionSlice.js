@@ -73,7 +73,6 @@ export const editQuestionText = createAsyncThunk(
         config
       );
       dispatch(updateQuestions(data.data.question));
-      return data;
     } catch (err) {
       console.error(err);
     }
