@@ -115,7 +115,7 @@ export const removeCourseFromAssessment = createAsyncThunk(
         `/api/assessments/${assessmentId}/courses/${courseId}`,
         config
       );
-      return data;
+      return courseId;
     } catch (err) {
       console.error(err);
     }
@@ -157,10 +157,11 @@ export const addAssociatedCourse = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = axios.post(
+      const { data } = await axios.post(
         `/api/assessments/${assessmentId}/courses/${courseId}`,
         config
       );
+
       return data;
     } catch (err) {
       console.error(err);
@@ -291,7 +292,7 @@ export const assessmentSlice = createSlice({
     builder.addCase(removeCourseFromAssessment.fulfilled, (state, action) => {
       state.assessment.associatedCourses =
         state.assessment.associatedCourses.filter(
-          (course) => course.id !== action.payload.courseId
+          (course) => course.id !== action.payload
         );
     });
     builder.addCase(addAssociatedCourse.fulfilled, (state, action) => {

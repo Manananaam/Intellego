@@ -12,7 +12,7 @@ const AssociatedCourseListItem = (props) => {
 
   const handleDelete = () => {
     dispatch(removeCourseFromAssessment({ assessmentId, courseId }));
-    navigate(0);
+    // navigate(0);
     //hacky - need to figure out why useeffect isn't working
     //right now when i add associated courses to the useeffect array it is causing constant refreshes
   };

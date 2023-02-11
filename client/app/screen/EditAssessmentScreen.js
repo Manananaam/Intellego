@@ -98,6 +98,16 @@ const EditAssessmentScreen = () => {
     handleCloseEditNameModal();
   }
 
+  function handleAddCourse(courseId) {
+    dispatch(
+      addAssociatedCourse({
+        courseId,
+        assessmentId,
+      })
+    );
+    // navigate(0);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
@@ -252,15 +262,6 @@ const EditAssessmentScreen = () => {
               <ListGroup>
                 {allcourses && allcourses.length
                   ? allcourses.map((course) => {
-                      function handleAddCourse() {
-                        dispatch(
-                          addAssociatedCourse({
-                            courseId: course.id,
-                            assessmentId,
-                          })
-                        );
-                        navigate(0);
-                      }
                       //not updating state properly without hacky refresh
                       let currentCourseId = course.id;
 
@@ -278,8 +279,10 @@ const EditAssessmentScreen = () => {
                         </ListGroup.Item>
                       ) : (
                         <ListGroup.Item key={course.id}>
-                          {course.name}{" "}
-                          <PlusCircleFill onClick={handleAddCourse} />
+                          {course.name}
+                          <PlusCircleFill
+                            onClick={() => handleAddCourse(course.id)}
+                          />
                         </ListGroup.Item>
                       );
                     })
