@@ -159,7 +159,7 @@ const AssessmentsTable = () => {
                       {assessment.questions.filter((question) => {
                         return question.submissions.length > 0;
                       }).length ? (
-                        <Archive
+                        <Trash3
                           onClick={() => {
                             setIsActive(false);
                             dispatch(
