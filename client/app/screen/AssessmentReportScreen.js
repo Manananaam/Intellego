@@ -122,7 +122,8 @@ const AssessmentReportScreen = () => {
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {courses &&
-              courses.id === courseId &&
+            courses.id === courseId &&
+            courses.assessments.length ? (
               courses.assessments.map((assessment) => {
                 return (
                   <Dropdown.Item
@@ -132,7 +133,10 @@ const AssessmentReportScreen = () => {
                     {assessment.title}
                   </Dropdown.Item>
                 );
-              })}
+              })
+            ) : (
+              <Dropdown.Item>No Assessment yet</Dropdown.Item>
+            )}
           </Dropdown.Menu>
         </Dropdown>
       )}
