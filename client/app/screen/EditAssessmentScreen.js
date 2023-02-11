@@ -108,6 +108,17 @@ const EditAssessmentScreen = () => {
     // navigate(0);
   }
 
+  function handleEditQuestion(questionId) {
+    dispatch(
+      editQuestionText({
+        id: questionId,
+        questionText: editQuestion,
+      })
+    );
+    handleCloseEditQuestionModal();
+    setEditQuestion("");
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
@@ -314,23 +325,7 @@ const EditAssessmentScreen = () => {
                 setQuestionId(question.id);
                 setEditQuestionModalVisible(true);
               }
-              function handleEditQuestion() {
-                console.log(
-                  "questionId, editQuestion",
-                  questionId,
-                  editQuestion
-                );
-                dispatch(
-                  editQuestionText({
-                    id: questionId,
-                    questionText: editQuestion,
-                  })
-                );
-                handleCloseEditQuestionModal();
-                setEditQuestion("");
-                navigate(0);
-                //not automatically updating without hacky nav0
-              }
+
               return (
                 <div key={question.id}>
                   <Container rows={6}>{question.questionText}</Container>
@@ -357,7 +352,9 @@ const EditAssessmentScreen = () => {
                           onChange={(e) => setEditQuestion(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <Button onClick={handleEditQuestion}>Submit</Button>
+                      <Button onClick={() => handleEditQuestion(question.id)}>
+                        Submit
+                      </Button>
                     </Modal.Body>
                   </Modal>
                   {/* note - check for submissions and change to archive button to match natalie? */}

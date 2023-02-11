@@ -276,7 +276,17 @@ export const submitGrade = createAsyncThunk(
 export const assessmentSlice = createSlice({
   name: "assessment",
   initialState,
-  reducers: {},
+  reducers: {
+    updateQuestions(state, action) {
+      state.assessment.questions = state.assessment.questions.map((el) => {
+        if (el.id === action.payload.id) {
+          return { ...el, questionText: action.payload.questionText };
+        } else {
+          return el;
+        }
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchAssessment.fulfilled, (state, action) => {
       state.assessment.assessmentTitle = action.payload.data.assessment.title;
@@ -324,3 +334,4 @@ export const selectAssessment = (state) => {
 };
 
 export default assessmentSlice.reducer;
+export const { updateQuestions } = assessmentSlice.actions;
