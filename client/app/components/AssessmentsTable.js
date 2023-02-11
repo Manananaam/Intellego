@@ -4,12 +4,10 @@ import {
   fetchAllAssessments,
   selectAllAssessments,
   isActiveAssessment,
+  deleteAssessment,
 } from "../store/slices/assessmentsTableSlice";
 import { selectCourses, fetchAllCourses } from "../store/slices/courseSlices";
-import {
-  assessmentSlice,
-  deleteAssessment,
-} from "../store/slices/singleAssessmentSlice";
+import { assessmentSlice } from "../store/slices/singleAssessmentSlice";
 import Table from "react-bootstrap/Table";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
@@ -161,20 +159,20 @@ const AssessmentsTable = () => {
                       {assessment.questions.filter((question) => {
                         return question.submissions.length > 0;
                       }).length ? (
-                        <Trash3
+                        <Archive
                           onClick={() => {
                             setIsActive(false);
                             dispatch(
                               isActiveAssessment({ assessmentId, isActive })
                             );
-                            navigate(0);
+                            // navigate(0);
                           }}
                         />
                       ) : (
                         <Trash3
                           onClick={() => {
                             dispatch(deleteAssessment({ assessmentId }));
-                            navigate(0);
+                            // navigate(0);
                           }}
                         />
                       )}

@@ -13,39 +13,27 @@ const DashHome = () => {
     <Container>
       <Row>
         <h1>Quick Actions</h1>
-        <Col>
-          <Card border="primary" style={{ width: "18rem" }}>
-            <Card.Header>Header</Card.Header>
+        <Col xs={6} md={4}>
+          <Card id="studentCard_dash">
             <Card.Body>
-              <Card.Title>Primary Card Title</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Card.Text>
+              <Card.Title>Add Student</Card.Title>
+              <Card.Text id="cardText">+</Card.Text>
             </Card.Body>
           </Card>
         </Col>
-        <Col>
-          <Card border="success" style={{ width: "18rem" }}>
-            <Card.Header>Header</Card.Header>
+        <Col xs={6} md={4}>
+          <Card id="courseCard_dash">
             <Card.Body>
-              <Card.Title>Primary Card Title</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Card.Text>
+              <Card.Title>Add Course</Card.Title>
+              <Card.Text id="cardText">+</Card.Text>
             </Card.Body>
           </Card>
         </Col>
-        <Col>
-          <Card border="info" style={{ width: "18rem" }}>
-            <Card.Header>Header</Card.Header>
+        <Col xs={6} md={4}>
+          <Card id="assessmentCard_dash">
             <Card.Body>
-              <Card.Title>Primary Card Title</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Card.Text>
+              <Card.Title>Add Assessment</Card.Title>
+              <Card.Text id="cardText">+</Card.Text>
             </Card.Body>
           </Card>
         </Col>

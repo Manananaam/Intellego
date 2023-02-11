@@ -40,7 +40,7 @@ const Sidebar = () => {
         </Figure.Caption>
 
         <Nav.Item>
-          <Nav.Link as={Link} to="/">
+          <Nav.Link as={Link} to="/" eventKey="home">
             Home
           </Nav.Link>
         </Nav.Item>

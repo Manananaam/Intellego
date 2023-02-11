@@ -9,15 +9,22 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
+export const StudentEdit = ({ showEdit, setShowEdit, student }) => {
   const dispatch = useDispatch();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [validated, setValidated] = useState(false);
+  const [firstName, setFirstName] = useState(student.firstName);
+  const [lastName, setLastName] = useState(student.lastName);
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    dispatch(editStudent({ id, firstName, lastName }));
+    const form = e.currentTarget;
+    if (!form.checkValidity()) {
+      setValidated(true);
+      return;
+    }
+
+    dispatch(editStudent({ id: student.id, firstName, lastName }));
     setShowEdit(false);
   };
 
@@ -25,7 +32,7 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
 
   const handleRemoveStudent = (e) => {
     e.preventDefault();
-    dispatch(removeStudent(id));
+    dispatch(removeStudent(student.id));
     handleEditClose();
   };
 
@@ -36,36 +43,44 @@ export const StudentEdit = ({ showEdit, setShowEdit, id }) => {
           <Modal.Title>Edit Student</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="">
+          <Form onSubmit={handleEditSubmit} noValidate validated={validated}>
+            <Form.Group>
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
+                value={firstName}
                 placeholder="First Name"
                 autoFocus
+                required
                 onChange={(e) => setFirstName(e.target.value)}
               />
+              <Form.Control.Feedback type="invalid">
+                Please enter student's first name.
+              </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group controlId="">
+            <Form.Group>
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
+                value={lastName}
                 placeholder="Last Name"
+                required
                 onChange={(e) => setLastName(e.target.value)}
               />
+              <Form.Control.Feedback type="invalid">
+                Please enter student's Last name.
+              </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="">
-              <Button onClick={handleRemoveStudent}>Remove Student</Button>
-            </Form.Group>
+            <Button variant="primary" type="submit">
+              Save Changes
+            </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
+          <Button onClick={handleRemoveStudent}>Remove Student</Button>
           <Button variant="secondary" onClick={handleEditClose}>
             Close
-          </Button>
-          <Button variant="primary" type="submit" onClick={handleEditSubmit}>
-            Save Changes
           </Button>
         </Modal.Footer>
       </Modal>

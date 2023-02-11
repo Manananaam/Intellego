@@ -18,12 +18,13 @@ router.get(
       where: {
         userId: req.user.id,
       },
-      include: [{
-        model: Question,
-        include: { model: Submission },
-      },
-      { model: Course },
-    ],
+      include: [
+        {
+          model: Question,
+          include: { model: Submission },
+        },
+        { model: Course },
+      ],
     });
     if (!assessments) {
       throw new AppError(
@@ -159,19 +160,26 @@ router.post(
     });
     // add associate with course if the user assign the assessment to existed course.
     if (req.body.courseId) {
-      console.log("run", req.body.courseId);
       const course = await Course.findByPk(req.body.courseId);
       newAssessment.addCourse(course);
     }
 
-    const newQuestion = await Question.create({
-      questionText: req.body.questionText,
-    });
-    await newQuestion.setAssessment(newAssessment);
+    const newQuestions = await Promise.all(
+      req.body.questions.map(async (question) => {
+        const newQuestion = await Question.create({
+          questionText: question,
+        });
+        await newQuestion.setAssessment(newAssessment);
+        return newQuestion;
+      })
+    );
+
     res.status(201).json({
       data: {
         newAssessment: {
-          questions: { ...newQuestion, submissions: [] },
+          questions: newQuestions.map((el) => {
+            return { ...el.toJSON(), submissions: [] };
+          }),
         },
       },
     });

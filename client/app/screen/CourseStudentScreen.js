@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
+import { Button, Dropdown } from "react-bootstrap";
+import { Dropbox } from "react-bootstrap-icons";
 
 //React related imports
 import { useDispatch, useSelector } from "react-redux";
@@ -11,24 +13,27 @@ import {
   selectCourses,
 } from "../store/slices/courseSlices";
 import { StudentEdit } from "../components/StudentEdit";
-import { Button, Dropdown } from "react-bootstrap";
-import { Dropbox } from "react-bootstrap-icons";
+import StudentCreate from "../components/StudentCreate";
 
 const CourseStudentScreen = () => {
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [currentStudentId, setCurrentStudentId] = useState("");
+  const [showAddNewStudent, setShowAddNewStudent] = useState(false);
+
+  const [currentStudent, setCurrentStudent] = useState(null);
 
   const dispatch = useDispatch();
   const { courseId } = useParams();
   const course = useSelector(selectCourses);
 
   //Eventhandlers
-  const handleShow = () => setShow(true);
-  const handleShowEdit = (selection) => {
+  const handleShowEdit = (student) => {
     setShowEdit(true);
-    setCurrentStudentId(selection.target.id);
+    setCurrentStudent(student);
   };
+
+  // Add new Student Handler
+  const handleShowAddNewStudent = () => setShowAddNewStudent(true);
 
   useEffect(() => {
     dispatch(fetchCourseStudents(courseId));
@@ -37,6 +42,9 @@ const CourseStudentScreen = () => {
   return (
     <>
       <h1>Students in {course.name}</h1>
+      <Button variant="primary" onClick={handleShowAddNewStudent}>
+        Add new Student +
+      </Button>
       <Table>
         <thead>
           <tr>
@@ -60,31 +68,35 @@ const CourseStudentScreen = () => {
                         <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
-                            href={`/report/students?courseId=${courseId}&studentId=${studentId}`}
+                            as={Link}
+                            to={`/report/students?courseId=${courseId}&studentId=${studentId}`}
                           >
                             View Report
                           </Dropdown.Item>
                           <Dropdown.Item
                             id={studentId}
-                            onClick={handleShowEdit}
+                            onClick={() => handleShowEdit(student)}
                           >
                             Edit/Remove Student
                           </Dropdown.Item>
                         </Dropdown.Menu>
-                        <StudentEdit
-                          showEdit={showEdit}
-                          setShowEdit={setShowEdit}
-                          id={currentStudentId}
-                        ></StudentEdit>
                       </Dropdown>
                     </td>
-                    <td></td>
                   </tr>
                 );
               })
             : null}
         </tbody>
       </Table>
+      {currentStudent && (
+        <StudentEdit
+          showEdit={showEdit}
+          setShowEdit={setShowEdit}
+          student={currentStudent}
+        />
+      )}
+
+      <StudentCreate show={showAddNewStudent} setShow={setShowAddNewStudent} />
     </>
   );
 };
