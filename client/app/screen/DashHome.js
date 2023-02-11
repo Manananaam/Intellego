@@ -7,9 +7,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import "../components/style/layout.css";
+import { Nav } from "react-bootstrap";
 
 const DashHome = () => {
   return (
+    <>
     <Container>
       <Row>
         <h1>Quick Actions</h1>
@@ -39,6 +41,13 @@ const DashHome = () => {
         </Col>
       </Row>
     </Container>
+    <Card>
+    <Card.Footer >
+      Welcome to Intellego, the dashboard for teachers who want more from their grading platform. Intellego offers teachers the tools to create, send and grade student assessments. For help getting started, visit our
+        <Nav.Link href="/faq">FAQ.</Nav.Link>
+    </Card.Footer>
+    </Card>
+    </>
   );
 };
 

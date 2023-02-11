@@ -24,6 +24,11 @@ const Sidebar = () => {
         className="col-md-3 d-none d-md-block bg-light sidebar justify-content-center"
         variant="pills"
       >
+        <Figure.Caption>
+          <h2 className="dashboard_title">
+            Intellego
+          </h2>
+        </Figure.Caption>
         <Figure>
           <Figure.Image
             width={150}
