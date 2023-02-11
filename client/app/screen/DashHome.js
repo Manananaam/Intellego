@@ -41,14 +41,12 @@ const DashHome = () => {
           </Col>
         </Row>
       </Container>
-      <Card>
-        <Card.Footer>
+      <h4>
           Welcome to Intellego, the dashboard for teachers who want more from
           their grading platform. Intellego offers teachers the tools to create,
           send and grade formative student assessments. For help getting
           started, visit our <a href="/faq">FAQ.</a>
-        </Card.Footer>
-      </Card>
+      </h4>
     </>
   );
 };

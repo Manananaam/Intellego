@@ -7,6 +7,11 @@ h1 {
   position: relative;
   margin: 40px 0 60px 0 !important;
 }
+h4 {
+  position: relative;
+  margin: 40px 0 60px 0 !important;
+}
+
 table {
   margin-top: 20px;
 }
@@ -28,6 +33,7 @@ button {
 .card-title {
   font-size: 17px !important;
 }
+
 
 /*Dashbaord*/
 h1:after {
@@ -51,6 +57,7 @@ h1:after {
   justify-content: center;
   transition: font-size 0.3s;
 }
+
 #cardText:hover {
   font-size: 40px;
   color: #fff;
