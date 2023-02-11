@@ -105,7 +105,6 @@ const EditAssessmentScreen = () => {
         assessmentId,
       })
     );
-    // navigate(0);
   }
 
   function handleEditQuestion(questionId) {
