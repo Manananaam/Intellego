@@ -107,7 +107,7 @@ const EditAssessmentScreen = () => {
     );
   }
 
-  function handleEditQuestion(questionId) {
+  function handleEditQuestion() {
     dispatch(
       editQuestionText({
         id: questionId,
@@ -351,9 +351,7 @@ const EditAssessmentScreen = () => {
                           onChange={(e) => setEditQuestion(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <Button onClick={() => handleEditQuestion(question.id)}>
-                        Submit
-                      </Button>
+                      <Button onClick={handleEditQuestion}>Submit</Button>
                     </Modal.Body>
                   </Modal>
                   {/* note - check for submissions and change to archive button to match natalie? */}
