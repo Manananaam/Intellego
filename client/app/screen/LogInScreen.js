@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
+import { Button, Toast, Modal, ToastContainer } from "react-bootstrap";
 import { useFormik, Formik, Field, Form } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthState, login } from "../store/slices/authSlice";
+import {
+  selectAuthState,
+  login,
+  clearAttempt,
+} from "../store/slices/authSlice";
 
 //NOTE! ADD IN CASE FOR UNDEFINED JWT OR THROWS ERROR
 
 const LogInScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, user } = useSelector(selectAuthState);
+  const { isLoading, user, error } = useSelector(selectAuthState);
+  const [visible, setVisible] = useState(false);
 
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
@@ -37,10 +40,20 @@ const LogInScreen = () => {
       }, 3000);
     }
   }, [user]);
+  useEffect(() => {
+    if (error) {
+      setVisible(true);
+    }
+  }, [error]);
+
+  function handleCloseModal() {
+    dispatch(clearAttempt());
+    setVisible(false);
+  }
 
   return (
     <>
-      <ToastContainer position="top-center">
+      <ToastContainer position='top-center'>
         <Toast
           show={showToast}
           onClose={() => setShowToast(false)}
@@ -63,22 +76,35 @@ const LogInScreen = () => {
         {({ errors, touched }) => (
           <Form>
             <>
-              <label htmlFor="email">Email Address</label>
-              <Field name="email" type="email" />
+              <label htmlFor='email'>Email Address</label>
+              <Field name='email' type='email' />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
             </>
             <br />
             <>
-              <label htmlFor="password">Password</label>
-              <Field name="password" type="password" />
+              <label htmlFor='password'>Password</label>
+              <Field name='password' type='password' />
               {errors.password && touched.password ? (
                 <div>{errors.password}</div>
               ) : null}
             </>
-            <button type="submit">Submit</button>
+            <button type='submit'>Submit</button>
           </Form>
         )}
       </Formik>
+      <Modal
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+        show={visible}
+        onHide={handleCloseModal}
+      >
+        <Modal.Title> Log In Error</Modal.Title>
+        <Modal.Body>
+          There was an issue logging in. Please check your username and password
+          and try again!
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
