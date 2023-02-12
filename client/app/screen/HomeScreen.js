@@ -1,7 +1,11 @@
+//react
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, logout } from "../store/slices/authSlice";
+
+//stying
+import Container from "react-bootstrap/Container";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -11,16 +15,7 @@ const HomeScreen = () => {
   const handleLogout = () => {
     dispatch(logout());
   };
-  if (user) {
-    return (
-      <>
-        <p>
-          hello, {user.firstName} {user.lastName}!
-        </p>
-        <button onClick={handleLogout}>log out</button>
-      </>
-    );
-  }
+
   return (
     <>
       <p>hello! welcome to intellego!</p>
@@ -33,5 +28,24 @@ const HomeScreen = () => {
       <Outlet />
     </>
   );
+  // return user ? (
+  //   <>
+  //     <p>
+  //       hello, {user.firstName} {user.lastName}!
+  //     </p>
+  //     <button onClick={handleLogout}>log out</button>
+  //   </>
+  // ) : (
+  //   <>
+  //     <p>hello! welcome to intellego!</p>
+  //     <p>
+  //       <Link to={"login"}>log in here</Link>
+  //     </p>
+  //     <p>
+  //       <Link to={"signup"}>sign up here</Link>
+  //     </p>
+  //     <Outlet />
+  //   </>
+  // );
 };
 export default HomeScreen;
