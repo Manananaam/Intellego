@@ -11,7 +11,6 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 //NOTE! ADD IN CASE FOR UNDEFINED JWT OR THROWS ERROR
 
@@ -37,12 +36,12 @@ const LogInScreen = () => {
   useEffect(() => {
     if (user) {
       setShowToast(true);
-      // navigate("/");
+      navigate("/");
     }
   }, [user]);
 
   return (
-    <Container id="loginContainer">
+    <>
       <ToastContainer position="top-center">
         <Toast
           show={showToast}
@@ -55,67 +54,71 @@ const LogInScreen = () => {
           </Toast.Header>
         </Toast>
       </ToastContainer>
-      <Row>
-        <h4>Login to your account</h4>
-      </Row>
-      <Row>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={validate}
-          onSubmit={(values) => dispatch(login(values))}
-        >
-          {({
-            handleChange,
-            handleSubmit,
-            values,
-            touched,
-            isValid,
-            errors,
-          }) => (
-            <Form noValidate onSubmit={handleSubmit} id="loginSignupForm">
-              <Form.Group>
-                <Form.Label> </Form.Label>
-                <Form.Control
-                  name="email"
-                  placeholder="Email"
-                  type="email"
-                  value={values.email}
-                  onChange={handleChange}
-                  isInvalid={errors.email && touched.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label> </Form.Label>
-                <Form.Control
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  isInvalid={errors.password && touched.password}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password}
-                </Form.Control.Feedback>
 
-                <br />
-                <Button type="submit" style={{ width: "100%" }}>
-                  Log in
-                </Button>
-              </Form.Group>
-            </Form>
-          )}
-        </Formik>
-      </Row>
-      <Row>
-        <p style={{ fontSize: "10px", marginTop: "20px" }}>
-          Don't have an account? <Link to="/signup">Sign up for free</Link>
-        </p>
-      </Row>
-    </Container>
+      <Container id="loginContainer">
+        <Row>
+          <h4>Login to your account</h4>
+        </Row>
+        <Row>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={validate}
+            onSubmit={(values) => dispatch(login(values))}
+          >
+            {({
+              handleChange,
+              handleSubmit,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit} id="loginSignupForm">
+                <Form.Group>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    name="email"
+                    type="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    isInvalid={errors.email && touched.email}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    type="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    isInvalid={errors.password && touched.password}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                  <Button
+                    type="submit"
+                    style={{ width: "100%", marginTop: "20px" }}
+                  >
+                    Log in
+                  </Button>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "10px", marginTop: "20px" }}>
+            Don't have an account? <Link to="/signup">Sign up for free</Link>
+          </p>
+        </Row>
+      </Container>
+    </>
   );
 };
 export default LogInScreen;
