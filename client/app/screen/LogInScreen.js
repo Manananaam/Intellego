@@ -22,7 +22,6 @@ const LogInScreen = () => {
   console.log(getUserInfo);
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
-  const [showInvalid, setShowInvalid] = useState("");
 
   const validate = yup.object().shape({
     email: yup
@@ -33,7 +32,6 @@ const LogInScreen = () => {
       .string("Enter your password")
       .min(6, "Enter 6 or more characters")
       .required("Password is required"),
-    invalid: yup.string("Invalid email and password"),
   });
 
   useEffect(() => {
@@ -59,7 +57,6 @@ const LogInScreen = () => {
       </ToastContainer>
       <Row>
         <h4>Login to your account</h4>
-        <p style={{ fontSize: "12px", color: "red" }}>{showInvalid}</p>
       </Row>
       <Row>
         <Formik
