@@ -14,10 +14,21 @@ const SignUpScreen = () => {
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
   const { isLoading, user } = useSelector(selectAuthState);
+  const mailformat =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/;
+
+  function validateEmail(message) {
+    return this.matches(mailformat, {
+      message,
+      name: "email",
+      excludeEmptyString: true,
+    });
+  }
+  Yup.addMethod(Yup.string, "validateEmail", validateEmail);
 
   const SignupValidate = Yup.object().shape({
     email: Yup.string("Enter your email")
-      .email("Enter a valid email")
+      .validateEmail("Enter a valid email")
       .required("Email is required"),
     password: Yup.string("Enter your password")
       .min(6, "Please enter a password that is 6 characters or more")
@@ -41,7 +52,7 @@ const SignUpScreen = () => {
 
   return (
     <>
-      <ToastContainer position="top-center">
+      <ToastContainer position='top-center'>
         <Toast
           show={showToast}
           onClose={() => setShowToast(false)}
@@ -64,35 +75,35 @@ const SignUpScreen = () => {
         {({ errors, touched }) => (
           <Form>
             <>
-              <label htmlFor="firstName">First Name</label>
-              <Field name="firstName" />
+              <label htmlFor='firstName'>First Name</label>
+              <Field name='firstName' />
               {errors.firstName && touched.firstName ? (
                 <div>{errors.firstName}</div>
               ) : null}
             </>
             <br />
             <>
-              <label htmlFor="lastName">Last Name</label>
-              <Field name="lastName" />
+              <label htmlFor='lastName'>Last Name</label>
+              <Field name='lastName' />
               {errors.lastName && touched.lastName ? (
                 <div>{errors.lastName}</div>
               ) : null}
             </>
             <br />
             <>
-              <label htmlFor="email">Email Address</label>
-              <Field name="email" type="email" />
+              <label htmlFor='email'>Email Address</label>
+              <Field name='email' type='email' />
               {errors.email && touched.email ? <div>{errors.email}</div> : null}
             </>
             <br />
             <>
-              <label htmlFor="password">Password</label>
-              <Field name="password" type="password" />
+              <label htmlFor='password'>Password</label>
+              <Field name='password' type='password' />
               {errors.password && touched.password ? (
                 <div>{errors.password}</div>
               ) : null}
             </>
-            <button type="submit">Submit</button>
+            <button type='submit'>Submit</button>
           </Form>
         )}
       </Formik>
