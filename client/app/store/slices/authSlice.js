@@ -111,6 +111,10 @@ const authSlice = createSlice({
       //see above note - may try to use cookies instead of adding jwt to localstorage
       //add in signup.rejected case later on
     });
+    builder.addCase(signup.rejected, (state, action) => {
+      state.error = true;
+      console.log("bad signup attempt");
+    });
     //could add extra reducers for getting user info
   },
 });

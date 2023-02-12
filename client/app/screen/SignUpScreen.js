@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
+import { Button, Toast, ToastContainer, Modal } from "react-bootstrap";
 import { useFormik, Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthState, signup } from "../store/slices/authSlice";
+import {
+  selectAuthState,
+  signup,
+  clearAttempt,
+} from "../store/slices/authSlice";
 
 const SignUpScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
-  const { isLoading, user } = useSelector(selectAuthState);
+  const { isLoading, user, error } = useSelector(selectAuthState);
+  const [visible, setVisible] = useState(false);
   const mailformat =
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/;
 
@@ -49,7 +52,17 @@ const SignUpScreen = () => {
       }, 3000);
     }
   }, [user]);
+  useEffect(() => {
+    if (error) {
+      setVisible(true);
+      dispatch(clearAttempt());
+    }
+  }, [error]);
 
+  function handleCloseModal() {
+    dispatch(clearAttempt());
+    setVisible(false);
+  }
   return (
     <>
       <ToastContainer position='top-center'>
@@ -107,6 +120,20 @@ const SignUpScreen = () => {
           </Form>
         )}
       </Formik>
+      <Modal
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+        show={visible}
+        onHide={handleCloseModal}
+      >
+        <Modal.Title> Sign Up Error</Modal.Title>
+        <Modal.Body>
+          There was an issue signing up. Please make sure you have entered a
+          valid email and try again. If you already have an account with us, you
+          can log in <Link to={"/login"}>here</Link>.
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
