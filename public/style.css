@@ -140,6 +140,10 @@ h1:after {
   /* text-align: center; */
 }
 
-#loginSignupForm {
+#loginForm {
   width: 20em;
+}
+
+#signupForm {
+  width: 25em;
 }

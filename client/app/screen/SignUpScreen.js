@@ -83,8 +83,8 @@ const SignUpScreen = () => {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit} id="loginSignupForm">
-                <Form.Group as={Row}>
+              <Form noValidate onSubmit={handleSubmit} id="signupForm">
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
                   <Form.Label column sm={4}>
                     First Name
                   </Form.Label>
@@ -97,13 +97,13 @@ const SignUpScreen = () => {
                       onChange={handleChange}
                       isInvalid={errors.firstName && touched.firstName}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.firstName}
+                    </Form.Control.Feedback>
                   </Col>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.firstName}
-                  </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Row}>
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
                   <Form.Label column sm={4}>
                     Last Name
                   </Form.Label>
@@ -116,14 +116,13 @@ const SignUpScreen = () => {
                       onChange={handleChange}
                       isInvalid={errors.lastName && touched.lastName}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.lastName}
+                    </Form.Control.Feedback>
                   </Col>
-
-                  <Form.Control.Feedback type="invalid">
-                    {errors.lastName}
-                  </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Row}>
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
                   <Form.Label column sm={4}>
                     Email
                   </Form.Label>
@@ -136,13 +135,13 @@ const SignUpScreen = () => {
                       onChange={handleChange}
                       isInvalid={errors.email && touched.email}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.email}
+                    </Form.Control.Feedback>
                   </Col>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.email}
-                  </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group as={Row}>
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
                   <Form.Label column sm={4}>
                     Password
                   </Form.Label>
@@ -155,10 +154,10 @@ const SignUpScreen = () => {
                       onChange={handleChange}
                       isInvalid={errors.password && touched.password}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.password}
+                    </Form.Control.Feedback>
                   </Col>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.password}
-                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group>
@@ -173,6 +172,12 @@ const SignUpScreen = () => {
               </Form>
             )}
           </Formik>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "10px", marginTop: "20px" }}>
+            Already have an account?{" "}
+            <Link to="/login">Login to your account.</Link>
+          </p>
         </Row>
       </Container>
     </>

@@ -73,7 +73,7 @@ const LogInScreen = () => {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit} id="loginSignupForm">
+              <Form noValidate onSubmit={handleSubmit} id="loginForm">
                 <Form.Group>
                   <Form.Label>Email</Form.Label>
                   <Form.Control
