@@ -8,7 +8,7 @@ import {
 } from "../store/slices/courseSlices";
 import CourseCreate from "../components/CourseCreate";
 import CourseEdit from "../components/CourseEdit";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 //Bootstrap imports
 import Table from "react-bootstrap/Table";
@@ -22,11 +22,11 @@ const CourseScreen = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
+  let [searchParams, setSearchParams] = useSearchParams();
 
   //Redux
   const dispatch = useDispatch();
   const courses = useSelector(selectCourses);
-  const navigate = useNavigate();
 
   //Eventhandlers
   const handleShow = () => setShow(true);
@@ -36,14 +36,20 @@ const CourseScreen = () => {
     dispatch(fetchAllCourses());
   }, [showEdit, show, isActive]);
 
+  useEffect(() => {
+    if (searchParams.get("create")) {
+      setShow(true);
+    }
+  }, []);
+
   //render
   return (
     <>
       <h1>Courses </h1>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary" onClick={handleShow} className="orangeButton">
         Create Course +
       </Button>
-      <Table>
+      <Table bordered>
         <thead>
           <tr>
             <th>Name</th>
@@ -67,7 +73,10 @@ const CourseScreen = () => {
                     <td>{course.gradeLevel}</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
+                        <Dropdown.Toggle
+                          id="dropdown-basic"
+                          className="orangeButton"
+                        ></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
                             as={Link}

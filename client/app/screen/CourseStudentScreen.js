@@ -42,10 +42,10 @@ const CourseStudentScreen = () => {
   return (
     <>
       <h1>Students in {course.name}</h1>
-      <Button variant="primary" onClick={handleShowAddNewStudent}>
+      <Button onClick={handleShowAddNewStudent} className="orangeButton">
         Add new Student +
       </Button>
-      <Table>
+      <Table bordered>
         <thead>
           <tr>
             <th>Student ID</th>
@@ -65,7 +65,10 @@ const CourseStudentScreen = () => {
                     <td>{student.lastName}</td>
                     <td>
                       <Dropdown>
-                        <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
+                        <Dropdown.Toggle
+                          id="dropdown-basic"
+                          className="orangeButton"
+                        ></Dropdown.Toggle>
                         <Dropdown.Menu>
                           <Dropdown.Item
                             as={Link}

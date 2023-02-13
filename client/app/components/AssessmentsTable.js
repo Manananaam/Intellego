@@ -35,7 +35,7 @@ const AssessmentsTable = () => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table bordered>
         <thead>
           <tr>
             <th>
@@ -70,7 +70,10 @@ const AssessmentsTable = () => {
                 return (
                   <tr key={assessment.id}>
                     <td>
-                      <NavLink to={`/assessments/${assessment.id}`}>
+                      <NavLink
+                        to={`/assessments/${assessment.id}`}
+                        style={{ color: "#017296" }}
+                      >
                         {assessment.title}
                       </NavLink>
                     </td>

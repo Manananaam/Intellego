@@ -83,7 +83,11 @@ const CourseCreate = ({ setShow, show }) => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button
+            type="submit"
+            className="orangeButton"
+            style={{ marginTop: "20px" }}
+          >
             Save Changes
           </Button>
         </Form>

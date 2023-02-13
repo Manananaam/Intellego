@@ -6,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 //Bootstrap
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -54,6 +55,7 @@ import {
 import ChartDataLables from "chartjs-plugin-datalabels";
 
 import { Bar } from "react-chartjs-2";
+import { ButtonGroup } from "react-bootstrap";
 
 ChartJS.register(
   CategoryScale,
@@ -151,8 +153,8 @@ export default function StudentReportScreen() {
       {
         label: "Assessment Grade",
         data: grades.map((el) => el.grade),
-        backgroundColor: "aqua",
-        borderColor: "#000",
+        backgroundColor: "#017296",
+        borderColor: "#017296",
         borderWidth: 1,
       },
     ],
@@ -226,7 +228,8 @@ export default function StudentReportScreen() {
     chart = (
       <div
         style={{
-          height: "690px",
+          padding: "20px 0 0 0",
+          height: "auto",
           width: "690px",
           margin: "auto",
         }}
@@ -244,17 +247,11 @@ export default function StudentReportScreen() {
     }
   }
   return (
-    <div>
-      {currentCourse && currentStudent && (
-        <Button variant="primary" onClick={handleExport}>
-          Export
-        </Button>
-      )}
-
+    <Container>
       <h1>Student Report</h1>
-      <Dropdown>
-        <Dropdown.Toggle>
-          {currentCourse ? currentCourse.name : "Course"}
+      <Dropdown as={ButtonGroup}>
+        <Dropdown.Toggle className="orangeButton">
+          {currentCourse ? currentCourse.name : "Select a Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {allcourses &&
@@ -272,11 +269,11 @@ export default function StudentReportScreen() {
         </Dropdown.Menu>
       </Dropdown>
       {currentCourse && (
-        <Dropdown>
-          <Dropdown.Toggle>
+        <Dropdown as={ButtonGroup} style={{ marginLeft: "10px" }}>
+          <Dropdown.Toggle className="orangeButton">
             {currentStudent
               ? `${currentStudent.firstName} ${currentStudent.lastName}`
-              : "Student"}
+              : "Select a Student"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {courses &&
@@ -293,12 +290,25 @@ export default function StudentReportScreen() {
               })}
           </Dropdown.Menu>
         </Dropdown>
+      )}{" "}
+      {currentCourse && currentStudent && (
+        <Button
+          variant="primary"
+          onClick={handleExport}
+          style={{
+            float: "right",
+            position: "relative",
+            backgroundColor: "#017296",
+          }}
+        >
+          Export
+        </Button>
       )}
-      <p>
+      {/* <p>
         {currentStudent &&
           `${currentStudent.firstName} ${currentStudent.lastName}`}
-      </p>
-      {currentCourse ? chart : <p>Please select a course</p>}
-    </div>
+      </p> */}
+      {currentCourse ? chart : null}
+    </Container>
   );
 }

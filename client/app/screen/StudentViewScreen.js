@@ -10,6 +10,9 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -152,7 +155,7 @@ export default function StudentViewScreen() {
       </Alert>
     );
   }
-  console.log("value", submission);
+
   const renderListOfQuestion =
     questions &&
     questions.length &&
@@ -179,7 +182,7 @@ export default function StudentViewScreen() {
     });
 
   return (
-    <div>
+    <Container>
       <ToastContainer position="top-center">
         <Toast
           show={showToast}
@@ -198,38 +201,52 @@ export default function StudentViewScreen() {
 
       <h1>Assessment </h1>
 
-      <Stack direction="horizontal">
-        <h2> Title: {assessment && assessment.title}</h2>
-        <Form className="ms-auto" onSubmit={handleStudentVerify}>
-          <FloatingLabel label="* Required Student ID">
-            <Form.Control
-              type="text"
-              placeholder="verify id"
-              value={studentId}
-              onBlur={() => setStudentIdTouched(true)}
-              onChange={handleStudentIdChange}
-            />
-            {!studentIdIsValid && studentIdTouch && (
-              <Form.Text className="text-danger">
-                Student Id is required and must be integer
-              </Form.Text>
-            )}
-            <Button variant="primary" type="submit">
-              verify
-            </Button>
-          </FloatingLabel>
-        </Form>
-      </Stack>
-      <hr />
+      <Row>
+        <Col>
+          <h2> Title: {assessment && assessment.title}</h2>
+        </Col>
+
+        <Col>
+          <Form className="ms-auto" onSubmit={handleStudentVerify}>
+            <Row>
+              <Col>
+                <FloatingLabel label="* Required Student ID">
+                  <Form.Control
+                    type="text"
+                    placeholder="verify id"
+                    value={studentId}
+                    onBlur={() => setStudentIdTouched(true)}
+                    onChange={handleStudentIdChange}
+                  />
+
+                  {!studentIdIsValid && studentIdTouch && (
+                    <Form.Text className="text-danger">
+                      Student Id is required and must be integer
+                    </Form.Text>
+                  )}
+                </FloatingLabel>
+              </Col>
+              <Col>
+                <Button className="orangeButton" type="submit">
+                  verify
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+      <br />
+      <br />
       <Form onSubmit={handleSubmission}>
         {renderListOfQuestion}
-        <Button variant="primary" type="submit">
-          Submit
+        <br />
+        <Button className="orangeButton" type="submit">
+          Submit Assessment
         </Button>
         {studentIdInputIsValid && !studentIdFormHasSubmit && (
           <p className="text-danger">Please verify Id before submit.</p>
         )}
       </Form>
-    </div>
+    </Container>
   );
 }

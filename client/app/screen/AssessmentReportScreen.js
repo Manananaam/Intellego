@@ -6,6 +6,8 @@ import { useSearchParams } from "react-router-dom";
 //Bootstrap
 import Table from "react-bootstrap/Table";
 import Dropdown from "react-bootstrap/Dropdown";
+import Container from "react-bootstrap/Container";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 //redux
 import {
@@ -93,11 +95,11 @@ const AssessmentReportScreen = () => {
   };
 
   return (
-    <>
+    <Container>
       <h1>Assessment Report</h1>
-      <Dropdown>
-        <Dropdown.Toggle variant="primary" id="dropdown-basic">
-          {currentCourse ? currentCourse.name : "Course"}
+      <Dropdown as={ButtonGroup}>
+        <Dropdown.Toggle className="orangeButton" id="dropdown-basic">
+          {currentCourse ? currentCourse.name : "Select a Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {allcourses &&
@@ -114,11 +116,12 @@ const AssessmentReportScreen = () => {
             })}
         </Dropdown.Menu>
       </Dropdown>
-      <br />
       {currentCourse && (
-        <Dropdown>
-          <Dropdown.Toggle variant="primary" id="dropdown-basic">
-            {currentAssessment ? `${currentAssessment.title}` : "Assessment"}
+        <Dropdown as={ButtonGroup} style={{ marginLeft: "10px" }}>
+          <Dropdown.Toggle className="orangeButton" id="dropdown-basic">
+            {currentAssessment
+              ? `${currentAssessment.title}`
+              : "Select an Assessment"}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {courses &&
@@ -137,13 +140,9 @@ const AssessmentReportScreen = () => {
         </Dropdown>
       )}
       <br />
-      <h2>
-        {currentAssessment
-          ? currentAssessment.title
-          : "Please select an assessment"}
-      </h2>
+      {/* <p>{currentAssessment ? currentAssessment.title : null}</p> */}
       {currentAssessment && (
-        <Table striped bordered hover>
+        <Table striped bordered>
           <thead>
             <tr>
               <th>Students</th>
@@ -233,7 +232,7 @@ const AssessmentReportScreen = () => {
       ) : (
         <h3> </h3>
       )}
-    </>
+    </Container>
   );
 };
 

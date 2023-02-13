@@ -14,27 +14,27 @@ const DashHome = () => {
     <Container>
       <Row>
         <h1>Quick Actions</h1>
-        {/* <Col xs={6} md={4}>
-          <Card id="studentCard_dash">
-            <Card.Body>
-              <Card.Title>Add Student</Card.Title>
-              <Card.Text id="cardText">+</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col> */}
+
         <Col xs={9} md={6}>
-          <Card id="courseCard_dash">
+          <Card
+            id="courseCard_dash"
+            as={Link}
+            to="/courses?create=true"
+            style={{ textDecoration: "none" }}
+          >
             <Card.Body>
               <Card.Title>Add Course</Card.Title>
               <Card.Text id="cardText">+</Card.Text>
-              <Link to="/courses">
-                <CourseCreate />
-              </Link>
             </Card.Body>
           </Card>
         </Col>
         <Col xs={9} md={6}>
-          <Card id="assessmentCard_dash">
+          <Card
+            id="assessmentCard_dash"
+            as={Link}
+            to="/assessments/create"
+            style={{ textDecoration: "none" }}
+          >
             <Card.Body>
               <Card.Title>Add Assessment</Card.Title>
               <Card.Text id="cardText">+</Card.Text>

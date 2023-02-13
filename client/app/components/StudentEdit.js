@@ -72,14 +72,20 @@ export const StudentEdit = ({ showEdit, setShowEdit, student }) => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button
+              className="orangeButton"
+              type="submit"
+              style={{ marginTop: "20px" }}
+            >
               Save Changes
             </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleRemoveStudent}>Remove Student</Button>
-          <Button variant="secondary" onClick={handleEditClose}>
+          <Button onClick={handleRemoveStudent} variant="danger">
+            Remove Student
+          </Button>
+          <Button onClick={handleEditClose} variant="secondary">
             Close
           </Button>
         </Modal.Footer>

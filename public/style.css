@@ -17,10 +17,17 @@ table {
   margin-top: 20px;
 }
 
-button {
+.orangeButton {
   background-color: #fd7607 !important;
   border: thin #fd7607 solid !important;
 }
+.orangeButton.active {
+  background-color: #fd7607 !important;
+}
+/* .btn-primary {
+  background-color: #fd7607 !important;
+  border: thin #fd7607 solid !important;
+} */
 
 .nav-link {
   color: #017296 !important;
