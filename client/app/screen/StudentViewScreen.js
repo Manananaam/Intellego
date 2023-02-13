@@ -163,10 +163,8 @@ export default function StudentViewScreen() {
       return (
         <Card key={idx}>
           <Card.Body>
-            <Card.Title>
-              {idx + 1}. Question:
-              <p>{question.questionText}</p>
-            </Card.Title>
+            <Card.Title>Question #{idx + 1} :</Card.Title>
+            <Card.Text>{question.questionText}</Card.Text>
             <Form.Control
               as="textarea"
               value={submission[question.id]}
@@ -189,6 +187,7 @@ export default function StudentViewScreen() {
           onClose={() => setShowToast(false)}
           delay={3000}
           autohide
+          bg="danger"
         >
           <Toast.Header>Verify Result</Toast.Header>
           <Toast.Body>
@@ -202,15 +201,15 @@ export default function StudentViewScreen() {
       <h1>Assessment </h1>
 
       <Row>
-        <Col>
+        <Col md={8}>
           <h2> Title: {assessment && assessment.title}</h2>
         </Col>
 
-        <Col>
+        <Col md={4}>
           <Form className="ms-auto" onSubmit={handleStudentVerify}>
             <Row>
-              <Col>
-                <FloatingLabel label="* Required Student ID">
+              <Col md={9}>
+                <FloatingLabel label="*Student ID">
                   <Form.Control
                     type="text"
                     placeholder="verify id"
@@ -226,8 +225,8 @@ export default function StudentViewScreen() {
                   )}
                 </FloatingLabel>
               </Col>
-              <Col>
-                <Button className="orangeButton" type="submit">
+              <Col md={3}>
+                <Button className="orangeButton" type="submit" size="lg">
                   verify
                 </Button>
               </Col>
@@ -237,16 +236,18 @@ export default function StudentViewScreen() {
       </Row>
       <br />
       <br />
-      <Form onSubmit={handleSubmission}>
-        {renderListOfQuestion}
-        <br />
-        <Button className="orangeButton" type="submit">
-          Submit Assessment
-        </Button>
-        {studentIdInputIsValid && !studentIdFormHasSubmit && (
-          <p className="text-danger">Please verify Id before submit.</p>
-        )}
-      </Form>
+      <Row>
+        <Form onSubmit={handleSubmission}>
+          {renderListOfQuestion}
+          <br />
+          <Button className="orangeButton" type="submit">
+            Submit Assessment
+          </Button>
+          {studentIdInputIsValid && !studentIdFormHasSubmit && (
+            <p className="text-danger">Please verify Id before submit.</p>
+          )}
+        </Form>
+      </Row>
     </Container>
   );
 }

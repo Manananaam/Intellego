@@ -60,7 +60,7 @@ const SignUpScreen = () => {
       </ToastContainer>
       <Container id="loginContainer">
         <Row>
-          <h1>Create an Account</h1>
+          <h4>Create an Account</h4>
         </Row>
         <Row>
           <Formik
@@ -165,6 +165,7 @@ const SignUpScreen = () => {
                   <Button
                     type="submit"
                     style={{ width: "100%", marginTop: "20px" }}
+                    className="orangeButton"
                   >
                     Sign Up
                   </Button>

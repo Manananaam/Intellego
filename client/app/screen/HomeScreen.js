@@ -6,6 +6,9 @@ import { selectAuthState, logout } from "../store/slices/authSlice";
 
 //stying
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -17,35 +20,44 @@ const HomeScreen = () => {
   };
 
   return (
-    <>
-      <p>hello! welcome to intellego!</p>
-      <p>
-        <Link to={"login"}>log in here</Link>
-      </p>
-      <p>
-        <Link to={"signup"}>sign up here</Link>
-      </p>
-      <Outlet />
-    </>
+    <Container className="landingContainer">
+      <Row>
+        <Col className="left_slide">
+          <h3>
+            <img src="/assets/Logo.png" alt="logo" style={{ width: "30px" }} />{" "}
+            Welcome to Intellego
+          </h3>
+          <br />
+          <p>
+            the dashboard for teachers who want more from their grading
+            platform. Intellego offers teachers the tools to create, send and
+            grade formative student assessments.
+          </p>
+          <br />
+          <Button
+            as={Link}
+            to={"login"}
+            className="orangeButton"
+            style={{ width: "70%" }}
+          >
+            log in
+          </Button>
+
+          <Button
+            as={Link}
+            to={"signup"}
+            className="orangeButton"
+            style={{ width: "70%", marginTop: "20px" }}
+          >
+            Sign up
+          </Button>
+        </Col>
+        <Col className="right_slide">
+          <img src={"/assets/landing_test_image.png"} alt="landing page" />
+        </Col>
+        <Outlet />
+      </Row>
+    </Container>
   );
-  // return user ? (
-  //   <>
-  //     <p>
-  //       hello, {user.firstName} {user.lastName}!
-  //     </p>
-  //     <button onClick={handleLogout}>log out</button>
-  //   </>
-  // ) : (
-  //   <>
-  //     <p>hello! welcome to intellego!</p>
-  //     <p>
-  //       <Link to={"login"}>log in here</Link>
-  //     </p>
-  //     <p>
-  //       <Link to={"signup"}>sign up here</Link>
-  //     </p>
-  //     <Outlet />
-  //   </>
-  // );
 };
 export default HomeScreen;

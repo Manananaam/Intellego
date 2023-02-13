@@ -104,6 +104,7 @@ const LogInScreen = () => {
                   <Button
                     type="submit"
                     style={{ width: "100%", marginTop: "20px" }}
+                    className="orangeButton"
                   >
                     Log in
                   </Button>
