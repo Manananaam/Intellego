@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ToastContainer from "react-bootstrap/ToastContainer";
+import {
+  Button,
+  Toast,
+  Modal,
+  ToastContainer,
+  Container,
+  Form,
+  Row,
+} from "react-bootstrap";
 import { useFormik, Formik, Field } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectAuthState, login } from "../store/slices/authSlice";
+import {
+  selectAuthState,
+  login,
+  clearAttempt,
+  getUserInfo,
+} from "../store/slices/authSlice";
 import LoadingSpinner from "../components/LoadingSpinner";
-
-import Toast from "react-bootstrap/Toast";
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-
-//NOTE! ADD IN CASE FOR UNDEFINED JWT OR THROWS ERROR
 
 const LogInScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getUserInfo, user } = useSelector(selectAuthState);
-  console.log(getUserInfo);
+  const { isLoading, user, error } = useSelector(selectAuthState);
+  const [visible, setVisible] = useState(false);
+
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
 
@@ -41,13 +47,24 @@ const LogInScreen = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (error) {
+      setVisible(true);
+    }
+  }, [error]);
+
+  function handleCloseModal() {
+    dispatch(clearAttempt());
+    setVisible(false);
+  }
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   return (
     <>
-      <ToastContainer position="top-center">
+      <ToastContainer position='top-center'>
         <Toast
           show={showToast}
           onClose={() => setShowToast(false)}
@@ -62,10 +79,9 @@ const LogInScreen = () => {
           </Toast.Body>
         </Toast>
       </ToastContainer>
-
-      <Container id="loginContainer">
+      <Container id='loginContainer'>
         <Row>
-          <h4>Login to your account</h4>
+          <h4>Log in to your account</h4>
         </Row>
         <Row>
           <Formik
@@ -81,38 +97,38 @@ const LogInScreen = () => {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit} id="loginForm">
+              <Form noValidate onSubmit={handleSubmit} id='loginForm'>
                 <Form.Group>
                   <Form.Label>Email</Form.Label>
                   <Form.Control
-                    name="email"
-                    type="email"
+                    name='email'
+                    type='email'
                     value={values.email}
                     onChange={handleChange}
                     isInvalid={errors.email && touched.email}
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type='invalid'>
                     {errors.email}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
-                    name="password"
-                    type="password"
+                    name='password'
+                    type='password'
                     value={values.password}
                     onChange={handleChange}
                     isInvalid={errors.password && touched.password}
                   />
-                  <Form.Control.Feedback type="invalid">
+                  <Form.Control.Feedback type='invalid'>
                     {errors.password}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
                   <Button
-                    type="submit"
+                    type='submit'
                     style={{ width: "100%", marginTop: "20px" }}
-                    className="orangeButton"
+                    className='orangeButton'
                   >
                     Log in
                   </Button>
@@ -123,10 +139,25 @@ const LogInScreen = () => {
         </Row>
         <Row>
           <p style={{ fontSize: "10px", marginTop: "20px" }}>
-            Don't have an account? <Link to="/signup">Sign up for free</Link>
+            Don't have an account? <Link to='/signup'>Sign up for free</Link>
           </p>
         </Row>
       </Container>
+      <Modal
+        size='lg'
+        aria-labelledby='contained-modal-title-vcenter'
+        centered
+        show={visible}
+        onHide={handleCloseModal}
+      >
+        <Modal.Header>
+          <Modal.Title> Log In Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          There was an issue logging in. Please check your username and password
+          and try again!
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
