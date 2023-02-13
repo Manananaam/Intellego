@@ -40,8 +40,8 @@ const SubmissionModal = (props) => {
 
   return (
     <Modal
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
+      size='lg'
+      aria-labelledby='contained-modal-title-vcenter'
       centered
       show={visible}
       onHide={handleCloseModal}
@@ -57,7 +57,7 @@ const SubmissionModal = (props) => {
       <Modal.Body>
         <Container>
           <Row>
-            <h6>Studnet's Answer: </h6>
+            <h6>Student's Answer: </h6>
             <p>
               {currentSubmission && Object.keys(currentSubmission).length
                 ? currentSubmission.response
@@ -68,16 +68,16 @@ const SubmissionModal = (props) => {
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Control
-              type="number"
-              min="1"
+              type='number'
+              min='1'
               // value={subGrade}
-              placeholder="Enter Grade"
-              max="100"
-              step="1"
+              placeholder='Enter Grade'
+              max='100'
+              step='1'
               onChange={(e) => setSubGrade(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Button type="submit" style={{ marginTop: "10px" }}>
+          <Button type='submit' style={{ marginTop: "10px" }}>
             Submit
           </Button>
         </Form>

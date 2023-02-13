@@ -1,30 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
+
 import { useFormik, Formik, Field } from "formik";
 import * as yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { selectAuthState, signup } from "../store/slices/authSlice";
-import LoadingSpinner from "../components/LoadingSpinner";
+import {
+  Button,
+  Toast,
+  ToastContainer,
+  Modal,
+  Container,
+  Form,
+  Row,
+  Col,
+} from "react-bootstrap";
 
-import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAuthState,
+  signup,
+  clearAttempt,
+} from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SignUpScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
-  const { isLoading, user } = useSelector(selectAuthState);
+  const { isLoading, user, error } = useSelector(selectAuthState);
+  const [visible, setVisible] = useState(false);
+  const mailformat =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/;
+
+  function validateEmail(message) {
+    return this.matches(mailformat, {
+      message,
+      name: "email",
+      excludeEmptyString: true,
+    });
+  }
+  yup.addMethod(yup.string, "validateEmail", validateEmail);
 
   const SignupValidate = yup.object().shape({
     email: yup
       .string("Enter your email")
-      .email("Enter a valid email")
+      .validateEmail("Enter a valid email")
       .required("Email is required"),
     password: yup
       .string("Enter your password")
@@ -45,13 +65,23 @@ const SignUpScreen = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (error) {
+      setVisible(true);
+      dispatch(clearAttempt());
+    }
+  }, [error]);
+
+  function handleCloseModal() {
+    dispatch(clearAttempt());
+    setVisible(false);
+  }
   if (isLoading) {
     return <LoadingSpinner />;
   }
-
   return (
     <>
-      <ToastContainer position="top-center">
+      <ToastContainer position='top-center'>
         <Toast
           show={showToast}
           onClose={() => setShowToast(false)}
@@ -66,7 +96,7 @@ const SignUpScreen = () => {
           </Toast.Body>
         </Toast>
       </ToastContainer>
-      <Container id="loginContainer">
+      <Container id='loginContainer'>
         <Row>
           <h4>Create an Account</h4>
         </Row>
@@ -91,21 +121,21 @@ const SignUpScreen = () => {
               isValid,
               errors,
             }) => (
-              <Form noValidate onSubmit={handleSubmit} id="signupForm">
+              <Form noValidate onSubmit={handleSubmit} id='signupForm'>
                 <Form.Group as={Row} style={{ marginBottom: "20px" }}>
                   <Form.Label column sm={4}>
                     First Name
                   </Form.Label>
                   <Col sm={8}>
                     <Form.Control
-                      name="firstName"
-                      placeholder="First Name"
-                      type="text"
+                      name='firstName'
+                      placeholder='First Name'
+                      type='text'
                       value={values.firstName}
                       onChange={handleChange}
                       isInvalid={errors.firstName && touched.firstName}
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type='invalid'>
                       {errors.firstName}
                     </Form.Control.Feedback>
                   </Col>
@@ -117,14 +147,14 @@ const SignUpScreen = () => {
                   </Form.Label>
                   <Col sm={8}>
                     <Form.Control
-                      name="lastName"
-                      placeholder="Last Name"
-                      type="text"
+                      name='lastName'
+                      placeholder='Last Name'
+                      type='text'
                       value={values.lastName}
                       onChange={handleChange}
                       isInvalid={errors.lastName && touched.lastName}
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type='invalid'>
                       {errors.lastName}
                     </Form.Control.Feedback>
                   </Col>
@@ -136,14 +166,14 @@ const SignUpScreen = () => {
                   </Form.Label>
                   <Col sm={8}>
                     <Form.Control
-                      name="email"
-                      type="email"
-                      placeholder="Email"
+                      name='email'
+                      type='email'
+                      placeholder='Email'
                       value={values.email}
                       onChange={handleChange}
                       isInvalid={errors.email && touched.email}
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type='invalid'>
                       {errors.email}
                     </Form.Control.Feedback>
                   </Col>
@@ -155,14 +185,14 @@ const SignUpScreen = () => {
                   </Form.Label>
                   <Col sm={8}>
                     <Form.Control
-                      name="password"
-                      type="password"
-                      placeholder="6 or more chacacters"
+                      name='password'
+                      type='password'
+                      placeholder='6 or more chacacters'
                       value={values.password}
                       onChange={handleChange}
                       isInvalid={errors.password && touched.password}
                     />
-                    <Form.Control.Feedback type="invalid">
+                    <Form.Control.Feedback type='invalid'>
                       {errors.password}
                     </Form.Control.Feedback>
                   </Col>
@@ -171,9 +201,9 @@ const SignUpScreen = () => {
                 <Form.Group>
                   <Form.Label> </Form.Label>
                   <Button
-                    type="submit"
+                    type='submit'
                     style={{ width: "100%", marginTop: "20px" }}
-                    className="orangeButton"
+                    className='orangeButton'
                   >
                     Sign Up
                   </Button>
@@ -185,7 +215,7 @@ const SignUpScreen = () => {
         <Row>
           <p style={{ fontSize: "10px", marginTop: "20px" }}>
             Already have an account?{" "}
-            <Link to="/login">Login to your account.</Link>
+            <Link to='/login'>Login to your account.</Link>
           </p>
         </Row>
       </Container>

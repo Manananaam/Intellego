@@ -63,7 +63,9 @@ const GradeSubmissionTable = () => {
   const studentRows =
     studentSubmissions && studentSubmissions.length
       ? [...studentSubmissions]
-          .sort((a, b) => b.lastName - a.lastName)
+          .sort((a, b) =>
+            (a.lastName + a.firstName).localeCompare(b.lastName + b.firstName)
+          )
           .map((student, idx) => {
             if (!!student) {
               return (
