@@ -175,17 +175,6 @@ const EditAssessmentScreen = () => {
           </Modal.Body>
         </Modal>
 
-        {/* <Form.Group>
-          <Form.Label>Assessment Title</Form.Label>
-
-          <Form.Control
-            size='lg'
-            //how can i make this change size to fit text?
-            type='text'
-            value={assessmentTitle || ""}
-            onChange={(e) => setAssessmentTitle(e.target.value)}
-          ></Form.Control>
-        </Form.Group> */}
         <br />
         <Form.Group>
           <Form.Label>Associated Courses</Form.Label>{" "}
@@ -198,8 +187,6 @@ const EditAssessmentScreen = () => {
             )}
           </Overlay>
           <br />
-          {/* note: i would love these to appear like chip tags, but don't want to spend too much time right now trying to get that working. in the future, could be worth playing with.
-          https://codepen.io/broneks/pen/objeqq */}
           {assessment.assessment.associatedCourses &&
           assessment.assessment.associatedCourses.length ? (
             <ListGroup horizontal>
@@ -361,7 +348,6 @@ const EditAssessmentScreen = () => {
                       <Button onClick={handleEditQuestion}>Submit</Button>
                     </Modal.Body>
                   </Modal>
-                  {/* note - check for submissions and change to archive button to match natalie? */}
                 </div>
               );
             })
