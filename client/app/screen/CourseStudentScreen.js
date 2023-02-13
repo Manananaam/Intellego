@@ -55,37 +55,44 @@ const CourseStudentScreen = () => {
           </tr>
         </thead>
         <tbody>
-          {course.students && course.students.length
-            ? course.students.map((student) => {
-                const studentId = student.id;
-                return (
-                  <tr key={student.id}>
-                    <td>{student.id}</td>
-                    <td>{student.firstName}</td>
-                    <td>{student.lastName}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            as={Link}
-                            to={`/report/students?courseId=${courseId}&studentId=${studentId}`}
-                          >
-                            View Report
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            id={studentId}
-                            onClick={() => handleShowEdit(student)}
-                          >
-                            Edit/Remove Student
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                );
-              })
-            : null}
+          {course.students && course.students.length ? (
+            course.students.map((student) => {
+              const studentId = student.id;
+              return (
+                <tr key={student.id}>
+                  <td>{student.id}</td>
+                  <td>{student.firstName}</td>
+                  <td>{student.lastName}</td>
+                  <td>
+                    <Dropdown>
+                      <Dropdown.Toggle id="dropdown-basic"></Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          as={Link}
+                          to={`/report/students?courseId=${courseId}&studentId=${studentId}`}
+                        >
+                          View Report
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id={studentId}
+                          onClick={() => handleShowEdit(student)}
+                        >
+                          Edit/Remove Student
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td>No Student Yet!</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          )}
         </tbody>
       </Table>
       {currentStudent && (

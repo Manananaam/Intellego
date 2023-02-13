@@ -98,6 +98,26 @@ const EditAssessmentScreen = () => {
     handleCloseEditNameModal();
   }
 
+  function handleAddCourse(courseId) {
+    dispatch(
+      addAssociatedCourse({
+        courseId,
+        assessmentId,
+      })
+    );
+  }
+
+  function handleEditQuestion() {
+    dispatch(
+      editQuestionText({
+        id: questionId,
+        questionText: editQuestion,
+      })
+    );
+    handleCloseEditQuestionModal();
+    setEditQuestion("");
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(editAssessmentTitle({ assessmentId, assessmentTitle }));
@@ -239,15 +259,6 @@ const EditAssessmentScreen = () => {
               <ListGroup>
                 {allcourses && allcourses.length
                   ? allcourses.map((course) => {
-                      function handleAddCourse() {
-                        dispatch(
-                          addAssociatedCourse({
-                            courseId: course.id,
-                            assessmentId,
-                          })
-                        );
-                        navigate(0);
-                      }
                       //not updating state properly without hacky refresh
                       let currentCourseId = course.id;
 
@@ -265,8 +276,10 @@ const EditAssessmentScreen = () => {
                         </ListGroup.Item>
                       ) : (
                         <ListGroup.Item key={course.id}>
-                          {course.name}{" "}
-                          <PlusCircleFill onClick={handleAddCourse} />
+                          {course.name}
+                          <PlusCircleFill
+                            onClick={() => handleAddCourse(course.id)}
+                          />
                         </ListGroup.Item>
                       );
                     })
@@ -298,23 +311,7 @@ const EditAssessmentScreen = () => {
                 setQuestionId(question.id);
                 setEditQuestionModalVisible(true);
               }
-              function handleEditQuestion() {
-                console.log(
-                  "questionId, editQuestion",
-                  questionId,
-                  editQuestion
-                );
-                dispatch(
-                  editQuestionText({
-                    id: questionId,
-                    questionText: editQuestion,
-                  })
-                );
-                handleCloseEditQuestionModal();
-                setEditQuestion("");
-                navigate(0);
-                //not automatically updating without hacky nav0
-              }
+
               return (
                 <div key={question.id}>
                   <Container rows={6}>{question.questionText}</Container>

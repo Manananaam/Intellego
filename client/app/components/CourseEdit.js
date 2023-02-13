@@ -30,8 +30,6 @@ const CourseCreate = ({ showEdit, setShowEdit, course }) => {
     } else {
       dispatch(editCourse({ id: course.id, name, subject, gradeLevel }));
       setShowEdit(false);
-
-      // navigate(0);
       setValidated(false);
     }
   };

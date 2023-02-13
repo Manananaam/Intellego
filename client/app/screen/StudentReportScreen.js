@@ -257,8 +257,7 @@ export default function StudentReportScreen() {
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {allcourses &&
-            allcourses.length &&
+          {allcourses && allcourses.length ? (
             allcourses.map((course) => {
               return (
                 <Dropdown.Item
@@ -268,7 +267,10 @@ export default function StudentReportScreen() {
                   {course.name}
                 </Dropdown.Item>
               );
-            })}
+            })
+          ) : (
+            <Dropdown.Item>No course yet</Dropdown.Item>
+          )}
         </Dropdown.Menu>
       </Dropdown>
       {currentCourse && (
@@ -278,9 +280,9 @@ export default function StudentReportScreen() {
               ? `${currentStudent.firstName} ${currentStudent.lastName}`
               : "Student"}
           </Dropdown.Toggle>
+
           <Dropdown.Menu>
-            {courses &&
-              courses.id === courseId &&
+            {courses && courses.id === courseId && courses.students.length ? (
               courses.students.map((student) => {
                 return (
                   <Dropdown.Item
@@ -290,7 +292,10 @@ export default function StudentReportScreen() {
                     {student.firstName} {student.lastName}
                   </Dropdown.Item>
                 );
-              })}
+              })
+            ) : (
+              <Dropdown.Item> No Student yet</Dropdown.Item>
+            )}
           </Dropdown.Menu>
         </Dropdown>
       )}

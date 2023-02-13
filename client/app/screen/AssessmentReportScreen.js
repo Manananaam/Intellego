@@ -100,8 +100,7 @@ const AssessmentReportScreen = () => {
           {currentCourse ? currentCourse.name : "Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {allcourses &&
-            allcourses.length &&
+          {allcourses && allcourses.length ? (
             allcourses.map((course) => {
               return (
                 <Dropdown.Item
@@ -111,7 +110,10 @@ const AssessmentReportScreen = () => {
                   {course.name}
                 </Dropdown.Item>
               );
-            })}
+            })
+          ) : (
+            <Dropdown.Item>No course yet</Dropdown.Item>
+          )}
         </Dropdown.Menu>
       </Dropdown>
       <br />
@@ -122,7 +124,8 @@ const AssessmentReportScreen = () => {
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {courses &&
-              courses.id === courseId &&
+            courses.id === courseId &&
+            courses.assessments.length ? (
               courses.assessments.map((assessment) => {
                 return (
                   <Dropdown.Item
@@ -132,7 +135,10 @@ const AssessmentReportScreen = () => {
                     {assessment.title}
                   </Dropdown.Item>
                 );
-              })}
+              })
+            ) : (
+              <Dropdown.Item>No Assessment yet</Dropdown.Item>
+            )}
           </Dropdown.Menu>
         </Dropdown>
       )}

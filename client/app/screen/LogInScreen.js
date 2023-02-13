@@ -7,6 +7,7 @@ import { useFormik, Formik, Field, Form } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, login } from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 //NOTE! ADD IN CASE FOR UNDEFINED JWT OR THROWS ERROR
 
@@ -32,11 +33,13 @@ const LogInScreen = () => {
   useEffect(() => {
     if (user) {
       setShowToast(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      navigate("/");
     }
   }, [user]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -48,8 +51,11 @@ const LogInScreen = () => {
           autohide
         >
           <Toast.Header>
-            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+            <span>Intellego</span>
           </Toast.Header>
+          <Toast.Body>
+            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
       <h1>Log In</h1>
