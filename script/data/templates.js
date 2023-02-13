@@ -25,7 +25,7 @@ const assessmentSeed = [
   {
     id: 105,
     title: "Test Assessment",
-    userId: 101,
+    userId: 102,
   },
   {
     id: 108,
