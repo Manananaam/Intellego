@@ -23,6 +23,7 @@ export const fetchAssessment = createAsyncThunk("assessment", async (id) => {
         Authorization: `Bearer ${token}`,
       },
     };
+
     const response = await axios.get(`/api/assessments/${id}`, config);
     const assessment = response.data;
     return assessment;
