@@ -7,17 +7,35 @@ h1 {
   position: relative;
   margin: 40px 0 60px 0 !important;
 }
+
+h4 {
+  position: relative;
+  margin: 0px 0 20px 0 !important;
+}
+
 table {
   margin-top: 20px;
 }
 
-button {
+.orangeButton {
   background-color: #fd7607 !important;
   border: thin #fd7607 solid !important;
 }
+.blueButton {
+  background-color: #3281a6 !important;
+  border: none !important;
+}
 
+a#nav-dropdown.dropdown-toggle.show.nav-link {
+  background-color: #3281a6 !important;
+  color: #fff !important;
+}
 .nav-link {
   color: #017296 !important;
+}
+
+a.dropdown-item.active {
+  background-color: #3281a6 !important;
 }
 
 .nav-link.active {
@@ -113,7 +131,6 @@ h1:after {
   height: 100%;
   align-items: center;
   background-color: #d99280;
-  justify-content: center;
   color: #a8503a;
   transition: opacity 0.3s, background-color 0.3s, box-shadow 0.3s,
     font-size 0.3s, color 0.3s;
@@ -123,4 +140,37 @@ h1:after {
   box-shadow: 0 0 7px #dadada;
   background-color: #d4816c;
   color: #393939;
+}
+
+/*LOGIN*/
+#loginContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  /* text-align: center; */
+}
+
+#loginForm {
+  width: 20em;
+}
+
+#signupForm {
+  width: 25em;
+}
+
+.landingContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.left_slide {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
 }

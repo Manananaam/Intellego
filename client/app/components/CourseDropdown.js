@@ -27,7 +27,7 @@ const CourseDropdown = (props) => {
   return (
     <>
       <Dropdown>
-        <Dropdown.Toggle>
+        <Dropdown.Toggle className="orangeButton">
           {Object.keys(currentCourse).length
             ? currentCourse.name
             : "Select a Course"}

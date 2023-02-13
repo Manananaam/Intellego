@@ -9,6 +9,7 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 // customize canvas color of chart, so export chart have white background
 const canvasColor = {
   id: "customCanvasBackgroundColor",
@@ -122,8 +123,8 @@ export default function CourseReportScreen() {
       {
         label: "Student Overall Grade",
         data: allGrades && allGrades.map((obj) => obj.overall_grade),
-        backgroundColor: "aqua",
-        borderColor: "#000",
+        backgroundColor: "#017296",
+        borderColor: "#017296",
         borderWidth: 1,
       },
     ],
@@ -139,7 +140,7 @@ export default function CourseReportScreen() {
         display: true,
         text: `Student Grades: ${currentCourse?.name} `,
         font: {
-          size: 32,
+          size: 30,
         },
         color: "#111",
       },
@@ -147,7 +148,7 @@ export default function CourseReportScreen() {
         display: true,
         color: "#111",
         font: {
-          weight: "bold",
+          weight: "normal",
           size: 16,
         },
         anchor: "end",
@@ -169,7 +170,7 @@ export default function CourseReportScreen() {
         min: 0,
         max: 100,
         ticks: {
-          stepSize: 5,
+          stepSize: 10,
           color: "#111",
         },
         title: {
@@ -196,10 +197,10 @@ export default function CourseReportScreen() {
   if (currentCourse && allGrades && allGrades.length) {
     chart = (
       <div>
-        <p className="">Course Report</p>
+        {/* <p className="">Course Report</p> */}
         <div
           style={{
-            height: "690px",
+            height: "auto",
             width: "690px",
             margin: "auto",
           }}
@@ -212,37 +213,45 @@ export default function CourseReportScreen() {
     chart = <p>Please select an active course. </p>;
   }
   return (
-    <div>
-      <Container>
-        {currentCourse && allGrades && allGrades.length ? (
-          <Button variant="primary" onClick={handleExport}>
-            Export
-          </Button>
-        ) : null}
-        <h1>Course Report</h1>
-        <Dropdown>
-          <Dropdown.Toggle>
-            {currentCourse ? currentCourse.name : "Course"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {allCourses && allCourses.length ? (
-              allCourses.map((course) => {
-                return (
-                  <Dropdown.Item
-                    key={course.id}
-                    onClick={() => handleCurrentCourse(course)}
-                  >
-                    {course.name}
-                  </Dropdown.Item>
-                );
-              })
-            ) : (
-              <Dropdown.Item>No course yet</Dropdown.Item>
-            )}
-          </Dropdown.Menu>
-        </Dropdown>
-        {currentCourse ? chart : <p>Please select a course</p>}
-      </Container>
-    </div>
+    <Container>
+      <h1>Course Report</h1>
+      <Dropdown as={ButtonGroup}>
+        <Dropdown.Toggle className="orangeButton">
+          {currentCourse ? currentCourse.name : "Select a Course"}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {allCourses && allCourses.length ? (
+            allCourses.map((course) => {
+              return (
+                <Dropdown.Item
+                  key={course.id}
+                  onClick={() => handleCurrentCourse(course)}
+                >
+                  {course.name}
+                </Dropdown.Item>
+              );
+            })
+          ) : (
+            <Dropdown.Item>No courses</Dropdown.Item>
+          )}
+        </Dropdown.Menu>
+      </Dropdown>{" "}
+      {currentCourse && allGrades && allGrades.length ? (
+        <Button
+          onClick={handleExport}
+          style={{
+            float: "right",
+            position: "relative",
+            color: "white",
+            backgroundColor: "#017296",
+          }}
+        >
+          Export
+        </Button>
+      ) : null}
+      <br />
+      <br />
+      {currentCourse ? chart : null}
+    </Container>
   );
 }
