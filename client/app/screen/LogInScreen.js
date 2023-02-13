@@ -129,7 +129,9 @@ const LogInScreen = () => {
         show={visible}
         onHide={handleCloseModal}
       >
-        <Modal.Title> Log In Error</Modal.Title>
+        <Modal.Header>
+          <Modal.Title> Log In Error</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           There was an issue logging in. Please check your username and password
           and try again!

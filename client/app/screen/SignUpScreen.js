@@ -257,7 +257,9 @@ const SignUpScreen = () => {
         show={visible}
         onHide={handleCloseModal}
       >
-        <Modal.Title> Sign Up Error</Modal.Title>
+        <Modal.Header>
+          <Modal.Title> Sign Up Error</Modal.Title>
+        </Modal.Header>
         <Modal.Body>
           There was an issue signing up. Please make sure you have entered a
           valid email and try again. If you already have an account with us, you
