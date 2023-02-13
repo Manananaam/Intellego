@@ -18,6 +18,7 @@ import {
   clearAttempt,
   getUserInfo,
 } from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const LogInScreen = () => {
   const dispatch = useDispatch();
@@ -46,6 +47,10 @@ const LogInScreen = () => {
     }
   }, [user]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   useEffect(() => {
     if (error) {
       setVisible(true);
@@ -59,6 +64,21 @@ const LogInScreen = () => {
 
   return (
     <>
+      <ToastContainer position='top-center'>
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header>
+            <span>Intellego</span>
+          </Toast.Header>
+          <Toast.Body>
+            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
       <Container id='loginContainer'>
         <Row>
           <h4>Log in to your account</h4>

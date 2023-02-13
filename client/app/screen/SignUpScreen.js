@@ -18,6 +18,7 @@ import {
   signup,
   clearAttempt,
 } from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SignUpScreen = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,10 @@ const SignUpScreen = () => {
     }
   }, [user]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   useEffect(() => {
     if (error) {
       setVisible(true);
@@ -81,8 +86,11 @@ const SignUpScreen = () => {
           autohide
         >
           <Toast.Header>
-            Welcome{`${user?.firstName} ${user?.lastName}!`}
+            <span>Intellego</span>
           </Toast.Header>
+          <Toast.Body>
+            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
 

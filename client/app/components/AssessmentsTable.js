@@ -165,14 +165,12 @@ const AssessmentsTable = () => {
                             dispatch(
                               isActiveAssessment({ assessmentId, isActive })
                             );
-                            // navigate(0);
                           }}
                         />
                       ) : (
                         <Trash3
                           onClick={() => {
                             dispatch(deleteAssessment({ assessmentId }));
-                            // navigate(0);
                           }}
                         />
                       )}
