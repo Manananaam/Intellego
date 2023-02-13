@@ -25,13 +25,7 @@ table {
   background-color: #3281a6 !important;
   border: none !important;
 }
-/* .orangeButton.active {
-  background-color: #fd7607 !important;
-} */
-/* .btn-primary {
-  background-color: #fd7607 !important;
-  border: thin #fd7607 solid !important;
-} */
+
 a#nav-dropdown.dropdown-toggle.show.nav-link {
   background-color: #3281a6 !important;
   color: #fff !important;
