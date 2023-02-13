@@ -10,6 +10,9 @@ import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
@@ -160,10 +163,8 @@ export default function StudentViewScreen() {
       return (
         <Card key={idx}>
           <Card.Body>
-            <Card.Title>
-              {idx + 1}. Question:
-              <p>{question.questionText}</p>
-            </Card.Title>
+            <Card.Title>Question #{idx + 1} :</Card.Title>
+            <Card.Text>{question.questionText}</Card.Text>
             <Form.Control
               as="textarea"
               value={submission[question.id]}
@@ -179,13 +180,14 @@ export default function StudentViewScreen() {
     });
 
   return (
-    <div>
+    <Container>
       <ToastContainer position="top-center">
         <Toast
           show={showToast}
           onClose={() => setShowToast(false)}
           delay={3000}
           autohide
+          bg="danger"
         >
           <Toast.Header>Verify Result</Toast.Header>
           <Toast.Body>
@@ -198,38 +200,54 @@ export default function StudentViewScreen() {
 
       <h1>Assessment </h1>
 
-      <Stack direction="horizontal">
-        <h2> Title: {assessment && assessment.title}</h2>
-        <Form className="ms-auto" onSubmit={handleStudentVerify}>
-          <FloatingLabel label="* Required Student ID">
-            <Form.Control
-              type="text"
-              placeholder="verify id"
-              value={studentId}
-              onBlur={() => setStudentIdTouched(true)}
-              onChange={handleStudentIdChange}
-            />
-            {!studentIdIsValid && studentIdTouch && (
-              <Form.Text className="text-danger">
-                Student Id is required and must be integer
-              </Form.Text>
-            )}
-            <Button variant="primary" type="submit">
-              verify
-            </Button>
-          </FloatingLabel>
+      <Row>
+        <Col md={8}>
+          <h2> Title: {assessment && assessment.title}</h2>
+        </Col>
+
+        <Col md={4}>
+          <Form className="ms-auto" onSubmit={handleStudentVerify}>
+            <Row>
+              <Col md={9}>
+                <FloatingLabel label="*Student ID">
+                  <Form.Control
+                    type="text"
+                    placeholder="verify id"
+                    value={studentId}
+                    onBlur={() => setStudentIdTouched(true)}
+                    onChange={handleStudentIdChange}
+                  />
+
+                  {!studentIdIsValid && studentIdTouch && (
+                    <Form.Text className="text-danger">
+                      Student Id is required and must be integer
+                    </Form.Text>
+                  )}
+                </FloatingLabel>
+              </Col>
+              <Col md={3}>
+                <Button className="orangeButton" type="submit" size="lg">
+                  verify
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+      </Row>
+      <br />
+      <br />
+      <Row>
+        <Form onSubmit={handleSubmission}>
+          {renderListOfQuestion}
+          <br />
+          <Button className="orangeButton" type="submit">
+            Submit Assessment
+          </Button>
+          {studentIdInputIsValid && !studentIdFormHasSubmit && (
+            <p className="text-danger">Please verify Id before submit.</p>
+          )}
         </Form>
-      </Stack>
-      <hr />
-      <Form onSubmit={handleSubmission}>
-        {renderListOfQuestion}
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-        {studentIdInputIsValid && !studentIdFormHasSubmit && (
-          <p className="text-danger">Please verify Id before submit.</p>
-        )}
-      </Form>
-    </div>
+      </Row>
+    </Container>
   );
 }

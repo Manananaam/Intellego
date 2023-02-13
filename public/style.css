@@ -17,13 +17,25 @@ table {
   margin-top: 20px;
 }
 
-button {
+.orangeButton {
   background-color: #fd7607 !important;
   border: thin #fd7607 solid !important;
 }
+.blueButton {
+  background-color: #3281a6 !important;
+  border: none !important;
+}
 
+a#nav-dropdown.dropdown-toggle.show.nav-link {
+  background-color: #3281a6 !important;
+  color: #fff !important;
+}
 .nav-link {
   color: #017296 !important;
+}
+
+a.dropdown-item.active {
+  background-color: #3281a6 !important;
 }
 
 .nav-link.active {
@@ -146,4 +158,19 @@ h1:after {
 
 #signupForm {
   width: 25em;
+}
+
+.landingContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.left_slide {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 80%;
 }

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { useFormik, Formik, Field } from "formik";
+import * as yup from "yup";
 import {
   Button,
   Toast,
@@ -10,8 +13,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { useFormik, Formik, Field } from "formik";
-import * as Yup from "yup";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAuthState,
@@ -37,21 +39,23 @@ const SignUpScreen = () => {
       excludeEmptyString: true,
     });
   }
-  Yup.addMethod(Yup.string, "validateEmail", validateEmail);
+  yup.addMethod(yup.string, "validateEmail", validateEmail);
 
-  const SignupValidate = Yup.object().shape({
-    email: Yup.string("Enter your email")
+  const SignupValidate = yup.object().shape({
+    email: yup
+      .string("Enter your email")
       .validateEmail("Enter a valid email")
       .required("Email is required"),
-    password: Yup.string("Enter your password")
+    password: yup
+      .string("Enter your password")
       .min(6, "Please enter a password that is 6 characters or more")
       .required("Password is required"),
-    firstName: Yup.string("Enter your first name").required(
-      "First name is a required field"
-    ),
-    lastName: Yup.string("Enter your last name").required(
-      "Last name is a required field"
-    ),
+    firstName: yup
+      .string("Enter your first name")
+      .required("First name is a required field"),
+    lastName: yup
+      .string("Enter your last name")
+      .required("Last name is a required field"),
   });
 
   useEffect(() => {
@@ -60,10 +64,6 @@ const SignUpScreen = () => {
       navigate("/");
     }
   }, [user]);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
 
   useEffect(() => {
     if (error) {
@@ -75,6 +75,9 @@ const SignUpScreen = () => {
   function handleCloseModal() {
     dispatch(clearAttempt());
     setVisible(false);
+  }
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
   return (
     <>
@@ -93,52 +96,9 @@ const SignUpScreen = () => {
           </Toast.Body>
         </Toast>
       </ToastContainer>
-
-      {/* <Formik
-        initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
-        validationSchema={SignupValidate}
-        onSubmit={(values) => {
-          dispatch(signup(values));
-        }}
-      >
-        {({ errors, touched }) => (
-          <Form>
-            <>
-              <label htmlFor='firstName'>First Name</label>
-              <Field name='firstName' />
-              {errors.firstName && touched.firstName ? (
-                <div>{errors.firstName}</div>
-              ) : null}
-            </>
-            <br />
-            <>
-              <label htmlFor='lastName'>Last Name</label>
-              <Field name='lastName' />
-              {errors.lastName && touched.lastName ? (
-                <div>{errors.lastName}</div>
-              ) : null}
-            </>
-            <br />
-            <>
-              <label htmlFor='email'>Email Address</label>
-              <Field name='email' type='email' />
-              {errors.email && touched.email ? <div>{errors.email}</div> : null}
-            </>
-            <br />
-            <>
-              <label htmlFor='password'>Password</label>
-              <Field name='password' type='password' />
-              {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-            </>
-            <button type='submit'>Submit</button>
-          </Form>
-        )}
-      </Formik> */}
       <Container id='loginContainer'>
         <Row>
-          <h1>Create an Account</h1>
+          <h4>Create an Account</h4>
         </Row>
         <Row>
           <Formik
@@ -227,7 +187,7 @@ const SignUpScreen = () => {
                     <Form.Control
                       name='password'
                       type='password'
-                      placeholder='6 or more characters'
+                      placeholder='6 or more chacacters'
                       value={values.password}
                       onChange={handleChange}
                       isInvalid={errors.password && touched.password}
@@ -243,6 +203,7 @@ const SignUpScreen = () => {
                   <Button
                     type='submit'
                     style={{ width: "100%", marginTop: "20px" }}
+                    className='orangeButton'
                   >
                     Sign Up
                   </Button>
@@ -258,38 +219,8 @@ const SignUpScreen = () => {
           </p>
         </Row>
       </Container>
-      <Modal
-        size='lg'
-        aria-labelledby='contained-modal-title-vcenter'
-        centered
-        show={visible}
-        onHide={handleCloseModal}
-      >
-        <Modal.Header>
-          <Modal.Title> Sign Up Error</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          There was an issue signing up. Please make sure you have entered a
-          valid email and try again. If you already have an account with us, you
-          can log in <Link to={"/login"}>here</Link>.
-        </Modal.Body>
-      </Modal>
     </>
   );
 };
 
 export default SignUpScreen;
-/*
-
-
-
-
-  return (
-    <>
-
-    </>
-  );
-};
-
-export default SignUpScreen;
-*/

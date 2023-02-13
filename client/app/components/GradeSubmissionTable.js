@@ -46,7 +46,12 @@ const GradeSubmissionTable = () => {
   }
 
   if (!studentSubmissions.length) {
-    return <h2>There are no student submissions for this assessment yet. </h2>;
+    return (
+      <>
+        <br />
+        <h6>There are no student submissions for this assessment yet. </h6>
+      </>
+    );
   }
 
   const questionHeaders = [...assessment.questions]
@@ -79,6 +84,7 @@ const GradeSubmissionTable = () => {
                                 Enter Grade
                                 <PlusCircleFill
                                   onClick={() => handleClick(sub.id)}
+                                  style={{ marginLeft: "10px" }}
                                 />
                               </td>
                             );
@@ -99,7 +105,7 @@ const GradeSubmissionTable = () => {
 
   return (
     <>
-      <Table striped bordered hover>
+      <Table bordered>
         <thead>
           <tr>
             <th>Student</th>

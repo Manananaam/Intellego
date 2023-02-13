@@ -36,7 +36,7 @@ const LogInScreen = () => {
       .required("Email is required"),
     password: yup
       .string("Enter your password")
-      .min(6, "Please enter a password that is 6 characters or more")
+      .min(6, "Enter 6 or more characters")
       .required("Password is required"),
   });
 
@@ -47,10 +47,6 @@ const LogInScreen = () => {
     }
   }, [user]);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   useEffect(() => {
     if (error) {
       setVisible(true);
@@ -60,6 +56,10 @@ const LogInScreen = () => {
   function handleCloseModal() {
     dispatch(clearAttempt());
     setVisible(false);
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -128,6 +128,7 @@ const LogInScreen = () => {
                   <Button
                     type='submit'
                     style={{ width: "100%", marginTop: "20px" }}
+                    className='orangeButton'
                   >
                     Log in
                   </Button>
