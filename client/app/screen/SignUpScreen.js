@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Toast, ToastContainer, Modal } from "react-bootstrap";
-import { useFormik, Formik, Field, Form } from "formik";
+import {
+  Button,
+  Toast,
+  ToastContainer,
+  Modal,
+  Container,
+  Form,
+  Row,
+  Col,
+} from "react-bootstrap";
+import { useFormik, Formik, Field } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -47,11 +56,10 @@ const SignUpScreen = () => {
   useEffect(() => {
     if (user) {
       setShowToast(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      navigate("/");
     }
   }, [user]);
+
   useEffect(() => {
     if (error) {
       setVisible(true);
@@ -73,12 +81,12 @@ const SignUpScreen = () => {
           autohide
         >
           <Toast.Header>
-            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+            Welcome{`${user?.firstName} ${user?.lastName}!`}
           </Toast.Header>
         </Toast>
       </ToastContainer>
-      <h1>Sign up for Intellego!</h1>
-      <Formik
+
+      {/* <Formik
         initialValues={{ firstName: "", lastName: "", email: "", password: "" }}
         validationSchema={SignupValidate}
         onSubmit={(values) => {
@@ -119,7 +127,129 @@ const SignUpScreen = () => {
             <button type='submit'>Submit</button>
           </Form>
         )}
-      </Formik>
+      </Formik> */}
+      <Container id='loginContainer'>
+        <Row>
+          <h1>Create an Account</h1>
+        </Row>
+        <Row>
+          <Formik
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              email: "",
+              password: "",
+            }}
+            validationSchema={SignupValidate}
+            onSubmit={(values) => {
+              dispatch(signup(values));
+            }}
+          >
+            {({
+              handleChange,
+              handleSubmit,
+              values,
+              touched,
+              isValid,
+              errors,
+            }) => (
+              <Form noValidate onSubmit={handleSubmit} id='signupForm'>
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
+                  <Form.Label column sm={4}>
+                    First Name
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control
+                      name='firstName'
+                      placeholder='First Name'
+                      type='text'
+                      value={values.firstName}
+                      onChange={handleChange}
+                      isInvalid={errors.firstName && touched.firstName}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.firstName}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
+                  <Form.Label column sm={4}>
+                    Last Name
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control
+                      name='lastName'
+                      placeholder='Last Name'
+                      type='text'
+                      value={values.lastName}
+                      onChange={handleChange}
+                      isInvalid={errors.lastName && touched.lastName}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.lastName}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
+                  <Form.Label column sm={4}>
+                    Email
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control
+                      name='email'
+                      type='email'
+                      placeholder='Email'
+                      value={values.email}
+                      onChange={handleChange}
+                      isInvalid={errors.email && touched.email}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.email}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} style={{ marginBottom: "20px" }}>
+                  <Form.Label column sm={4}>
+                    Password
+                  </Form.Label>
+                  <Col sm={8}>
+                    <Form.Control
+                      name='password'
+                      type='password'
+                      placeholder='6 or more characters'
+                      value={values.password}
+                      onChange={handleChange}
+                      isInvalid={errors.password && touched.password}
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      {errors.password}
+                    </Form.Control.Feedback>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group>
+                  <Form.Label> </Form.Label>
+                  <Button
+                    type='submit'
+                    style={{ width: "100%", marginTop: "20px" }}
+                  >
+                    Sign Up
+                  </Button>
+                </Form.Group>
+              </Form>
+            )}
+          </Formik>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "10px", marginTop: "20px" }}>
+            Already have an account?{" "}
+            <Link to='/login'>Login to your account.</Link>
+          </p>
+        </Row>
+      </Container>
       <Modal
         size='lg'
         aria-labelledby='contained-modal-title-vcenter'
@@ -139,3 +269,17 @@ const SignUpScreen = () => {
 };
 
 export default SignUpScreen;
+/*
+
+
+
+
+  return (
+    <>
+
+    </>
+  );
+};
+
+export default SignUpScreen;
+*/
