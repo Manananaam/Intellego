@@ -59,62 +59,69 @@ const CourseScreen = () => {
           </tr>
         </thead>
         <tbody>
-          {courses && courses.length
-            ? courses.map((course) => {
-                const courseId = course.id;
-                const handleShowEdit = () => {
-                  setSelectedCourse(course);
-                  setShowEdit(true);
-                };
-                return (
-                  <tr key={course.id}>
-                    <td>{course.name}</td>
-                    <td>{course.subject}</td>
-                    <td>{course.gradeLevel}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          id="dropdown-basic"
-                          className="orangeButton"
-                        ></Dropdown.Toggle>
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            as={Link}
-                            to={`/courses/${course.id}/students`}
-                          >
-                            Students
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            as={Link}
-                            to={`/courses/${course.id}/assessments`}
-                          >
-                            Assessments
-                          </Dropdown.Item>{" "}
-                          <Dropdown.Item
-                            as={Link}
-                            to={`/report/courses?courseId=${courseId}`}
-                          >
-                            Report
-                          </Dropdown.Item>
-                          <Dropdown.Divider />
-                          <Dropdown.Item onClick={handleShowEdit}>
-                            Edit
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            onClick={() => {
-                              setIsActive(false);
-                              dispatch(isActiveCourse({ courseId, isActive }));
-                            }}
-                          >
-                            Delete
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                );
-              })
-            : null}
+          {courses && courses.length ? (
+            courses.map((course) => {
+              const courseId = course.id;
+              const handleShowEdit = () => {
+                setSelectedCourse(course);
+                setShowEdit(true);
+              };
+              return (
+                <tr key={course.id}>
+                  <td>{course.name}</td>
+                  <td>{course.subject}</td>
+                  <td>{course.gradeLevel}</td>
+                  <td>
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        id="dropdown-basic"
+                        className="orangeButton"
+                      ></Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item
+                          as={Link}
+                          to={`/courses/${course.id}/students`}
+                        >
+                          Students
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          as={Link}
+                          to={`/courses/${course.id}/assessments`}
+                        >
+                          Assessments
+                        </Dropdown.Item>{" "}
+                        <Dropdown.Item
+                          as={Link}
+                          to={`/report/courses?courseId=${courseId}`}
+                        >
+                          Report
+                        </Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={handleShowEdit}>
+                          Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => {
+                            setIsActive(false);
+                            dispatch(isActiveCourse({ courseId, isActive }));
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td>No Course Yet!</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          )}
         </tbody>
       </Table>
       {selectedCourse && (

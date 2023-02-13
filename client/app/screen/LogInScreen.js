@@ -5,6 +5,7 @@ import { useFormik, Formik, Field } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, login } from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 import Toast from "react-bootstrap/Toast";
 import Container from "react-bootstrap/Container";
@@ -40,6 +41,10 @@ const LogInScreen = () => {
     }
   }, [user]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <ToastContainer position="top-center">
@@ -50,8 +55,11 @@ const LogInScreen = () => {
           autohide
         >
           <Toast.Header>
-            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+            <span>Intellego</span>
           </Toast.Header>
+          <Toast.Body>
+            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
 

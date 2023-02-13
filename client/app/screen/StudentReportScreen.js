@@ -277,9 +277,9 @@ export default function StudentReportScreen() {
               ? `${currentStudent.firstName} ${currentStudent.lastName}`
               : "Select a Student"}
           </Dropdown.Toggle>
+
           <Dropdown.Menu>
-            {courses &&
-              courses.id === courseId &&
+            {courses && courses.id === courseId && courses.students.length ? (
               courses.students.map((student) => {
                 return (
                   <Dropdown.Item
@@ -289,7 +289,10 @@ export default function StudentReportScreen() {
                     {student.firstName} {student.lastName}
                   </Dropdown.Item>
                 );
-              })}
+              })
+            ) : (
+              <Dropdown.Item> No Student yet</Dropdown.Item>
+            )}
           </Dropdown.Menu>
         </Dropdown>
       )}{" "}
