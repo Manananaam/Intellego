@@ -254,8 +254,7 @@ export default function StudentReportScreen() {
           {currentCourse ? currentCourse.name : "Select a Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          {allcourses &&
-            allcourses.length &&
+          {allcourses && allcourses.length ? (
             allcourses.map((course) => {
               return (
                 <Dropdown.Item
@@ -265,7 +264,10 @@ export default function StudentReportScreen() {
                   {course.name}
                 </Dropdown.Item>
               );
-            })}
+            })
+          ) : (
+            <Dropdown.Item>No courses</Dropdown.Item>
+          )}
         </Dropdown.Menu>
       </Dropdown>
       {currentCourse && (
