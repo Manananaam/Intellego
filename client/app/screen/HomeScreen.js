@@ -29,7 +29,7 @@ const HomeScreen = () => {
           </h3>
           <br />
           <p>
-            the dashboard for teachers who want more from their grading
+            The dashboard for teachers who want more from their grading
             platform. Intellego offers teachers the tools to create, send and
             grade formative student assessments.
           </p>
@@ -40,7 +40,7 @@ const HomeScreen = () => {
             className="orangeButton"
             style={{ width: "70%" }}
           >
-            log in
+            Log in
           </Button>
 
           <Button

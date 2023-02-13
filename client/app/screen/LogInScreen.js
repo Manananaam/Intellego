@@ -18,7 +18,7 @@ import Row from "react-bootstrap/Row";
 const LogInScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { getUserInfo, user } = useSelector(selectAuthState);
+  const { getUserInfo, user, isLoading } = useSelector(selectAuthState);
   console.log(getUserInfo);
   // state related to verify student ID
   const [showToast, setShowToast] = useState(false);
