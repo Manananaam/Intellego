@@ -44,7 +44,7 @@ const GradingScreen = () => {
 
   return (
     <>
-      <h1>howdy, it is time to grade, pardner</h1>
+      <h1>Grades</h1>
       <CourseDropdown courses={assessment.associatedCourses} />
       {selectedCourse && Object.keys(selectedCourse).length ? (
         <>
