@@ -15,6 +15,7 @@ import {
   Archive,
   Trash3,
   InfoSquareFill,
+  TrashFill,
 } from "react-bootstrap-icons";
 import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -42,7 +43,7 @@ const AssessmentsTable = () => {
               Assessment{" "}
               {<InfoSquareFill ref={target} onClick={() => setShow(!show)} />}
             </th>
-            <Overlay target={target.current} show={show} placement="right">
+            <Overlay target={target.current} show={show} placement='right'>
               {(props) => (
                 <Tooltip {...props}>Click an assessment to make edits.</Tooltip>
               )}
@@ -55,7 +56,7 @@ const AssessmentsTable = () => {
               <th>No Courses Yet!</th>
             )}
             <th>Average</th>
-            <th>{<ArchiveFill />}</th>
+            <th>{<TrashFill />}</th>
           </tr>
         </thead>
         <tbody>
@@ -161,7 +162,7 @@ const AssessmentsTable = () => {
                       {assessment.questions.filter((question) => {
                         return question.submissions.length > 0;
                       }).length ? (
-                        <Archive
+                        <Trash3
                           onClick={() => {
                             setIsActive(false);
                             dispatch(
