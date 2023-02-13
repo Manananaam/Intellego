@@ -7,7 +7,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import "../components/style/layout.css";
-import CourseCreate from "../components/CourseCreate";
 
 const DashHome = () => {
   return (
