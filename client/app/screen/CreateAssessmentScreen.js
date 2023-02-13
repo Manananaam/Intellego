@@ -63,18 +63,18 @@ const CreateAssessmentScreen = () => {
 
   return (
     <>
-      <Navbar bg="light">
+      <h1>Create Assessment</h1>
+      {/* <Navbar bg="light">
         <Container>
           <Navbar.Brand>New Assessment</Navbar.Brand>
         </Container>
-      </Navbar>
+      </Navbar> */}
 
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
         <Form.Group>
           <Form.Label>Title</Form.Label>
           <Form.Control
             required
-            size="lg"
             type="text"
             placeholder="Your Title Here"
             onChange={(e) => setTitle(e.target.value)}
@@ -88,6 +88,7 @@ const CreateAssessmentScreen = () => {
         {questions.map((question, idx) => {
           return (
             <Form.Group key={idx}>
+              <Form.Label>Question</Form.Label>
               <Form.Control
                 required
                 value={question}
@@ -103,10 +104,12 @@ const CreateAssessmentScreen = () => {
             </Form.Group>
           );
         })}
-
-        <Button variant="primary" onClick={handleAddMoreQuestion}>
-          Add Question +
+        <br />
+        <Button onClick={handleAddMoreQuestion} variant="secondary">
+          Add a Question +
         </Button>
+
+        <br />
         <br />
         <FloatingLabel label="Assign to course">
           <Form.Select
@@ -134,12 +137,17 @@ const CreateAssessmentScreen = () => {
           </Form.Select>
         </FloatingLabel>
         <br />
-        <Button as="input" type="submit" value="Create Assessment"></Button>
+        <Button
+          as="input"
+          type="submit"
+          value="Create Assessment"
+          className="orangeButton"
+        ></Button>
       </Form>
       <br />
 
       {showButton ? (
-        <Button onClick={() => navigate("/assessments")}>
+        <Button onClick={() => navigate("/assessments")} variant="secondary">
           Back to Assessments
         </Button>
       ) : null}

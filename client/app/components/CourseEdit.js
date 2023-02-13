@@ -85,7 +85,11 @@ const CourseCreate = ({ showEdit, setShowEdit, course }) => {
               Please enter a number between 0 to 100.
             </Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button
+            className="orangeButton"
+            type="submit"
+            style={{ marginTop: "20px" }}
+          >
             Save Changes
           </Button>
         </Form>

@@ -82,7 +82,11 @@ export default function StudentCreate({ show, setShow }) {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button
+            className="orangeButton"
+            type="submit"
+            style={{ marginTop: "20px" }}
+          >
             Add new student
           </Button>
         </Form>

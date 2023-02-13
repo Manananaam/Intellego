@@ -153,53 +153,61 @@ const EditAssessmentScreen = () => {
   return (
     <>
       <Form onSubmit={handleSubmit}>
-        <h2>
+        <h1>
           {assessmentTitle || ""}
           {!activeSubmissions() ? (
             <Pencil onClick={setEditNameModalVisible} />
           ) : null}
-        </h2>
+        </h1>
         <OverlayTrigger
-          placement='right'
+          placement="right"
           delay={{ show: 250, hide: 400 }}
           overlay={renderTooltip}
         >
           <Button
             onClick={() => navigate(`/assessments/${assessmentId}/grades`)}
+            className="orangeButton"
           >
             Assessment Grades
           </Button>
         </OverlayTrigger>
         <br />
         <Modal
-          size='lg'
-          aria-labelledby='contained-modal-title-vcenter'
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
           centered
           show={editNameModalVisible}
           onHide={handleCloseEditNameModal}
         >
-          <Modal.Title>Edit Assessment Name</Modal.Title>
+          <Modal.Header>
+            <Modal.Title>Edit Assessment Name</Modal.Title>
+          </Modal.Header>
+
           <Modal.Body>
             <Form.Group>
-              <Form.Label>Assessment Title</Form.Label>
-
               <Form.Control
-                size='lg'
+                // size="lg"
                 //how can i make this change size to fit text?
-                type='text'
+                type="text"
                 value={assessmentTitle || ""}
                 onChange={(e) => setAssessmentTitle(e.target.value)}
               ></Form.Control>
             </Form.Group>
-            <Button onClick={handleNameChange}>Submit</Button>
+            <Button onClick={handleNameChange} style={{ marginTop: "10px" }}>
+              Submit
+            </Button>
           </Modal.Body>
         </Modal>
 
         <br />
+        <hr />
         <Form.Group>
-          <Form.Label>Associated Courses</Form.Label>{" "}
+          <Form.Label>
+            <h5>Associated Courses</h5>
+          </Form.Label>{" "}
           <QuestionSquareFill ref={target} onClick={() => setShow(!show)} />
-          <Overlay target={target.current} show={show} placement='right'>
+          <br />
+          <Overlay target={target.current} show={show} placement="right">
             {(props) => (
               <Tooltip {...props}>
                 Click "Add Course" to assign this assessment to other courses.
@@ -246,15 +254,19 @@ const EditAssessmentScreen = () => {
             <></>
           )}
           <br />
-          <Button onClick={setAddCourseModalVisible}>Add Course</Button>
+          <Button onClick={setAddCourseModalVisible} className="orangeButton">
+            Add Course
+          </Button>
           <Modal
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
-            centered
+            // size="lg"
+            // aria-labelledby="contained-modal-title-vcenter"
+            // centered
             show={addCourseModalVisible}
             onHide={handleCloseCourseModal}
           >
-            <Modal.Title>Add Course</Modal.Title>
+            <Modal.Header>
+              <Modal.Title>Add Course</Modal.Title>
+            </Modal.Header>
             <Modal.Body>
               <ListGroup>
                 {allcourses && allcourses.length
@@ -289,82 +301,106 @@ const EditAssessmentScreen = () => {
           </Modal>
         </Form.Group>
         <br />
+        <hr />
         <Form.Group>
-          <Form.Label>Questions</Form.Label>{" "}
+          <Form.Label>
+            <h5>Questions</h5>
+          </Form.Label>{" "}
           <OverlayTrigger
-            placement='right'
+            placement="right"
             delay={{ show: 250, hide: 400 }}
             overlay={renderExclamationTooltip}
           >
             <ExclamationDiamondFill />
           </OverlayTrigger>
           <br />
-          {assessment && assessment.assessment.questions.length ? (
-            assessment.assessment.questions.map((question) => {
-              function handleDeleteQuestion() {
-                dispatch(deleteQuestion(question.id));
-              }
+          <br />
+          <ListGroup>
+            {assessment && assessment.assessment.questions.length ? (
+              assessment.assessment.questions.map((question) => {
+                function handleDeleteQuestion() {
+                  dispatch(deleteQuestion(question.id));
+                }
 
-              function handleOpenEditQuestion() {
-                dispatch(fetchSingleQuestion(question.id));
-                setEditQuestion(question.questionText);
-                setQuestionId(question.id);
-                setEditQuestionModalVisible(true);
-              }
+                function handleOpenEditQuestion() {
+                  dispatch(fetchSingleQuestion(question.id));
+                  setEditQuestion(question.questionText);
+                  setQuestionId(question.id);
+                  setEditQuestionModalVisible(true);
+                }
 
-              return (
-                <div key={question.id}>
-                  <Container rows={6}>{question.questionText}</Container>
-                  {!activeSubmissions() ? (
-                    <>
-                      <Trash3 onClick={handleDeleteQuestion} />
-                      <Pencil onClick={handleOpenEditQuestion} />
-                    </>
-                  ) : null}
-                  <Modal
-                    size='lg'
-                    aria-labelledby='contained-modal-title-vcenter'
-                    centered
-                    show={editQuestionModalVisible}
-                    onHide={handleCloseEditQuestionModal}
-                  >
-                    <Modal.Title>Edit Question</Modal.Title>
-                    <Modal.Body>
-                      <Form.Group>
-                        <Form.Control
-                          as='textarea'
-                          rows={6}
-                          value={editQuestion}
-                          onChange={(e) => setEditQuestion(e.target.value)}
-                        ></Form.Control>
-                      </Form.Group>
-                      <Button onClick={handleEditQuestion}>Submit</Button>
-                    </Modal.Body>
-                  </Modal>
-                </div>
-              );
-            })
-          ) : (
-            <></>
-          )}
+                return (
+                  <div key={question.id}>
+                    <ListGroup.Item>
+                      {question.questionText}
+                      {!activeSubmissions() ? (
+                        <>
+                          <Trash3
+                            onClick={handleDeleteQuestion}
+                            style={{ marginLeft: "10px" }}
+                          />
+                          <Pencil
+                            onClick={handleOpenEditQuestion}
+                            style={{ marginLeft: "10px" }}
+                          />
+                        </>
+                      ) : null}
+                    </ListGroup.Item>
+                    <Modal
+                      size="lg"
+                      aria-labelledby="contained-modal-title-vcenter"
+                      centered
+                      show={editQuestionModalVisible}
+                      onHide={handleCloseEditQuestionModal}
+                    >
+                      <Modal.Header>
+                        <Modal.Title>Edit Question</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Form.Group>
+                          <Form.Control
+                            as="textarea"
+                            rows={6}
+                            value={editQuestion}
+                            onChange={(e) => setEditQuestion(e.target.value)}
+                          ></Form.Control>
+                        </Form.Group>
+                        <Button onClick={handleEditQuestion}>Submit</Button>
+                      </Modal.Body>
+                    </Modal>
+                    {/* note - check for submissions and change to archive button to match natalie? */}
+                  </div>
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </ListGroup>
           <br />
           {!activeSubmissions() ? (
-            <Button type='button' onClick={setAddQuestionModalVisible}>
+            <Button
+              type="button"
+              onClick={setAddQuestionModalVisible}
+              className="orangeButton"
+            >
               Add Question
             </Button>
           ) : null}
           <Modal
-            size='lg'
-            aria-labelledby='contained-modal-title-vcenter'
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
             centered
             show={addQuestionModalVisible}
             onHide={handleCloseAddQuestionModal}
           >
-            <Modal.Title>Add Question</Modal.Title>
+            <Modal.Header>
+              <Modal.Title>Add Question</Modal.Title>
+            </Modal.Header>
+
             <Modal.Body>
               <Form.Group>
                 <Form.Control
-                  as='textarea'
+                  as="textarea"
                   rows={6}
                   value={newQuestion || ""}
                   onChange={(e) => setNewQuestion(e.target.value)}
