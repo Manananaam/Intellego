@@ -27,7 +27,7 @@ const FAQ = () => {
             <Accordion.Header>
             FAQ #3: What is the best approach for using Intellego?
               </Accordion.Header>
-            <Accordion.Body>First, sign up for an account. For a way to jump right in and start adding your information to the site, click one of the quick-add buttons on the home screen to add a student, add a class, or add an assessment. Otherwise, select an item on the sidebar to navigate to either courses, assessments or reports.
+            <Accordion.Body>First, sign up for an account. For a way to jump right in and start adding your information to the site, click one of the quick-add buttons on the home screen to add a class or add an assessment. Otherwise, select an item on the sidebar to navigate to either courses, assessments or reports.
 
             </Accordion.Body>
           </Accordion.Item>
@@ -58,7 +58,7 @@ const FAQ = () => {
             <Accordion.Header>
             FAQ #7: Can I export reports on Intellego?
               </Accordion.Header>
-            <Accordion.Body>Yes! When you are viewing a report, click the "export" button at the top of the page, and you will have a ready-to-print or email copy of the report.
+            <Accordion.Body>Yes! When you are viewing a report, click the "export" button at the top of the page, and you will have a ready-to-print-or-email copy of the report.
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="7">
