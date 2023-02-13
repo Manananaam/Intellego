@@ -47,6 +47,7 @@ a.dropdown-item.active {
   font-size: 17px !important;
 }
 
+
 /*Dashbaord*/
 h1:after {
   display: block;
@@ -69,6 +70,7 @@ h1:after {
   justify-content: center;
   transition: font-size 0.3s;
 }
+
 #cardText:hover {
   font-size: 40px;
   color: #fff;
