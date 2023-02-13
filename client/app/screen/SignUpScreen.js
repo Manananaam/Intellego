@@ -7,6 +7,7 @@ import { useFormik, Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAuthState, signup } from "../store/slices/authSlice";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SignUpScreen = () => {
   const dispatch = useDispatch();
@@ -33,11 +34,13 @@ const SignUpScreen = () => {
   useEffect(() => {
     if (user) {
       setShowToast(true);
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      navigate("/");
     }
   }, [user]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -49,8 +52,11 @@ const SignUpScreen = () => {
           autohide
         >
           <Toast.Header>
-            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+            <span>Intellego</span>
           </Toast.Header>
+          <Toast.Body>
+            Welcome Back! {`${user?.firstName} ${user?.lastName}`}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
       <h1>Sign up for Intellego!</h1>

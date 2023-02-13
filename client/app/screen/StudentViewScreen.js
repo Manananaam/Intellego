@@ -152,7 +152,7 @@ export default function StudentViewScreen() {
       </Alert>
     );
   }
-  console.log("value", submission);
+
   const renderListOfQuestion =
     questions &&
     questions.length &&
