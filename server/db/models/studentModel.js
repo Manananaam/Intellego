@@ -63,7 +63,7 @@ Student.prototype.calculateOverallGradeAtCourse = async function (course) {
       assessments.length
   );
 
-  return overall_grade;
+  return { overall_grade, gradeAtEachAssessment };
 };
 
 Student.prototype.belongToCourse = async function (courseId) {
