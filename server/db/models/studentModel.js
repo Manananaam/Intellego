@@ -58,9 +58,16 @@ Student.prototype.calculateOverallGradeAtCourse = async function (course) {
       };
     })
   );
+  let numGraded = assessments.length;
   const overall_grade = Math.round(
-    gradeAtEachAssessment.reduce((acc, curr) => acc + curr.grade, 0) /
-      assessments.length
+    gradeAtEachAssessment.reduce((acc, curr) => {
+      if (Number.isInteger(curr.grade)) {
+        return acc + curr.grade;
+      } else {
+        numGraded--;
+        return acc;
+      }
+    }, 0) / numGraded
   );
 
   return { overall_grade, gradeAtEachAssessment };
