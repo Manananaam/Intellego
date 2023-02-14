@@ -30,15 +30,19 @@ router.get(
     const students = await course.getStudents();
     const overallGradeForEachStudent = await Promise.all(
       students.map(async (student) => {
+        const { overall_grade, gradeAtEachAssessment } =
+          await student.calculateOverallGradeAtCourse(course);
         return {
           id: student.id,
           firstName: student.firstName,
           lastName: student.lastName,
-          overall_grade: await student.calculateOverallGradeAtCourse(course),
+          overall_grade,
+          gradeAtEachAssessment,
         };
       })
     );
     res.json({
+      course,
       numOfStudents: students.length,
       overallGradeForEachStudent,
     });
