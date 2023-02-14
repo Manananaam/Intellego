@@ -98,7 +98,7 @@ const AssessmentReportScreen = () => {
     <Container>
       <h1>Assessment Report</h1>
       <Dropdown as={ButtonGroup}>
-        <Dropdown.Toggle className="orangeButton" id="dropdown-basic">
+        <Dropdown.Toggle className='orangeButton' id='dropdown-basic'>
           {currentCourse ? currentCourse.name : "Select a Course"}
         </Dropdown.Toggle>
         <Dropdown.Menu>
@@ -120,7 +120,7 @@ const AssessmentReportScreen = () => {
       </Dropdown>
       {currentCourse && (
         <Dropdown as={ButtonGroup} style={{ marginLeft: "10px" }}>
-          <Dropdown.Toggle className="orangeButton" id="dropdown-basic">
+          <Dropdown.Toggle className='orangeButton' id='dropdown-basic'>
             {currentAssessment
               ? `${currentAssessment.title}`
               : "Select an Assessment"}
@@ -178,6 +178,13 @@ const AssessmentReportScreen = () => {
                           let submission = question.submissions.find(
                             (el) => el.studentId === student.id
                           );
+                          if (submission === undefined) {
+                            return (
+                              <td key={`s{student.id}q{question.id}`}>
+                                <i>student did not submit</i>
+                              </td>
+                            );
+                          }
                           allGrades += submission.grade;
                           numGrades++;
                           assessmentGrades.push(
