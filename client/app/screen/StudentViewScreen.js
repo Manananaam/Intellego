@@ -63,9 +63,16 @@ export default function StudentViewScreen() {
       // use this format to load localStorage value.
       setSubmission((prev) => {
         const values = JSON.parse(localStorage.getItem("answer"));
+        // only get values in localStorage which is the current question's response
+        const currentQuestion = {};
+        for (const key of Object.keys(values)) {
+          if (questions.find((el) => el.id === Number(key))) {
+            currentQuestion[key] = values[key];
+          }
+        }
         return {
           ...prev,
-          ...values,
+          ...currentQuestion,
         };
       });
     }
