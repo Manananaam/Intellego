@@ -29,22 +29,24 @@ const SignUpScreen = () => {
   const [showToast, setShowToast] = useState(false);
   const { isLoading, user, error } = useSelector(selectAuthState);
   const [visible, setVisible] = useState(false);
-  const mailformat =
-    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/;
 
-  function validateEmail(message) {
-    return this.matches(mailformat, {
-      message,
-      name: "email",
-      excludeEmptyString: true,
-    });
-  }
-  yup.addMethod(yup.string, "validateEmail", validateEmail);
+  // const mailformat =
+  //   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]{2,})*$/;
+
+  // function validateEmail(message) {
+  //   return this.matches(mailformat, {
+  //     message,
+  //     name: "email",
+  //     excludeEmptyString: true,
+  //   });
+  // }
+  // yup.addMethod(yup.string, "validateEmail", validateEmail);
 
   const SignupValidate = yup.object().shape({
     email: yup
       .string("Enter your email")
-      .validateEmail("Enter a valid email")
+      .email("Enter a valid email")
+      // .validateEmail("Enter a valid email")
       .required("Email is required"),
     password: yup
       .string("Enter your password")
